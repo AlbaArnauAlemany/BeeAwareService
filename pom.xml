@@ -56,7 +56,7 @@
         </dependency>
         <dependency>
             <groupId>ch.unil.doplab.beeaware</groupId>
-            <artifactId>BeeAware</artifactId>
+            <artifactId>BeeAwareDomain</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
