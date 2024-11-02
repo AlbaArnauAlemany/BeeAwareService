@@ -51,12 +51,14 @@ public class AuthenticationEndpoint {
             logger.log( Level.SEVERE, password);
             logger.log( Level.SEVERE, bee.getValue().getUsername());
             logger.log( Level.SEVERE, bee.getValue().getPassword());
-            if (username != null && password != null && username.equals(bee.getValue().getUsername()) && checkPassword(password, bee.getValue().getPassword())) {
-                logger.log(Level.FINE, "User {0} successfully connectes", username);
+            if (username != null && password != null &&
+                    username.equals(bee.getValue().getUsername()) &&
+                    checkPassword(password, bee.getValue().getPassword())) {
+                logger.log(Level.FINE, "User {0} successfully connected", username);
                 return;
             }
         }
-        logger.log( Level.SEVERE, "Error during authentification");
+        logger.log( Level.SEVERE, "Error during authentication");
         throw new Exception("No match with user or password");
     }
 

@@ -12,6 +12,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.Getter;
 import lombok.Setter;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -22,12 +23,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @ApplicationScoped
+@Getter
+@Setter
 public class ApplicationState {
 
-    @Getter
-    @Setter
     private List<PollenLocationIndex> PollenLocationIndexArray;
     private String APIKEY = ResourceBundle.getBundle("application").getString("API_KEY");
+    @Getter
     private Map<Long, Beezzer> beezzers;
     private Map<Long, Location> locations;
     private Map<Long, Symptom> symptoms;
@@ -71,85 +73,85 @@ public class ApplicationState {
         } else { beezzers.put(beezzer.getId(), beezzer); }
     }
 
-    public Map<Long, Beezzer> getBeezzers(){
-        return beezzers;
-    }
-
     /**
      * Adds a specific pollen allergen to the Beezzer's list of allergens
-     * This method checks if the provided pollen is not null and if it is part of
+     * This method checks if the provided pollen and beezzer are not null and if it is part of
      * the predefined pollens available in the Beezzer's country. If both conditions
-     * are met, the pollen is added to the allergens set. If the pollen is null
+     * are met, the pollen id and the Beezzer id are added to the allergens set. If the pollen is null
      * or not available, an IllegalArgumentException is thrown.
      *
      * @param pollen The pollen allergen to be added. It must be a predefined pollen available in the Beezzer's country.
+     * @param beezzer The beezzer initiator of this operation
      * @throws IllegalArgumentException If the pollen is null or not available in the Beezzer's country.
      */
-    public void addAllergen(Pollen pollen, Beezzer beezzer) {
-        if (pollen != null && Pollen.getPredefinedPollens().contains(pollen)) {
-            Map<Long, Pollen> allergens = new HashMap<Long, Pollen>();
-            allergens.put(pollen.getId(), pollen);
-            beezzer.setAllergens(allergens);
-        } else {
+    public void addAllergen(@NonNull Pollen pollen, @NonNull Beezzer beezzer) {
+        if (!Pollen.getPredefinedPollens().contains(pollen)) {
             throw new IllegalArgumentException("This pollen is not available in your country.");
         }
+        if (beezzer.getAllergens().containsKey(pollen.getId())) {
+            throw new IllegalArgumentException("This allergen is already saved to your list.");
+        }
+        beezzer.getAllergens().put(pollen.getId(), pollen);
     }
 
-    public void addSymptom(@NotNull Symptom symptom, Beezzer beezzer){
-        // est-ce que ça rends bien la date d'aujourd'hui
+    // Alba: Est-ce que le Beezzer est nécessaire alors que pour construire un Symptom if
+    // faut de toute façon un beezzer id?
+    public void addSymptom(@NotNull Symptom symptom, @NonNull Beezzer beezzer){
         Date todayDate = new Date();
         symptom.setDate(todayDate);
         for (Map.Entry<Long, Symptom> sym: symptoms.entrySet()) {
-            if (beezzer.getId().equals(sym.getValue().getUserId()) && isSameDay(sym.getValue().getDate(), todayDate)) {
+            if (beezzer.getId().equals(sym.getValue().getBeezzerId()) &&
+                    isSameDay(sym.getValue().getDate(), todayDate)) {
                 symptom.setId(sym.getValue().getId());
+                // Alba: Est-ce que ça overwrite le symptom sur le symptom avec le même id dans notre liste de symptoms?
                 symptoms.put(sym.getValue().getId(), symptom);
                 return;
             }
         }
         symptom.setId(idSymptom++);
-        symptoms.put(symptom.getUserId(), symptom);
+        symptoms.put(symptom.getBeezzerId(), symptom);
     }
 
-    // StudyBuddy return quelque chose à chaque fois!! (Symptom)
-    public void addSymptomForASpecificDate(@NotNull Symptom symptom, Beezzer beezzer, Date date){
+    // Alba: On peut overwrite les méthodes, pourquoi pas overwrite addsymptoms quand une date est  passée?
+    public void addSymptomForASpecificDate(@NotNull Symptom symptom, @NotNull Beezzer beezzer, @NotNull Date date){
         symptom.setDate(date);
         for (Map.Entry<Long, Symptom> sym: symptoms.entrySet()) {
-            if (beezzer.getId().equals(sym.getValue().getUserId()) && isSameDay(sym.getValue().getDate(), date)) {
+            if (beezzer.getId().equals(sym.getValue().getBeezzerId()) && isSameDay(sym.getValue().getDate(), date)) {
                 symptom.setId(sym.getValue().getId());
                 symptoms.put(sym.getValue().getId(), symptom);
                 return;
             }
         }
         symptom.setId(idSymptom++);
-        symptoms.put(symptom.getUserId(), symptom);
+        symptoms.put(symptom.getBeezzerId(), symptom);
     }
 
-    @NotNull
-    public List<Symptom> getSymptomsForASpecificBeezzer(Beezzer beezzer){
+
+    public List<Symptom> getSymptomsForASpecificBeezzer(@NotNull Beezzer beezzer) {
         List<Symptom> symptomsBeezzer = new ArrayList<>();
         for (Map.Entry<Long, Symptom> sym: symptoms.entrySet()) {
-            if (beezzer.getId().equals(sym.getValue().getUserId())) {
+            if (beezzer.getId().equals(sym.getValue().getBeezzerId())) {
                 symptomsBeezzer.add(sym.getValue());
             }
         }
         return symptomsBeezzer;
     }
 
-    public List<Symptom> getSymptomsForASpecificDate(Beezzer beezzer, Date date){
+    public List<Symptom> getSymptomsForASpecificDate(@NotNull Beezzer beezzer, @NotNull Date date){
         List<Symptom> symptomsDate = new ArrayList<>();
         for (Map.Entry<Long, Symptom> sym: symptoms.entrySet()) {
-            if (beezzer.getId() == sym.getValue().getUserId()) {
-                if (beezzer.getId() == sym.getValue().getUserId() && isSameDay(sym.getValue().getDate(), date)) {
-                    symptomsDate.add(sym.getValue());
-                }
+            if (beezzer.getId().equals(sym.getValue().getBeezzerId())
+                    && isSameDay(sym.getValue().getDate(), date)) {
+                symptomsDate.add(sym.getValue());
             }
         }
         return symptomsDate;
     }
 
-    public void addPollenIndexLocation(PollenLocationIndex pollenLocationIndex) {
+    public void addPollenIndexLocation(@NotNull PollenLocationIndex pollenLocationIndex) {
         for (PollenLocationIndex pil: PollenLocationIndexArray) {
-            if (pil.getLocation() != null && pil.getLocation().getNPA() == pollenLocationIndex.getLocation().getNPA()) {
+            if (pil.getLocation() != null && pil.getLocation().getNPA() == pollenLocationIndex.getLocation().getNPA() &&
+                    pil.getLocation().getCountry() == pollenLocationIndex.getLocation().getCountry()) {
                 return;
             }
         }
@@ -157,9 +159,12 @@ public class ApplicationState {
         PollenLocationIndexArray.add(pollenLocationIndex);
     }
 
-    public void addLocation(Location location) {
+    // Alba: le NPA ET le Country doivent être pareil dans le if car 2 pays
+    // peuvent avoir le même NPA?
+    public void addLocation(@NotNull Location location) {
         for (Map.Entry<Long, Location> loc: locations.entrySet()) {
-            if (location != null && loc.getValue().getNPA() == location.getNPA()) {
+            if (loc.getValue().getNPA() == location.getNPA() &&
+                    loc.getValue().getCountry() == location.getCountry()) {
                 return;
             }
         }
@@ -173,10 +178,11 @@ public class ApplicationState {
         }
     }
 
-    public List<PollenInfoDTO> getIndexForSpecificBeezzer(Beezzer beezzer){
+    public List<PollenInfoDTO> getIndexForSpecificBeezzer(@NotNull Beezzer beezzer){
         List<PollenInfoDTO> PollenShortDTOs = new ArrayList<>();
         for (PollenLocationIndex pollenLocationIndex : PollenLocationIndexArray) {
-            if(pollenLocationIndex.getLocation().getNPA() == beezzer.getLocation().getNPA()){
+            if(pollenLocationIndex.getLocation().getNPA() == beezzer.getLocation().getNPA() &&
+                    pollenLocationIndex.getLocation().getCountry() == beezzer.getLocation().getCountry()){
 
                 for (PollenLocationIndex.DailyInfo dailyInfo : pollenLocationIndex.getDailyInfo()) {
 
@@ -215,9 +221,30 @@ public class ApplicationState {
         return localDate1.isEqual(localDate2);
     }
 
+    public void pollenForecast(Location location, int days) {
+        String url = String.format(
+                "https://pollen.googleapis.com/v1/forecast:lookup?key=%s&location.longitude=%s&location.latitude=%s&days=%s",
+                APIKEY, location.getLongitude(), location.getLatitude(), days);
+
+        try {
+            NetHttpTransport httpTransport = new NetHttpTransport();
+            HttpRequestFactory requestFactory = httpTransport.createRequestFactory();
+            HttpRequest request = requestFactory.buildGetRequest(new com.google.api.client.http.GenericUrl(url));
+            HttpResponse response = request.execute();
+
+            String jsonResponse = response.parseAsString();
+            ObjectMapper objectMapper = new ObjectMapper();
+            PollenLocationIndex pollenInfo = objectMapper.readValue(jsonResponse, PollenLocationIndex.class);
+            pollenInfo.setLocation(location);
+            pollenInfo.setId(idPollenIndex++);
+            addPollenIndexLocation(pollenInfo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void populateApplicationState() {
-        // Utils.testModeOn(); used in StudyBuddy!!
+        // Alba: Utils.testModeOn(); used in StudyBuddy!!
 
         try {
             Beezzer ony = new Beezzer("Ony", "o@unil.ch", "Q.-wDw124", 1024, "CH");
@@ -255,25 +282,5 @@ public class ApplicationState {
             logger.log( Level.SEVERE, e.getMessage());
         }
     }
-    public void pollenForecast(Location location, int days) {
-        String url = String.format(
-                "https://pollen.googleapis.com/v1/forecast:lookup?key=%s&location.longitude=%s&location.latitude=%s&days=%s",
-                APIKEY, location.getLongitude(), location.getLatitude(), days);
 
-        try {
-            NetHttpTransport httpTransport = new NetHttpTransport();
-            HttpRequestFactory requestFactory = httpTransport.createRequestFactory();
-            HttpRequest request = requestFactory.buildGetRequest(new com.google.api.client.http.GenericUrl(url));
-            HttpResponse response = request.execute();
-
-            String jsonResponse = response.parseAsString();
-            ObjectMapper objectMapper = new ObjectMapper();
-            PollenLocationIndex pollenInfo = objectMapper.readValue(jsonResponse, PollenLocationIndex.class);
-            pollenInfo.setLocation(location);
-            pollenInfo.setId(idPollenIndex++);
-            addPollenIndexLocation(pollenInfo);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }
