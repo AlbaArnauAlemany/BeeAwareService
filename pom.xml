@@ -7,7 +7,6 @@
     <groupId>ch.unil.doplab.beeaware</groupId>
     <artifactId>BeeAwareService</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>BeeAwareService</name>
     <packaging>war</packaging>
 
     <properties>
@@ -56,7 +55,7 @@
         </dependency>
         <dependency>
             <groupId>ch.unil.doplab.beeaware</groupId>
-            <artifactId>BeeAwareDomain</artifactId>
+            <artifactId>BeeAware</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
