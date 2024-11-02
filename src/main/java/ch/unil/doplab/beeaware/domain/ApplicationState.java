@@ -30,8 +30,8 @@ public class ApplicationState {
     private String APIKEY = ResourceBundle.getBundle("application").getString("API_KEY");
     private Map<Long, Beezzer> beezzers;
     private Map<Long, Location> locations;
-    private Map<Long,Symptom> symptoms;
-    private Map<Long, Pollen> allergens;
+    private Map<Long, Symptom> symptoms;
+    private Map<Long, Long> allergens;
 
     private Long idBeezzer;
     private Long idLocation;
@@ -44,6 +44,7 @@ public class ApplicationState {
         beezzers = new HashMap<>();
         locations = new HashMap<>();
         symptoms = new HashMap<>();
+        // allergens = new HashMap<>();
 
         idBeezzer = 0L;
         idLocation = 0L;
@@ -53,14 +54,19 @@ public class ApplicationState {
         populateApplicationState();
     }
 
-    public Beezzer addBeezzer(Beezzer beezzer){
+    public void addBeezzer(Beezzer beezzer){
         for (Map.Entry<Long, Beezzer> bee: beezzers.entrySet()) {
-            if (beezzer.getUsername() != null && bee.getValue().getUsername() != null && beezzer.getUsername().equals(bee.getValue().getUsername())) {
+            if (beezzer.getUsername() != null &&
+                    bee.getValue().getUsername() != null &&
+                    beezzer.getUsername().equals(bee.getValue().getUsername())) {
                 throw new IllegalArgumentException("Username " + beezzer.getUsername() + " already used. Please try a new one.");
             }
         }
-        beezzers.put(idBeezzer++, beezzer);
-        return beezzer;
+        if (beezzer.getId() == null) {
+            Long newId = idBeezzer++;
+            beezzers.put(newId, beezzer);
+            beezzer.setId(newId);
+        } else { beezzers.put(beezzer.getId(), beezzer); }
     }
 
     /**
@@ -73,9 +79,9 @@ public class ApplicationState {
      * @param pollen The pollen allergen to be added. It must be a predefined pollen available in the Beezzer's country.
      * @throws IllegalArgumentException If the pollen is null or not available in the Beezzer's country.
      */
-    public void addAllergen(Pollen pollen) {
+    public void addAllergen(Pollen pollen, Beezzer beezzer) {
         if (pollen != null && Pollen.getPredefinedPollens().contains(pollen)) {
-            allergens.put(pollen.getId(), pollen);
+            beezzer.setAllergens(pollen.getId(), beezzer.getId());
         } else {
             throw new IllegalArgumentException("This pollen is not available in your country.");
         }
