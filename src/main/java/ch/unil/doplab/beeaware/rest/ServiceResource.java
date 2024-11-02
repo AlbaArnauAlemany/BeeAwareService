@@ -1,5 +1,6 @@
 package ch.unil.doplab.beeaware.rest;
 
+import ch.unil.doplab.beeaware.DTO.BeezzerDTO;
 import ch.unil.doplab.beeaware.Domain.Beezzer;
 import ch.unil.doplab.beeaware.domain.*;
 import com.google.maps.errors.ApiException;
@@ -8,7 +9,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -20,16 +20,20 @@ public class ServiceResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/reset")
-    public Response reset() throws IOException, InterruptedException, ApiException {
+    public Response reset() {
         state.init();
         return Response.ok("BeeAware Service was reset at " + LocalDateTime.now()).build();
     }
 
+    @Secured
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/beezzers")
-    public HashSet<Beezzer> getBeezzers() {
-        HashSet<Beezzer> beezzers = new HashSet<>();
+    public List<BeezzerDTO> getBeezzers() {
+        List<BeezzerDTO> beezzers = new ArrayList<>();
+        for (Map.Entry<Long, Beezzer> beezzer : state.getBeezzers().entrySet()){
+            beezzers.add(new BeezzerDTO(beezzer.getValue().getUsername(), beezzer.getValue().getEmail(), beezzer.getValue().getLocation(), beezzer.getValue().getAllergens()));
+        }
         return beezzers;
     }
 }
