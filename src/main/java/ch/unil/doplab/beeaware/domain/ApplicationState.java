@@ -24,15 +24,14 @@ import static ch.unil.doplab.beeaware.Domain.PasswordUtilis.checkPassword;
 @ApplicationScoped
 public class ApplicationState {
 
-    private List<PollenLocationIndex> PollenLocationIndexArray;
-    private String APIKEY = ResourceBundle.getBundle("application").getString("API_KEY");
     @Getter
     @Setter
-    // Est-ce que ça devrait être des maps de beezzer et leur id?
+    private List<PollenLocationIndex> PollenLocationIndexArray;
+    private String APIKEY = ResourceBundle.getBundle("application").getString("API_KEY");
     private Map<Long, Beezzer> beezzers;
     private Map<Long, Location> locations;
     private Map<Long,Symptom> symptoms;
-    private Map<Long, Pollen> addAllergen;
+    private Map<Long, Pollen> allergens;
 
     private Long idBeezzer;
     private Long idLocation;
@@ -62,6 +61,24 @@ public class ApplicationState {
         }
         beezzers.put(idBeezzer++, beezzer);
         return beezzer;
+    }
+
+    /**
+     * Adds a specific pollen allergen to the Beezzer's list of allergens
+     * This method checks if the provided pollen is not null and if it is part of
+     * the predefined pollens available in the Beezzer's country. If both conditions
+     * are met, the pollen is added to the allergens set. If the pollen is null
+     * or not available, an IllegalArgumentException is thrown.
+     *
+     * @param pollen The pollen allergen to be added. It must be a predefined pollen available in the Beezzer's country.
+     * @throws IllegalArgumentException If the pollen is null or not available in the Beezzer's country.
+     */
+    public void addAllergen(Pollen pollen) {
+        if (pollen != null && Pollen.getPredefinedPollens().contains(pollen)) {
+            allergens.put(pollen.getId(), pollen);
+        } else {
+            throw new IllegalArgumentException("This pollen is not available in your country.");
+        }
     }
 
     public void addSymptom(@NotNull Symptom symptom, Beezzer beezzer){
@@ -193,23 +210,6 @@ public class ApplicationState {
             return null;
         }
         return bee.getId();
-    }
-    /**
-     * Adds a specific pollen allergen to the Beezzer's list of allergens
-     * This method checks if the provided pollen is not null and if it is part of
-     * the predefined pollens available in the Beezzer's country. If both conditions
-     * are met, the pollen is added to the allergens set. If the pollen is null
-     * or not available, an IllegalArgumentException is thrown.
-     *
-     * @param pollen The pollen allergen to be added. It must be a predefined pollen available in the Beezzer's country.
-     * @throws IllegalArgumentException If the pollen is null or not available in the Beezzer's country.
-     */
-    public void addAllergen(Pollen pollen) {
-        if (pollen != null && Pollen.getPredefinedPollens().contains(pollen)) {
-            allergens.put(pollen.getId(), pollen);
-        } else {
-            throw new IllegalArgumentException("This pollen is not available in your country.");
-        }
     }
 
 
