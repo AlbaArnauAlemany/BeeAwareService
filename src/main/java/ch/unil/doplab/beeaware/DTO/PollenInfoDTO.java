@@ -1,4 +1,4 @@
-package ch.unil.doplab.beeaware.Domain.DTO;
+package ch.unil.doplab.beeaware.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

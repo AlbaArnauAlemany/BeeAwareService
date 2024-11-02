@@ -1,6 +1,6 @@
 package ch.unil.doplab.beeaware.rest;
 
-import ch.unil.doplab.beeaware.Domain.*;
+import ch.unil.doplab.beeaware.Domain.Beezzer;
 import ch.unil.doplab.beeaware.domain.*;
 import com.google.maps.errors.ApiException;
 import jakarta.inject.Inject;
@@ -29,15 +29,7 @@ public class ServiceResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/beezzers")
     public HashSet<Beezzer> getBeezzers() {
-        HashSet<Beezzer> beezzers = new HashSet<>(state.getBeezzers());
+        HashSet<Beezzer> beezzers = new HashSet<>();
         return beezzers;
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/authenticate/{username}/{password}")
-    public Long authenticate(@PathParam("username") String username, @PathParam("password") String password) {
-        return state.authenticate(username, password);
     }
 }
