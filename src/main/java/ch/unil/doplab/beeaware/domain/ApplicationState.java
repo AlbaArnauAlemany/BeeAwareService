@@ -2,6 +2,11 @@ package ch.unil.doplab.beeaware.domain;
 
 import ch.unil.doplab.beeaware.Domain.*;
 import ch.unil.doplab.beeaware.Domain.DTO.PollenInfoDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestFactory;
+import com.google.api.client.http.HttpResponse;
+import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.maps.errors.ApiException;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -15,18 +20,19 @@ import java.time.ZoneId;
 import java.util.*;
 
 import static ch.unil.doplab.beeaware.Domain.PasswordUtilis.checkPassword;
-import static ch.unil.doplab.beeaware.Domain.PollenLocationIndex.pollenForecast;
 
 @ApplicationScoped
 public class ApplicationState {
 
     private List<PollenLocationIndex> PollenLocationIndexArray;
+    private String APIKEY = ResourceBundle.getBundle("application").getString("API_KEY");
     @Getter
     @Setter
     // Est-ce que ça devrait être des maps de beezzer et leur id?
-    private Set<Beezzer> beezzers;
-    private Set<Location> locations;
-    private List<Symptom> symptoms;
+    private Map<Long, Beezzer> beezzers;
+    private Map<Long, Location> locations;
+    private Map<Long,Symptom> symptoms;
+    private Map<Long, Pollen> addAllergen;
 
     private Long idBeezzer;
     private Long idLocation;
@@ -34,11 +40,11 @@ public class ApplicationState {
     private Long idSymptom;
 
     @PostConstruct
-    public void init() {
+    public void init() throws IOException, InterruptedException, ApiException {
         PollenLocationIndexArray = new ArrayList<>();
-        beezzers = new HashSet<>();
-        locations = new HashSet<>();
-        symptoms = new ArrayList<>();
+        beezzers = new HashMap<>();
+        locations = new HashMap<>();
+        symptoms = new HashMap<>();
 
         idBeezzer = 0L;
         idLocation = 0L;
@@ -49,13 +55,12 @@ public class ApplicationState {
     }
 
     public Beezzer addBeezzer(Beezzer beezzer){
-        for (Beezzer bee: beezzers) {
-            if (beezzer.getUsername() != null && bee.getUsername() != null && beezzer.getUsername().equals(bee.getUsername())) {
+        for (Map.Entry<Long, Beezzer> bee: beezzers.entrySet()) {
+            if (beezzer.getUsername() != null && bee.getValue().getUsername() != null && beezzer.getUsername().equals(bee.getValue().getUsername())) {
                 throw new IllegalArgumentException("Username " + beezzer.getUsername() + " already used. Please try a new one.");
             }
         }
-        beezzer.setId(idBeezzer++);
-        beezzers.add(beezzer);
+        beezzers.put(idBeezzer++, beezzer);
         return beezzer;
     }
 
@@ -189,6 +194,24 @@ public class ApplicationState {
         }
         return bee.getId();
     }
+    /**
+     * Adds a specific pollen allergen to the Beezzer's list of allergens
+     * This method checks if the provided pollen is not null and if it is part of
+     * the predefined pollens available in the Beezzer's country. If both conditions
+     * are met, the pollen is added to the allergens set. If the pollen is null
+     * or not available, an IllegalArgumentException is thrown.
+     *
+     * @param pollen The pollen allergen to be added. It must be a predefined pollen available in the Beezzer's country.
+     * @throws IllegalArgumentException If the pollen is null or not available in the Beezzer's country.
+     */
+    public void addAllergen(Pollen pollen) {
+        if (pollen != null && Pollen.getPredefinedPollens().contains(pollen)) {
+            allergens.put(pollen.getId(), pollen);
+        } else {
+            throw new IllegalArgumentException("This pollen is not available in your country.");
+        }
+    }
+
 
     private void populateApplicationState() throws IOException, InterruptedException, ApiException {
         // Utils.testModeOn(); used in StudyBuddy!!
@@ -223,5 +246,27 @@ public class ApplicationState {
         }
 
         // Utils.testModeOff(); used in StudyBuddy!!
+
+    }
+    public void pollenForecast(Location location, int days) {
+        String url = String.format(
+                "https://pollen.googleapis.com/v1/forecast:lookup?key=%s&location.longitude=%s&location.latitude=%s&days=%s",
+                APIKEY, location.getLongitude(), location.getLatitude(), days);
+
+        try {
+            NetHttpTransport httpTransport = new NetHttpTransport();
+            HttpRequestFactory requestFactory = httpTransport.createRequestFactory();
+            HttpRequest request = requestFactory.buildGetRequest(new com.google.api.client.http.GenericUrl(url));
+            HttpResponse response = request.execute();
+
+            String jsonResponse = response.parseAsString();
+            ObjectMapper objectMapper = new ObjectMapper();
+            PollenLocationIndex pollenInfo = objectMapper.readValue(jsonResponse, PollenLocationIndex.class);
+            pollenInfo.setLocation(location);
+            pollenInfo.setId(idPollenIndex++);
+            addPollenIndexLocation(pollenInfo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

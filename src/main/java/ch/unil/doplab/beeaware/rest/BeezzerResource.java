@@ -31,8 +31,8 @@ public class BeezzerResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/symptomsfor{beezzerId}")
-    public List<Symptom> getSymptomsForASpecificBeezzer(@PathParam("beezzerId") Beezzer beezzer) {
-        return new ArrayList<>(state.getSymptomsForASpecificBeezzer(beezzer));
+    public List<Symptom> getSymptomsForASpecificBeezzer(@PathParam("beezzerId") Long beezzerId) {
+        return new ArrayList<>(state.getSymptomsForASpecificBeezzer(beezzerId));
     }
 
 
