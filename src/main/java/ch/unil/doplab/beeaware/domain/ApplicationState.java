@@ -57,8 +57,8 @@ public class ApplicationState {
 
         populateApplicationState();
     }
-
-    public void addBeezzer(Beezzer beezzer){
+     // TODO: GOOD addBeezzer
+    public Beezzer addBeezzer(Beezzer beezzer){
         for (Map.Entry<Long, Beezzer> bee: beezzers.entrySet()) {
             if (beezzer.getUsername() != null &&
                     bee.getValue().getUsername() != null &&
@@ -70,28 +70,30 @@ public class ApplicationState {
             Long newId = idBeezzer++;
             beezzers.put(newId, beezzer);
             beezzer.setId(newId);
-        } else { beezzers.put(beezzer.getId(), beezzer); }
+        } else {
+            beezzers.put(beezzer.getId(), beezzer);
+        }
+        return beezzer;
     }
 
-    /**
-     * Adds a specific pollen allergen to the Beezzer's list of allergens
-     * This method checks if the provided pollen and beezzer are not null and if it is part of
-     * the predefined pollens available in the Beezzer's country. If both conditions
-     * are met, the pollen id and the Beezzer id are added to the allergens set. If the pollen is null
-     * or not available, an IllegalArgumentException is thrown.
-     *
-     * @param pollen The pollen allergen to be added. It must be a predefined pollen available in the Beezzer's country.
-     * @param beezzer The beezzer initiator of this operation
-     * @throws IllegalArgumentException If the pollen is null or not available in the Beezzer's country.
-     */
-    public void addAllergen(@NonNull Pollen pollen, @NonNull Beezzer beezzer) {
-        if (!Pollen.getPredefinedPollens().contains(pollen)) {
-            throw new IllegalArgumentException("This pollen is not available in your country.");
+    // TODO: GOOD getBeezzer
+    public Beezzer getBeezzer(Long id) { return beezzers.get(id); }
+
+    // TODO: GOOD getAllBeezzers
+    public Map<Long, Beezzer> getAllBeezzers() { return beezzers; }
+
+    // TODO: GOOD setBeezzer
+    public boolean setBeezzer(Long id, Beezzer beezzer) {
+        var theBeezzer = beezzers.get(id);
+        if (theBeezzer == null) {
+            return false;
         }
-        if (beezzer.getAllergens().containsKey(pollen.getId())) {
-            throw new IllegalArgumentException("This allergen is already saved to your list.");
+        var username = beezzer.getUsername();
+        if (!theBeezzer.getUsername().equals(username)) {
+            throw new IllegalArgumentException("A user named '" + beezzer.getUsername() + "' already exists");
         }
-        beezzer.getAllergens().put(pollen.getId(), pollen);
+        theBeezzer.replaceWith(beezzer);
+        return true;
     }
 
     // Alba: Est-ce que le Beezzer est nécessaire alors que pour construire un Symptom if
@@ -110,6 +112,17 @@ public class ApplicationState {
         }
         symptom.setId(idSymptom++);
         symptoms.put(symptom.getBeezzerId(), symptom);
+    }
+
+
+    // TODO: GOOD removeBeezzer
+    public boolean removeBeezzer(Long id) {
+        var beezzer = beezzers.get(id);
+        if (beezzer == null) {
+            return false;
+        }
+        beezzers.remove(id);
+        return true;
     }
 
     // Alba: On peut overwrite les méthodes, pourquoi pas overwrite addsymptoms quand une date est  passée?
@@ -151,7 +164,7 @@ public class ApplicationState {
     public void addPollenIndexLocation(@NotNull PollenLocationIndex pollenLocationIndex) {
         for (PollenLocationIndex pil: PollenLocationIndexArray) {
             if (pil.getLocation() != null && pil.getLocation().getNPA() == pollenLocationIndex.getLocation().getNPA() &&
-                    pil.getLocation().getCountry() == pollenLocationIndex.getLocation().getCountry()) {
+                    pil.getLocation().getCountry().equals(pollenLocationIndex.getLocation().getCountry())) {
                 return;
             }
         }
@@ -164,11 +177,11 @@ public class ApplicationState {
     public void addLocation(@NotNull Location location) {
         for (Map.Entry<Long, Location> loc: locations.entrySet()) {
             if (loc.getValue().getNPA() == location.getNPA() &&
-                    loc.getValue().getCountry() == location.getCountry()) {
+                    loc.getValue().getCountry().equals(location.getCountry())) {
                 return;
             }
         }
-        location.setId(idLocation++);;
+        location.setId(idLocation++);
         locations.put(idLocation, location);
     }
 
@@ -182,7 +195,7 @@ public class ApplicationState {
         List<PollenInfoDTO> PollenShortDTOs = new ArrayList<>();
         for (PollenLocationIndex pollenLocationIndex : PollenLocationIndexArray) {
             if(pollenLocationIndex.getLocation().getNPA() == beezzer.getLocation().getNPA() &&
-                    pollenLocationIndex.getLocation().getCountry() == beezzer.getLocation().getCountry()){
+                    pollenLocationIndex.getLocation().getCountry().equals(beezzer.getLocation().getCountry())){
 
                 for (PollenLocationIndex.DailyInfo dailyInfo : pollenLocationIndex.getDailyInfo()) {
 
@@ -267,7 +280,7 @@ public class ApplicationState {
 
             for (Symptom symptom:getSymptomsForASpecificBeezzer(ony)) {
                 System.out.println(symptom);
-            };
+            }
 
             forecastAllLocation();
 
