@@ -1,7 +1,7 @@
 package ch.unil.doplab.beeaware.DTO;
 
+import ch.unil.doplab.beeaware.Domain.Beezzer;
 import ch.unil.doplab.beeaware.Domain.Pollen;
-import ch.unil.doplab.beeaware.Domain.Location;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.Map;
@@ -11,13 +11,13 @@ import java.util.Map;
 public class BeezzerDTO {
     private String username;
     private String email;
-    private Location location;
+    private LocationDTO location;
     private Map<Long, Pollen> allergens;
 
-    public BeezzerDTO(String username, String email, Location location, Map<Long, Pollen> allergens){
-        this.username = username;
-        this.email = email;
-        this.location = location;
-        this.allergens = allergens;
+    public BeezzerDTO(Beezzer beezzer){
+        this.username = beezzer.getUsername();
+        this.email = beezzer.getEmail();
+        this.location = new LocationDTO(beezzer.getLocation());
+        this.allergens = beezzer.getAllergens();
     }
 }

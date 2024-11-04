@@ -1,15 +1,17 @@
 package ch.unil.doplab.beeaware.rest;
 
+import ch.unil.doplab.beeaware.service.TokenService;
 import jakarta.annotation.Priority;
 import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.SecurityContext;
 import jakarta.ws.rs.ext.Provider;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Secured
 @Provider
@@ -18,6 +20,8 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
     private static final String REALM = "example";
     private static final String AUTHENTICATION_SCHEME = "Bearer";
+    private TokenService tokenService = new TokenService();
+    private Logger logger = Logger.getLogger(AuthenticationFilter.class.getName());
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
@@ -66,7 +70,8 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     }
 
     private void validateToken(String token) throws Exception {
-        // Check if the token was issued by the server and if it's not expired
-        // Throw an Exception if the token is invalid
+        if(!tokenService.isAuthorizedToAccess(token)){
+            throw new Exception("No valid token founded");
+        }
     }
 }
