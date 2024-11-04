@@ -17,14 +17,14 @@ public class BeezzerResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Beezzer> getAllBeezzers() {
-        return new LinkedList<>(state.getAllBeezzers().values());
+        return new LinkedList<>(state.getBeezzerService().getAllBeezzers().values());
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public Beezzer getBeezzer(@PathParam("id") Long id) {
-        return state.getBeezzer(id);
+        return state.getBeezzerService().getBeezzer(id);
     }
 
     @PUT
@@ -32,14 +32,14 @@ public class BeezzerResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public boolean setBeezzer(@PathParam("id") Long id, Beezzer beezzer) {
-        return state.setBeezzer(id, beezzer);
+        return state.getBeezzerService().setBeezzer(id, beezzer);
     }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Beezzer addBeezzer(Beezzer beezzer) {
-        state.addBeezzer(beezzer);
+        state.getBeezzerService().addBeezzer(beezzer);
         return beezzer;
     }
 
@@ -47,7 +47,7 @@ public class BeezzerResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public boolean removeBeezzer(@PathParam("id") Long id) {
-        return state.removeBeezzer(id);
+        return state.getBeezzerService().removeBeezzer(id);
     }
 
 }

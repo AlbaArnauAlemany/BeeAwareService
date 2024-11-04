@@ -43,56 +43,6 @@ public class ApplicationState {
         populateApplicationState();
     }
 
-
-    // TODO: GOOD addBeezzer
-    public Beezzer addBeezzer(Beezzer beezzer){
-        for (Map.Entry<Long, Beezzer> bee: beezzers.entrySet()) {
-            if (beezzer.getUsername() != null &&
-                    bee.getValue().getUsername() != null &&
-                    beezzer.getUsername().equals(bee.getValue().getUsername())) {
-                throw new IllegalArgumentException("Username " + beezzer.getUsername() + " already used. Please try a new one.");
-            }
-        }
-        if (beezzer.getId() == null) {
-            Long newId = idBeezzer++;
-            beezzers.put(newId, beezzer);
-            beezzer.setId(newId);
-        } else {
-            beezzers.put(beezzer.getId(), beezzer);
-        }
-        return beezzer;
-    }
-
-    // TODO: GOOD getBeezzer
-    public Beezzer getBeezzer(Long id) { return beezzers.get(id); }
-
-    // TODO: GOOD getAllBeezzers
-    public Map<Long, Beezzer> getAllBeezzers() { return beezzers; }
-
-    // TODO: GOOD setBeezzer
-    public boolean setBeezzer(Long id, Beezzer beezzer) {
-        var theBeezzer = beezzers.get(id);
-        if (theBeezzer == null) {
-            return false;
-        }
-        var username = beezzer.getUsername();
-        if (!theBeezzer.getUsername().equals(username)) {
-            throw new IllegalArgumentException("A user named '" + beezzer.getUsername() + "' already exists");
-        }
-        theBeezzer.replaceWith(beezzer);
-        return true;
-    }
-
-    // TODO: GOOD removeBeezzer
-    public boolean removeBeezzer(Long id) {
-        var beezzer = beezzers.get(id);
-        if (beezzer == null) {
-            return false;
-        }
-        beezzers.remove(id);
-        return true;
-    }
-
     private void populateApplicationState() {
         // Alba: Utils.testModeOn(); used in StudyBuddy!!
         try {

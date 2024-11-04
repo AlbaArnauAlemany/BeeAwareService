@@ -18,8 +18,7 @@ public class SymptomResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Symptom addSymptom(Symptom symptom, Beezzer beezzer) {
-        return state.addSymptom(symptom, beezzer);
+    public void addSymptom(Symptom symptom) {
+        state.getSymptomService().addSymptom(symptom);
     }
-
 }

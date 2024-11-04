@@ -16,17 +16,46 @@ public class BeezzerService {
     private final Map<Long, Beezzer> beezzers = new HashMap<>();
     private Logger logger = Logger.getLogger(BeezzerService.class.getName());
 
-    public void addBeezzer(Beezzer beezzer){
+    public Beezzer addBeezzer(Beezzer beezzer){
         for (Map.Entry<Long, Beezzer> bee: beezzers.entrySet()) {
             if (beezzer.getUsername() != null &&
                     bee.getValue().getUsername() != null &&
                     beezzer.getUsername().equals(bee.getValue().getUsername())) {
-                logger.log( Level.WARNING, "Beezzer already exists: {0}", beezzer);
-                return;
+                throw new IllegalArgumentException("Username " + beezzer.getUsername() + " already used. Please try a new one.");
             }
         }
-        beezzer.setId(idBeezzer++);
-        beezzers.put(beezzer.getId(), beezzer);
-        logger.log( Level.INFO, "New beezzer added : {0}", beezzer);
+        if (beezzer.getId() == null) {
+            Long newId = idBeezzer++;
+            beezzers.put(newId, beezzer);
+            beezzer.setId(newId);
+        } else {
+            beezzers.put(beezzer.getId(), beezzer);
+        }
+        return beezzer;
+    }
+
+    public Beezzer getBeezzer(Long id) { return beezzers.get(id); }
+
+    public Map<Long, Beezzer> getAllBeezzers() { return beezzers; }
+
+    public boolean setBeezzer(Long id, Beezzer beezzer) {
+        var theBeezzer = beezzers.get(id);
+        if (theBeezzer == null) {
+            return false;
+        }
+        var username = beezzer.getUsername();
+        if (!theBeezzer.getUsername().equals(username)) {
+            throw new IllegalArgumentException("A user named '" + beezzer.getUsername() + "' already exists");
+        }
+        theBeezzer.replaceWith(beezzer);
+        return true;
+    }
+   public boolean removeBeezzer(Long id) {
+        var beezzer = beezzers.get(id);
+        if (beezzer == null) {
+            return false;
+        }
+        beezzers.remove(id);
+        return true;
     }
 }
