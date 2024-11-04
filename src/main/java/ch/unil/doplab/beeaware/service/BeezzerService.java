@@ -38,17 +38,8 @@ public class BeezzerService {
 
     public Map<Long, Beezzer> getAllBeezzers() { return beezzers; }
 
-    public boolean setBeezzer(Long id, Beezzer beezzer) {
-        var theBeezzer = beezzers.get(id);
-        if (theBeezzer == null) {
-            return false;
-        }
-        var username = beezzer.getUsername();
-        if (!theBeezzer.getUsername().equals(username)) {
-            throw new IllegalArgumentException("A user named '" + beezzer.getUsername() + "' already exists");
-        }
-        theBeezzer.replaceWith(beezzer);
-        return true;
+    public void setBeezzer(Beezzer beezzer) {
+        beezzers.put(beezzer.getId(), beezzer);
     }
    public boolean removeBeezzer(Long id) {
         var beezzer = beezzers.get(id);

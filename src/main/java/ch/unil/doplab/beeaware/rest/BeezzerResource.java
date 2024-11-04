@@ -28,11 +28,10 @@ public class BeezzerResource {
     }
 
     @PUT
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/{id}")
-    public boolean setBeezzer(@PathParam("id") Long id, Beezzer beezzer) {
-        return state.getBeezzerService().setBeezzer(id, beezzer);
+    @Path("/setbeezzer")
+    public void setBeezzer(Beezzer beezzer) {
+        state.getBeezzerService().setBeezzer(beezzer);
     }
 
     @POST
