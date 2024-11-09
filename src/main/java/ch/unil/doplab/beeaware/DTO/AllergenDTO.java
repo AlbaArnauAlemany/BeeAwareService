@@ -1,20 +1,23 @@
 package ch.unil.doplab.beeaware.DTO;
 
 import ch.unil.doplab.beeaware.Domain.Pollen;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.Map;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AllergenDTO {
-    List<Pollen> pollenList;
+    List<PollenDTO> pollenList;
 
     public AllergenDTO(Map<Long, Pollen> allergens){
         for (Map.Entry<Long, Pollen> pollen: allergens.entrySet()) {
-            pollenList.add(pollen.getValue());
+            PollenDTO pollenDTO = new PollenDTO((Pollen) pollen);
+            pollenList.add(pollenDTO);
         }
     }
 }

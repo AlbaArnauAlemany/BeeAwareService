@@ -1,10 +1,7 @@
 package ch.unil.doplab.beeaware.rest;
 
-import ch.unil.doplab.beeaware.DTO.BeezzerDTO;
-import ch.unil.doplab.beeaware.Domain.Beezzer;
-import ch.unil.doplab.beeaware.Domain.Location;
 import ch.unil.doplab.beeaware.Domain.PollenLocationIndex;
-import ch.unil.doplab.beeaware.domain.*;
+import ch.unil.doplab.beeaware.domain.ApplicationState;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -25,17 +22,6 @@ public class ServiceResource {
         state.init();
         return Response.ok("BeeAware Service was reset at " + LocalDateTime.now()).build();
     }
-    @Secured
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/beezzers")
-    public List<BeezzerDTO> getBeezzers() {
-        List<BeezzerDTO> beezzers = new ArrayList<>();
-        for (Map.Entry<Long, Beezzer> beezzer : state.getBeezzerService().getBeezzers().entrySet()){
-            beezzers.add(new BeezzerDTO(beezzer.getValue()));
-        }
-        return beezzers;
-    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -44,10 +30,4 @@ public class ServiceResource {
         return  state.getPollenLocationIndexService().getPollenLocationIndexMap();
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/locations")
-    public Map<Long,Location> getLocations() {
-        return  state.getLocationService().getLocations();
-    }
 }

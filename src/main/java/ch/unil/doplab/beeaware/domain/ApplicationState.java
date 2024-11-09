@@ -1,5 +1,6 @@
 package ch.unil.doplab.beeaware.domain;
 
+import ch.unil.doplab.beeaware.DTO.SymptomsDTO;
 import ch.unil.doplab.beeaware.Domain.*;
 import ch.unil.doplab.beeaware.DTO.PollenInfoDTO;
 import ch.unil.doplab.beeaware.service.*;
@@ -7,6 +8,10 @@ import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,6 +48,16 @@ public class ApplicationState {
         populateApplicationState();
     }
 
+    public static boolean isSameDay(@NotNull Date date1, @NotNull Date date2) {
+        LocalDate localDate1 = date1.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        LocalDate localDate2 = date2.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        return localDate1.isEqual(localDate2);
+    }
+
     private void populateApplicationState() {
         // Alba: Utils.testModeOn(); used in StudyBuddy!!
         try {
@@ -54,8 +69,8 @@ public class ApplicationState {
             allergenService.addAllergen(Pollen.getPollenByName("Weed"), ony);
 
             beezzerService.addBeezzer(ony);
-            for (Map.Entry<Long, Beezzer> beezer: beezzerService.getBeezzers().entrySet()) {
-                logger.log( Level.INFO, beezer.toString());
+            for (Map.Entry<Long, Beezzer> beezzer: beezzerService.getBeezzers().entrySet()) {
+                logger.log( Level.INFO, beezzer.toString());
             }
             Symptom symptom1 = new Symptom(ony.getId(), 8, false);
             Symptom symptom2 = new Symptom(ony.getId(), 5, false);
@@ -70,13 +85,13 @@ public class ApplicationState {
             symptomService.addSymptom(symptom3, d2);
             symptomService.addSymptom(symptom2);
 
-            for (Symptom symptom:symptomService.getSymptomsForASpecificBeezzer(ony.getId())) {
+            for (SymptomsDTO symptom:symptomService.getSymptoms(ony.getId())) {
                 System.out.println(symptom);
             }
 
-            foreCastService.forecastAllLocation(locationService.getLocations());
+            foreCastService.forecastAllLocationPrivate(locationService.getLocations());
 
-            List<PollenInfoDTO> pollenShortDTOs = foreCastService.getIndexForSpecificBeezzer(ony);
+            List<PollenInfoDTO> pollenShortDTOs = foreCastService.getIndex(ony);
             for (PollenInfoDTO pollen : pollenShortDTOs) {
                 logger.log( Level.INFO, pollen.toString());
             }

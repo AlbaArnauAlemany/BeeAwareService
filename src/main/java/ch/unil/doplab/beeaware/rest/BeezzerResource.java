@@ -1,5 +1,7 @@
 package ch.unil.doplab.beeaware.rest;
 
+import ch.unil.doplab.beeaware.DTO.BeezzerDTO;
+import ch.unil.doplab.beeaware.DTO.LocationDTO;
 import ch.unil.doplab.beeaware.Domain.Beezzer;
 import ch.unil.doplab.beeaware.domain.ApplicationState;
 import jakarta.inject.Inject;
@@ -16,20 +18,20 @@ public class BeezzerResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Beezzer> getAllBeezzers() {
-        return new LinkedList<>(state.getBeezzerService().getAllBeezzers().values());
+    public List<BeezzerDTO> getAllBeezzers() {
+        return new LinkedList<>(state.getBeezzerService().getAllBeezzers());
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
-    public Beezzer getBeezzer(@PathParam("id") Long id) {
+    public BeezzerDTO getBeezzer(@PathParam("id") Long id) {
         return state.getBeezzerService().getBeezzer(id);
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/setbeezzer")
+    @Path("/setBeezzer")
     public void setBeezzer(Beezzer beezzer) {
         state.getBeezzerService().setBeezzer(beezzer);
     }
@@ -49,4 +51,11 @@ public class BeezzerResource {
         return state.getBeezzerService().removeBeezzer(id);
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/location/{id}")
+    public LocationDTO getBeezzerLocation(@PathParam("id") Long id) {
+        return state.getBeezzerService().getBeezzerLocation(id);
+    }
 }

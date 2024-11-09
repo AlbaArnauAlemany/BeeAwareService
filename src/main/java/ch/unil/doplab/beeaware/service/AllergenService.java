@@ -17,7 +17,7 @@ public class AllergenService {
     private final Map<Long, Pollen> allergens = new HashMap<>();
     private Logger logger = Logger.getLogger(AllergenService.class.getName());
 
-    // TODO : Change to an table of allergen and specify an ID
+    // TODO : Change to a table of allergen and specify an ID
     /**
      * Adds a specific pollen allergen to the Beezzer's list of allergens
      * This method checks if the provided pollen and beezzer are not null and if it is part of

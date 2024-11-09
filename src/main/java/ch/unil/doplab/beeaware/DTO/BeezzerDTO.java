@@ -12,12 +12,12 @@ public class BeezzerDTO {
     private String username;
     private String email;
     private LocationDTO location;
-    private Map<Long, Pollen> allergens;
+    private AllergenDTO allergens;
 
     public BeezzerDTO(Beezzer beezzer){
         this.username = beezzer.getUsername();
         this.email = beezzer.getEmail();
         this.location = new LocationDTO(beezzer.getLocation());
-        this.allergens = beezzer.getAllergens();
+        this.allergens = new AllergenDTO(beezzer.getAllergens());
     }
 }
