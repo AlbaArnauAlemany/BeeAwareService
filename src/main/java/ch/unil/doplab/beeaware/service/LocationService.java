@@ -42,19 +42,10 @@ public class LocationService {
         return allLocations;
     }
 
-    public List<Location> getAllRegisteredLocationsPrivate() {
-        logger.log( Level.INFO, "Searching for all registered locations (returns Location objects)...");
-        List <Location> allLocations = new ArrayList<>();
-        for (Map.Entry<Long, Location> loc: locations.entrySet()) {
-            allLocations.add(loc.getValue());
-        }
-        return allLocations;
-    }
-
     public boolean removeLocation(Long idLocation) {
         var location = locations.get(idLocation);
         var locationDTO = new LocationDTO(location);
-        logger.log( Level.INFO, "Removing Location...", locationDTO);
+        logger.log( Level.INFO, "Removing Location...");
         if (location == null) {
             logger.log( Level.WARNING, "Location with ID {0} doesn't exist.", idLocation);
             return false;

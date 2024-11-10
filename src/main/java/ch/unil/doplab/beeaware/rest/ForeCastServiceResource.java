@@ -17,42 +17,42 @@ public class ForeCastServiceResource {
     @Inject
     private ApplicationState state;
 
+    // TODO: To remove after creating CRON task
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void forecastAllLocationPrivate(Map<Long, Location> locations) {
-        state.getForeCastService().forecastAllLocationPrivate(locations);
+    public void forecastAllLocation(Map<Long, Location> locations) {
+        state.getForeCastService().forecastAllLocation(locations);
     }
 
-    // TODO: Use IDs
-//    @GET
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("/{beezzer}")
-//    public List<PollenInfoDTO> getIndex(@PathParam("beezzer") Beezzer beezzer) {
-//        return state.getForeCastService().getIndex(beezzer);
-//    }
-//
-//    @GET
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("/{date}&{beezzer}")
-//    public List<PollenInfoDTO> getIndex(@PathParam("date") String date, @PathParam("beezzer") Beezzer beezzer) {
-//        return state.getForeCastService().getIndex(date, beezzer);
-//    }
-//
-//    @GET
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("/{date}&{location}")
-//    public List<PollenInfoDTO> getIndex(@PathParam("date") String date, @PathParam("location") Location location) {
-//        return state.getForeCastService().getIndex(date, location);
-//    }
-//
-//    @GET
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("/{date}&{location}&{pollen}")
-//    public List<PollenInfoDTO> getIndex(@PathParam("date") String date, @PathParam("location") Location location, @PathParam("pollen") Pollen pollen) {
-//        return state.getForeCastService().getIndex(date, location, pollen);
-//    }
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/beezzer")
+    public List<PollenInfoDTO> getIndex(Beezzer beezzer) {
+        return state.getForeCastService().getIndex(beezzer);
+    }
+
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/beezzer/{date}")
+    public List<PollenInfoDTO> getIndex(@PathParam("date") String date, Beezzer beezzer) {
+        return state.getForeCastService().getIndex(date, beezzer);
+    }
+
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/location/{date}")
+    public List<PollenInfoDTO> getIndex(@PathParam("date") String date, Location location) {
+        return state.getForeCastService().getIndex(date, location);
+    }
+
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/location/pollen/{date}")
+    public List<PollenInfoDTO> getIndex(@PathParam("date") String date, Location location, Pollen pollen) {
+        return state.getForeCastService().getIndex(date, location, pollen);
+    }
 }

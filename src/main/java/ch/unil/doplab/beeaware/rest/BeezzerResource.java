@@ -4,7 +4,6 @@ import ch.unil.doplab.beeaware.DTO.AllergenDTO;
 import ch.unil.doplab.beeaware.DTO.BeezzerDTO;
 import ch.unil.doplab.beeaware.DTO.LocationDTO;
 import ch.unil.doplab.beeaware.Domain.Beezzer;
-import ch.unil.doplab.beeaware.Domain.Pollen;
 import ch.unil.doplab.beeaware.domain.ApplicationState;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -64,16 +63,15 @@ public class BeezzerResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/allergens{pollen}&{beezzerID}")
+    @Path("/allergens/{pollen}&{beezzerID}")
     public void addAllergen(@PathParam("pollen") String stringPollen, @PathParam("beezzerID") Long idBeezzer) {
         state.getBeezzerService().addAllergen(stringPollen, idBeezzer);
     }
 
-    /// TODO: use pollen name instead of Allergen ID?
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/allergens{id}&{beezzerID}")
-    public boolean removeAllergen(@PathParam("id") Long idAllergen, @PathParam("beezzerID") Long idBeezzer) {
+    @Path("/allergens/{allergenid}&{beezzerid}")
+    public boolean removeAllergen(@PathParam("allergenid") Long idAllergen, @PathParam("beezzerid") Long idBeezzer) {
         return state.getBeezzerService().removeAllergen(idAllergen, idBeezzer);
     }
 

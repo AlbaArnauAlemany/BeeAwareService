@@ -4,6 +4,7 @@ import ch.unil.doplab.beeaware.DTO.SymptomsDTO;
 import ch.unil.doplab.beeaware.Domain.Beezzer;
 import ch.unil.doplab.beeaware.Domain.Symptom;
 import ch.unil.doplab.beeaware.domain.ApplicationState;
+import ch.unil.doplab.beeaware.domain.Utilis;
 import lombok.Getter;
 import lombok.Setter;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -28,7 +29,7 @@ public class SymptomService {
         Date todayDate = new Date();
         symptom.setDate(todayDate);
         for (Map.Entry<Long, Symptom> sym: symptoms.entrySet()) {
-            if (ApplicationState.isSameDay(sym.getValue().getDate(), todayDate)) {
+            if (Utilis.isSameDay(sym.getValue().getDate(), todayDate)) {
                 symptom.setId(sym.getValue().getId());
                 symptoms.put(sym.getValue().getId(), symptom);
                 logger.log( Level.INFO, "Symptom replaced : {0}", symptomsDTO);
@@ -45,7 +46,7 @@ public class SymptomService {
         logger.log( Level.INFO, "Adding symptom....", symptomsDTO);
         symptom.setDate(date);
         for (Map.Entry<Long, Symptom> sym: symptoms.entrySet()) {
-            if (ApplicationState.isSameDay(sym.getValue().getDate(), date)) {
+            if (Utilis.isSameDay(sym.getValue().getDate(), date)) {
                 symptom.setId(sym.getValue().getId());
                 symptoms.put(sym.getValue().getId(), symptom);
                 logger.log( Level.INFO, "Symptom replaced : {0}", symptomsDTO);
@@ -73,7 +74,7 @@ public class SymptomService {
         List<SymptomsDTO> symptomsDate = new ArrayList<>();
         for (Map.Entry<Long, Symptom> sym: symptoms.entrySet()) {
             if (beezzerId.equals(sym.getValue().getBeezzerId())
-                    && ApplicationState.isSameDay(sym.getValue().getDate(), date)) {
+                    && Utilis.isSameDay(sym.getValue().getDate(), date)) {
                 symptomsDate.add(new SymptomsDTO(sym.getValue()));
             }
         }

@@ -3,8 +3,8 @@ package ch.unil.doplab.beeaware.service;
 import ch.unil.doplab.beeaware.DTO.PollenDTO;
 import ch.unil.doplab.beeaware.Domain.Beezzer;
 import ch.unil.doplab.beeaware.DTO.PollenInfoDTO;
-import ch.unil.doplab.beeaware.domain.ApplicationState;
 import ch.unil.doplab.beeaware.Domain.Location;
+import ch.unil.doplab.beeaware.domain.Utilis;
 import ch.unil.doplab.beeaware.Domain.Pollen;
 import ch.unil.doplab.beeaware.Domain.PollenLocationIndex;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,10 +16,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static ch.unil.doplab.beeaware.domain.Utilis.formatDate;
 import static org.apache.http.client.utils.DateUtils.parseDate;
 
 public class ForeCastService {
@@ -31,7 +31,7 @@ public class ForeCastService {
         this.APIKEY = apiKEy;
     }
 
-    public void forecastAllLocationPrivate(Map<Long, Location> locations) {
+    public void forecastAllLocation(Map<Long, Location> locations) {
         logger.log( Level.INFO, "Retrieving pollen per locations....");
         for (Map.Entry<Long, Location> loc: locations.entrySet()) {
             logger.log( Level.INFO, "Location : {0}", loc);
@@ -39,16 +39,6 @@ public class ForeCastService {
         }
     }
 
-    // TODO: Comment faire que qu'on puisse accéder à une instance de LocationService
-//    public void forecastAllLocation() {
-//        logger.log( Level.INFO, "Retrieving pollen per locations....");
-//        for (Location loc: LocationService.getAllRegisteredLocationsPrivate()) {
-//            logger.log( Level.INFO, "Location : {0}", loc);
-//            pollenForecast(loc, 1);
-//        }
-//    }
-
-    //TODO : Change for an ID
     // getIndex for a specific beezzer
     public List<PollenInfoDTO> getIndex(@NotNull Beezzer beezzer){
         logger.log( Level.INFO, "Retrieving pollen for a specific Beezzer...");
@@ -85,25 +75,19 @@ public class ForeCastService {
         return PollenShortDTOs;
     }
 
-    //TODO : Change for an ID
     // getIndex for a specific beezzer and date
     public List<PollenInfoDTO> getIndex(String stringDate, @NotNull Beezzer beezzer) {
         Date date = parseDate(stringDate);
         logger.log( Level.INFO, "Retrieving pollen for a specific Beezzer for the following day: {0}...", date);
-        Calendar calendar = Calendar.getInstance();
         List<PollenInfoDTO> PollenShortDTOs = new ArrayList<>();
         for (Map.Entry<Long, PollenLocationIndex> pollenLocationIndex : pollenLocationIndexService.getPollenLocationIndexMap().entrySet()) {
             if(pollenLocationIndex.getValue().getLocation().equals(beezzer.getLocation())){
 
                 for (PollenLocationIndex.DailyInfo dailyInfo : pollenLocationIndex.getValue().getDailyInfo()) {
-                    int year = dailyInfo.getDate().getYear();
-                    int month = dailyInfo.getDate().getMonth() - 1;
-                    int day = dailyInfo.getDate().getDay();
-                    calendar.set(year, month, day);
-                    Date dailyDate = calendar.getTime();
 
-                    if (ApplicationState.isSameDay(dailyDate, date)) {
+                    if (Utilis.isSameDay(formatDate(dailyInfo.getDate()), date)) {
 
+                        // TODO: fonction
                         for (PollenLocationIndex.PollenTypeInfo pollenTypeDailyInfo : dailyInfo.getPollenTypeInfo()) {
 
                             for (Map.Entry<Long, Pollen> pollen : beezzer.getAllergens().entrySet()) {
@@ -132,24 +116,17 @@ public class ForeCastService {
         return PollenShortDTOs;
     }
 
-    //TODO : Change for an ID
     // getIndex for a specific Location and date
     public List<PollenInfoDTO> getIndex(String stringDate, @NotNull Location location) {
         Date date = parseDate(stringDate);
         logger.log( Level.INFO, "Retrieving pollen for a specific Location for the following day: {0}...", date);
-        Calendar calendar = Calendar.getInstance();
         List<PollenInfoDTO> PollenShortDTOs = new ArrayList<>();
         for (Map.Entry<Long, PollenLocationIndex> pollenLocationIndex : pollenLocationIndexService.getPollenLocationIndexMap().entrySet()) {
             if(pollenLocationIndex.getValue().getLocation().equals(location)){
 
                 for (PollenLocationIndex.DailyInfo dailyInfo : pollenLocationIndex.getValue().getDailyInfo()) {
-                    int year = dailyInfo.getDate().getYear();
-                    int month = dailyInfo.getDate().getMonth() - 1;
-                    int day = dailyInfo.getDate().getDay();
-                    calendar.set(year, month, day);
-                    Date dailyDate = calendar.getTime();
 
-                    if (ApplicationState.isSameDay(dailyDate, date)) {
+                    if (Utilis.isSameDay(formatDate(dailyInfo.getDate()), date)) {
                         for (PollenLocationIndex.PollenTypeInfo pollenTypeDailyInfo : dailyInfo.getPollenTypeInfo()) {
                             if (pollenTypeDailyInfo.getIndexInfo() != null) {
                                         PollenShortDTOs.add(new PollenInfoDTO(pollenTypeDailyInfo));
@@ -168,24 +145,18 @@ public class ForeCastService {
         return PollenShortDTOs;
     }
 
-    //TODO : Change for an ID
     // getIndex for a specific Pollen, Location and date
     public List<PollenInfoDTO> getIndex(String stringDate, @NotNull Location location, @NotNull Pollen pollen) {
         Date date = parseDate(stringDate);
-        logger.log( Level.INFO, "Retrieving info on " + new PollenDTO(pollen) + " for the following day: {0}...", date);
-        Calendar calendar = Calendar.getInstance();
+        // TODO: New Object
+        logger.log( Level.INFO, "Retrieving info on {0} " + new PollenDTO(pollen) + " for the following day: {0}...", date);
         List<PollenInfoDTO> PollenShortDTOs = new ArrayList<>();
         for (Map.Entry<Long, PollenLocationIndex> pollenLocationIndex : pollenLocationIndexService.getPollenLocationIndexMap().entrySet()) {
             if(pollenLocationIndex.getValue().getLocation().equals(location)){
 
                 for (PollenLocationIndex.DailyInfo dailyInfo : pollenLocationIndex.getValue().getDailyInfo()) {
-                    int year = dailyInfo.getDate().getYear();
-                    int month = dailyInfo.getDate().getMonth() - 1;
-                    int day = dailyInfo.getDate().getDay();
-                    calendar.set(year, month, day);
-                    Date dailyDate = calendar.getTime();
 
-                    if (ApplicationState.isSameDay(dailyDate, date)) {
+                    if (Utilis.isSameDay(formatDate(dailyInfo.getDate()), date)) {
                         for (PollenLocationIndex.PollenTypeInfo pollenTypeDailyInfo : dailyInfo.getPollenTypeInfo()) {
                             if (pollen.getPollenNameEN().equals(pollenTypeDailyInfo.getDisplayName())) {
                                 if (pollenTypeDailyInfo.getIndexInfo() != null) {

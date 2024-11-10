@@ -7,8 +7,6 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 
-import java.awt.*;
-
 @Path("/pollenLocationIndex")
 public class PollenLocationIndexResource {
     @Inject

@@ -27,7 +27,7 @@ public class ApplicationState {
     private LocationService locationService;
     private SymptomService symptomService;
     private PollenLocationIndexService pollenLocationIndexService;
-    private AllergenService allergenService;
+    // private AllergenService allergenService;
     private GeoApiService geoApiService;
     private ForeCastService foreCastService;
     private TokenService tokenService;
@@ -40,22 +40,12 @@ public class ApplicationState {
         locationService = new LocationService();
         symptomService = new SymptomService();
         pollenLocationIndexService = new PollenLocationIndexService();
-        allergenService = new AllergenService();
+        // allergenService = new AllergenService();
         geoApiService = new GeoApiService(APIKEY);
         foreCastService = new ForeCastService(APIKEY, pollenLocationIndexService);
         tokenService = new TokenService();
 
         populateApplicationState();
-    }
-
-    public static boolean isSameDay(@NotNull Date date1, @NotNull Date date2) {
-        LocalDate localDate1 = date1.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
-        LocalDate localDate2 = date2.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
-        return localDate1.isEqual(localDate2);
     }
 
     private void populateApplicationState() {
@@ -65,8 +55,8 @@ public class ApplicationState {
             location.setCoordinate(geoApiService.getCoordinates(location.getNPA(), location.getCountry()));
             locationService.addLocation(location);
             Beezzer ony = new Beezzer("Ony", "o@unil.ch", "Q.-wDw124", location);
-            allergenService.addAllergen("Grasses", ony);
-            allergenService.addAllergen("Weed", ony);
+            beezzerService.addAllergen("Grasses", ony.getId());
+            beezzerService.addAllergen("Weed", ony.getId());
 
             beezzerService.addBeezzer(ony);
             for (Map.Entry<Long, Beezzer> beezzer: beezzerService.getBeezzers().entrySet()) {
@@ -89,7 +79,7 @@ public class ApplicationState {
                 System.out.println(symptom);
             }
 
-            foreCastService.forecastAllLocationPrivate(locationService.getLocations());
+            foreCastService.forecastAllLocation(locationService.getLocations());
 
             List<PollenInfoDTO> pollenShortDTOs = foreCastService.getIndex(ony);
             for (PollenInfoDTO pollen : pollenShortDTOs) {

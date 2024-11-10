@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 
 @Getter
 @Setter
+// TODO: remove after ... dots
 public class BeezzerService {
     private Long idBeezzer = 0L;
     private final Map<Long, Beezzer> beezzers = new HashMap<>();
@@ -103,11 +104,12 @@ public class BeezzerService {
         }
         if (!Pollen.getPredefinedPollens().contains(pollen)) {
             logger.log( Level.WARNING,"This pollen is not available in your country.");
+            return;
         }
         if (beezzer.getAllergens().containsKey(pollen.getId())) {
             logger.log( Level.WARNING,"This allergen is already saved to your list.");
+            return;
         }
-        // TODO: we modify in beezzer's allergens Map directly or in the AllergenService Map??
         beezzer.getAllergens().put(pollen.getId(), pollen);
     }
 
