@@ -21,6 +21,7 @@ public class AllergenService {
     private Logger logger = Logger.getLogger(AllergenService.class.getName());
 
     // TODO : Change to a table of allergen and specify an ID
+    // TODO : Should we use BeezzerService for all of this?
     /**
      * Adds a specific pollen allergen to the Beezzer's list of allergens
      * This method checks if the provided pollen and beezzer are not null and if it is part of

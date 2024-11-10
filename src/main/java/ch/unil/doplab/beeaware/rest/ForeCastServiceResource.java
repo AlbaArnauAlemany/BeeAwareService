@@ -35,7 +35,7 @@ public class ForeCastServiceResource {
 //    @GET
 //    @Consumes(MediaType.APPLICATION_JSON)
 //    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("/{date}/{beezzer}")
+//    @Path("/{date}&{beezzer}")
 //    public List<PollenInfoDTO> getIndex(@PathParam("date") String date, @PathParam("beezzer") Beezzer beezzer) {
 //        return state.getForeCastService().getIndex(date, beezzer);
 //    }
@@ -43,7 +43,7 @@ public class ForeCastServiceResource {
 //    @GET
 //    @Consumes(MediaType.APPLICATION_JSON)
 //    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("/{date}/{location}")
+//    @Path("/{date}&{location}")
 //    public List<PollenInfoDTO> getIndex(@PathParam("date") String date, @PathParam("location") Location location) {
 //        return state.getForeCastService().getIndex(date, location);
 //    }
@@ -51,7 +51,7 @@ public class ForeCastServiceResource {
 //    @GET
 //    @Consumes(MediaType.APPLICATION_JSON)
 //    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("/{date}/{location}/{pollen}")
+//    @Path("/{date}&{location}&{pollen}")
 //    public List<PollenInfoDTO> getIndex(@PathParam("date") String date, @PathParam("location") Location location, @PathParam("pollen") Pollen pollen) {
 //        return state.getForeCastService().getIndex(date, location, pollen);
 //    }

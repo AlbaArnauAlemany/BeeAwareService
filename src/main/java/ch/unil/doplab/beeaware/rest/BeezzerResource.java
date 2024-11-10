@@ -1,5 +1,6 @@
 package ch.unil.doplab.beeaware.rest;
 
+import ch.unil.doplab.beeaware.DTO.AllergenDTO;
 import ch.unil.doplab.beeaware.DTO.BeezzerDTO;
 import ch.unil.doplab.beeaware.DTO.LocationDTO;
 import ch.unil.doplab.beeaware.Domain.Beezzer;
@@ -60,20 +61,27 @@ public class BeezzerResource {
         return state.getBeezzerService().getBeezzerLocation(id);
     }
 
-    // TODO: use beezzer's ID?
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/{pollen}&{beezzer}")
-    public void addAllergen(@PathParam("pollen") String stringPollen, @PathParam("beezzer") Beezzer beezzer) {
-        state.getAllergenService().addAllergen(stringPollen, beezzer);
+    @Path("/allergens{pollen}&{beezzerID}")
+    public void addAllergen(@PathParam("pollen") String stringPollen, @PathParam("beezzerID") Long idBeezzer) {
+        state.getBeezzerService().addAllergen(stringPollen, idBeezzer);
     }
 
-    /// TODO: use beezzer's ID?
+    /// TODO: use pollen name instead of Allergen ID?
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/allergens/{id}&{beezzer}")
-    public boolean removeAllergen(@PathParam("id") Long idAllergen, @PathParam("beezzer") Beezzer beezzer) {
-        return state.getAllergenService().removeAllergen(idAllergen, beezzer);
+    @Path("/allergens{id}&{beezzerID}")
+    public boolean removeAllergen(@PathParam("id") Long idAllergen, @PathParam("beezzerID") Long idBeezzer) {
+        return state.getBeezzerService().removeAllergen(idAllergen, idBeezzer);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/allergens{beezzerID}")
+    public AllergenDTO getBeezzerAllergens(@PathParam("beezzerID") Long idBeezzer) {
+        return state.getBeezzerService().getBeezzerAllergens(idBeezzer);
     }
 }

@@ -39,7 +39,7 @@ public class SymptomResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{id}/{date}")
+    @Path("/{id}&{date}")
     public List<SymptomsDTO> getSymptoms(@PathParam("id") Long id, @PathParam("date") String stringDate) {
         Date date = parseDate(stringDate);
         return state.getSymptomService().getSymptoms(id, date);
