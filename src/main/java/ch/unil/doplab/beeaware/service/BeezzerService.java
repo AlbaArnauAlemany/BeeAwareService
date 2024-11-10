@@ -69,7 +69,7 @@ public class BeezzerService {
         var beezzer = beezzers.get(id);
         logger.log( Level.INFO, "Removing Beezzer...", beezzer.getUsername());
         if (beezzer == null) {
-            logger.log( Level.WARNING, "Beezzer with id {0} doesn't exist.", id);
+            logger.log( Level.WARNING, "Beezzer with ID {0} doesn't exist.", id);
             return false;
 
         }

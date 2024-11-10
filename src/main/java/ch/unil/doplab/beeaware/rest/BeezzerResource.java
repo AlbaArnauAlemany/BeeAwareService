@@ -3,6 +3,7 @@ package ch.unil.doplab.beeaware.rest;
 import ch.unil.doplab.beeaware.DTO.BeezzerDTO;
 import ch.unil.doplab.beeaware.DTO.LocationDTO;
 import ch.unil.doplab.beeaware.Domain.Beezzer;
+import ch.unil.doplab.beeaware.Domain.Pollen;
 import ch.unil.doplab.beeaware.domain.ApplicationState;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -57,5 +58,22 @@ public class BeezzerResource {
     @Path("/location/{id}")
     public LocationDTO getBeezzerLocation(@PathParam("id") Long id) {
         return state.getBeezzerService().getBeezzerLocation(id);
+    }
+
+    // TODO: use beezzer's ID?
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/{pollen}&{beezzer}")
+    public void addAllergen(@PathParam("pollen") String stringPollen, @PathParam("beezzer") Beezzer beezzer) {
+        state.getAllergenService().addAllergen(stringPollen, beezzer);
+    }
+
+    /// TODO: use beezzer's ID?
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/allergens/{id}&{beezzer}")
+    public boolean removeAllergen(@PathParam("id") Long idAllergen, @PathParam("beezzer") Beezzer beezzer) {
+        return state.getAllergenService().removeAllergen(idAllergen, beezzer);
     }
 }

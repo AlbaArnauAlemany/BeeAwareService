@@ -44,4 +44,11 @@ public class SymptomResource {
         Date date = parseDate(stringDate);
         return state.getSymptomService().getSymptoms(id, date);
     }
+
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{id}")
+    public boolean removeSymptom(@PathParam("id") Long idSymptom) {
+        return state.getSymptomService().removeSymptom(idSymptom);
+    }
 }

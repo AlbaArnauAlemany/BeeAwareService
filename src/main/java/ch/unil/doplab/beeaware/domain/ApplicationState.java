@@ -65,8 +65,8 @@ public class ApplicationState {
             location.setCoordinate(geoApiService.getCoordinates(location.getNPA(), location.getCountry()));
             locationService.addLocation(location);
             Beezzer ony = new Beezzer("Ony", "o@unil.ch", "Q.-wDw124", location);
-            allergenService.addAllergen(Pollen.getPollenByName("Grasses"), ony);
-            allergenService.addAllergen(Pollen.getPollenByName("Weed"), ony);
+            allergenService.addAllergen("Grasses", ony);
+            allergenService.addAllergen("Weed", ony);
 
             beezzerService.addBeezzer(ony);
             for (Map.Entry<Long, Beezzer> beezzer: beezzerService.getBeezzers().entrySet()) {

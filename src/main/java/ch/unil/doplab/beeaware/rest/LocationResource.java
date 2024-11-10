@@ -28,4 +28,10 @@ public class LocationResource {
         return new LinkedList<>(state.getLocationService().getAllRegisteredLocations());
     }
 
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{id}")
+    public boolean removeLocation(@PathParam("id") Long idLocation) {
+        return state.getLocationService().removeLocation(idLocation);
+    }
 }

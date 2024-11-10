@@ -30,5 +30,20 @@ public class PollenLocationIndexService {
         pollenLocationIndexMap.put(idPollenLocationIndex, pollenLocationIndex);
         logger.log( Level.INFO, "New pollenLocationIndex added : {0}", pollenLocationIndex);
     }
+
+    // TODO: For PollenInfoDTO is it .PollenTypeInfo or .PlantInfo
+    public boolean removePollenLocationIndex(Long idPollenLocationIndex) {
+        var pollenLocationIndex = pollenLocationIndexMap.get(idPollenLocationIndex);
+        // var pollenInfoDTO = new PollenInfoDTO(pollenLocationIndex.PollenTypeInfo());
+        logger.log( Level.INFO, "Removing PollenLocationIndex..."); //, pollenInfoDTO);
+        if (pollenLocationIndex == null) {
+            logger.log( Level.WARNING, "PollenLocationIndex with ID {0} doesn't exist.", idPollenLocationIndex);
+            return false;
+
+        }
+        pollenLocationIndexMap.remove(idPollenLocationIndex);
+        logger.log( Level.INFO, "PollenLocationIndex deleted."); //, pollenInfoDTO);
+        return true;
+    }
 }
 

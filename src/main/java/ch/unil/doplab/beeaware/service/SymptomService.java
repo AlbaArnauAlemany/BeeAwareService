@@ -79,4 +79,18 @@ public class SymptomService {
         }
         return symptomsDate;
     }
+
+    public boolean removeSymptom(Long idSymptom) {
+        var symptom = symptoms.get(idSymptom);
+        var symptomDTO = new SymptomsDTO(symptom);
+        logger.log( Level.INFO, "Removing Symptom...", symptomDTO);
+        if (symptom == null) {
+            logger.log( Level.WARNING, "Symptom with ID {0} doesn't exist.", idSymptom);
+            return false;
+
+        }
+        symptoms.remove(idSymptom);
+        logger.log( Level.INFO, "Symptom deleted : {0}", symptomDTO);
+        return true;
+    }
 }

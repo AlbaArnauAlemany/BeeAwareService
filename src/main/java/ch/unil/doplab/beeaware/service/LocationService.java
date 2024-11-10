@@ -50,4 +50,18 @@ public class LocationService {
         }
         return allLocations;
     }
+
+    public boolean removeLocation(Long idLocation) {
+        var location = locations.get(idLocation);
+        var locationDTO = new LocationDTO(location);
+        logger.log( Level.INFO, "Removing Location...", locationDTO);
+        if (location == null) {
+            logger.log( Level.WARNING, "Location with ID {0} doesn't exist.", idLocation);
+            return false;
+
+        }
+        locations.remove(idLocation);
+        logger.log( Level.INFO, "Location deleted : {0}", locationDTO);
+        return true;
+    }
 }

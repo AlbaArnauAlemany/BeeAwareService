@@ -14,6 +14,7 @@ import java.util.Map;
 public class AllergenDTO {
     List<PollenDTO> pollenList;
 
+    // TODO: if you want a specific allergen use PollenDTO
     public AllergenDTO(Map<Long, Pollen> allergens){
         for (Map.Entry<Long, Pollen> pollen: allergens.entrySet()) {
             PollenDTO pollenDTO = new PollenDTO((Pollen) pollen);
