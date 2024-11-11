@@ -4,6 +4,7 @@ import ch.unil.doplab.beeaware.DTO.AllergenDTO;
 import ch.unil.doplab.beeaware.DTO.BeezzerDTO;
 import ch.unil.doplab.beeaware.DTO.LocationDTO;
 import ch.unil.doplab.beeaware.Domain.Beezzer;
+import ch.unil.doplab.beeaware.Domain.Role;
 import ch.unil.doplab.beeaware.domain.ApplicationState;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -54,6 +55,8 @@ public class BeezzerResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @Secured
+    @RoleRequired({Role.ADMIN})
     @Path("/location/{id}")
     public LocationDTO getBeezzerLocation(@PathParam("id") Long id) {
         return state.getBeezzerService().getBeezzerLocation(id);

@@ -20,19 +20,19 @@ import java.util.logging.Logger;
 
 @Getter
 @Setter
-// TODO: remove after ... dots
 public class BeezzerService {
     private Long idBeezzer = 0L;
     private final Map<Long, Beezzer> beezzers = new HashMap<>();
     private Logger logger = Logger.getLogger(BeezzerService.class.getName());
 
-    public Beezzer addBeezzer(@NotNull Beezzer beezzer){
-        logger.log( Level.INFO, "Adding Beezzer...", beezzer);
+    public void addBeezzer(@NotNull Beezzer beezzer){
+        logger.log( Level.INFO, "Adding Beezzer...");
         for (Map.Entry<Long, Beezzer> bee: beezzers.entrySet()) {
             if (beezzer.getUsername() != null &&
                     bee.getValue().getUsername() != null &&
                     beezzer.getUsername().equals(bee.getValue().getUsername())) {
                 logger.log( Level.WARNING, "Username {0} already used. Please try a new one.", beezzer.getUsername());
+                return;
             }
         }
         if (beezzer.getId() == null) {
@@ -43,12 +43,11 @@ public class BeezzerService {
             beezzers.put(beezzer.getId(), beezzer);
         }
         logger.log( Level.INFO, "New Beezzer added : {0}", beezzer.getUsername());
-        return beezzer;
     }
 
     public BeezzerDTO getBeezzer(Long idBeezzer) {
         var beezzer = beezzers.get(idBeezzer);
-        logger.log( Level.INFO, "Searching for Beezzer...", beezzer.getUsername());
+        logger.log( Level.INFO, "Searching for Beezzer...");
         if (beezzer == null) {
             logger.log( Level.WARNING, "Beezzer with id {0} doesn't exist.", idBeezzer);
             return null;
@@ -72,20 +71,20 @@ public class BeezzerService {
 
     public boolean removeBeezzer(Long id) {
         var beezzer = beezzers.get(id);
-        logger.log( Level.INFO, "Removing Beezzer...", beezzer.getUsername());
+        logger.log(Level.INFO, "Removing Beezzer...");
         if (beezzer == null) {
-            logger.log( Level.WARNING, "Beezzer with ID {0} doesn't exist.", id);
+            logger.log(Level.WARNING, "Beezzer with ID {0} doesn't exist.", id);
             return false;
 
         }
         beezzers.remove(id);
-        logger.log( Level.INFO, "Beezzer deleted : {0}", beezzer.getUsername());
+        logger.log(Level.INFO, "Beezzer deleted : {0}", id);
         return true;
     }
 
     public LocationDTO getBeezzerLocation(Long beezzerId) {
         var beezzer = beezzers.get(beezzerId);
-        logger.log( Level.INFO, "Searching location for Beezzer...", beezzer.getUsername());
+        logger.log( Level.INFO, "Searching location for Beezzer...");
         if (beezzer == null) {
             logger.log( Level.WARNING, "Beezzer with id {0} doesn't exist.", beezzerId);
             return null;
@@ -97,7 +96,7 @@ public class BeezzerService {
         var pollen = Pollen.getPollenByName(stringPollen);
         PollenDTO pollenDTO = new PollenDTO(pollen);
         var beezzer = beezzers.get(idBeezzer);
-        logger.log( Level.INFO, "Adding Allergen " + pollenDTO + " for Beezzer " + beezzer.getUsername() + "...");
+        logger.log( Level.INFO, "Adding Allergen " + pollenDTO + " for Beezzer id " + idBeezzer + "...");
         if (beezzer == null) {
             logger.log( Level.WARNING, "Beezzer with id {0} doesn't exist.", idBeezzer);
             return;
@@ -115,7 +114,7 @@ public class BeezzerService {
 
     public AllergenDTO getBeezzerAllergens(Long idBeezzer) {
         var beezzer = beezzers.get(idBeezzer);
-        logger.log( Level.INFO, "Searching allergens for Beezzer...", beezzer.getUsername());
+        logger.log( Level.INFO, "Searching allergens for Beezzer...");
         AllergenDTO allergenDTO = new AllergenDTO(beezzer.getAllergens());
         if (beezzer == null) {
             logger.log( Level.WARNING, "Beezzer with id {0} doesn't exist.", idBeezzer);

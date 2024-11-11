@@ -51,14 +51,15 @@ public class ApplicationState {
     private void populateApplicationState() {
         // Alba: Utils.testModeOn(); used in StudyBuddy!!
         try {
+            logger.log( Level.SEVERE, "Populating application");
             Location location = new Location(1024, "CH");
             location.setCoordinate(geoApiService.getCoordinates(location.getNPA(), location.getCountry()));
             locationService.addLocation(location);
-            Beezzer ony = new Beezzer("Ony", "o@unil.ch", "Q.-wDw124", location);
+            Beezzer ony = new Beezzer("Ony", "o@unil.ch", "Q.-wDw124", location, Role.BEEZZER);
+            beezzerService.addBeezzer(ony);
             beezzerService.addAllergen("Grasses", ony.getId());
             beezzerService.addAllergen("Weed", ony.getId());
 
-            beezzerService.addBeezzer(ony);
             for (Map.Entry<Long, Beezzer> beezzer: beezzerService.getBeezzers().entrySet()) {
                 logger.log( Level.INFO, beezzer.toString());
             }
@@ -96,5 +97,4 @@ public class ApplicationState {
             logger.log( Level.SEVERE, e.getMessage());
         }
     }
-
 }

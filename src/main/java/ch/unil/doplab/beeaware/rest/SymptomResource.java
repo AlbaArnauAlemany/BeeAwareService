@@ -23,12 +23,12 @@ public class SymptomResource {
         state.getSymptomService().addSymptom(symptom);
     }
 
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void addSymptom(Symptom symptom, Date date) {
-        state.getSymptomService().addSymptom(symptom, date);
-    }
+//    @POST
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    public void addSymptom(Symptom symptom, Date date) {
+//        state.getSymptomService().addSymptom(symptom, date);
+//    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

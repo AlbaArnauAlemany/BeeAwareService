@@ -31,7 +31,7 @@ public class DailyTaskService {
         scheduler = Executors.newScheduledThreadPool(1);
 
         int targetHour = 10;
-        int targetMinute = 11;
+        int targetMinute = 45;
 
 
         ZonedDateTime now = ZonedDateTime.now(ZoneId.systemDefault());

@@ -1,14 +1,13 @@
 package ch.unil.doplab.beeaware.service;
 
+import ch.unil.doplab.beeaware.Domain.Role;
 import ch.unil.doplab.beeaware.domain.Token;
+import ch.unil.doplab.beeaware.rest.RoleRequired;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

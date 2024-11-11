@@ -1,6 +1,9 @@
 package ch.unil.doplab.beeaware.domain;
 
+import ch.unil.doplab.beeaware.Domain.Beezzer;
 import ch.unil.doplab.beeaware.Domain.PollenLocationIndex;
+import ch.unil.doplab.beeaware.Domain.Role;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,8 +13,12 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.Calendar;
+import java.util.Objects;
 
 public class Utilis {
+    @Inject
+    private ApplicationState state;
+
 
     public static boolean isSameDay(@NotNull Date date1, @NotNull Date date2) {
         LocalDate localDate1 = date1.toInstant()
@@ -30,5 +37,10 @@ public class Utilis {
         int day = dailyInfo.getDay();
         calendar.set(year, month, day);
         return calendar.getTime();
+    }
+
+    public boolean isAdministrator(Long beezzerID) {
+        Beezzer beezzer = state.getBeezzerService().getBeezzers().get(beezzerID);
+        return Objects.equals(beezzer.getRole(), Role.ADMIN);
     }
 }

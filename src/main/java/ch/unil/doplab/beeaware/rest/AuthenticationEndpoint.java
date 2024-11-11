@@ -61,7 +61,7 @@ public class AuthenticationEndpoint {
         throw new Exception("No match with user or password");
     }
 
-    private String issueToken(Long userId) {
+    private String issueToken(Long beezzerId) {
         Random random = new SecureRandom();
         String tokenString = new BigInteger(130, random).toString(32);
         Date now = new Date();
@@ -69,7 +69,7 @@ public class AuthenticationEndpoint {
         calendar.setTime(now);
         calendar.add(Calendar.HOUR, 2);
         Date plusOneHour = calendar.getTime();
-        Token token = new Token(tokenString, plusOneHour, userId);
+        Token token = new Token(tokenString, plusOneHour, beezzerId, state.getBeezzerService().getBeezzers().get(beezzerId).getRole());
         state.getTokenService().addToken(token);
         return tokenString;
     }

@@ -1,17 +1,24 @@
 package ch.unil.doplab.beeaware.rest;
 
+import ch.unil.doplab.beeaware.Domain.Role;
 import ch.unil.doplab.beeaware.domain.ApplicationState;
+import ch.unil.doplab.beeaware.domain.Token;
 import ch.unil.doplab.beeaware.service.TokenService;
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
+import jakarta.ws.rs.container.ResourceInfo;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,6 +31,8 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     private static final String AUTHENTICATION_SCHEME = "Bearer";
     @Inject
     private ApplicationState state;
+    @Context
+    private ResourceInfo resourceInfo;
     private Logger logger = Logger.getLogger(AuthenticationFilter.class.getName());
 
     @Override
@@ -43,9 +52,29 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                 .substring(AUTHENTICATION_SCHEME.length()).trim();
 
         try {
+                // Validate the token and get the user roles
+                Role userRole = validateTokenAndGetRole(token);
 
-            // Validate the token
-            validateToken(token);
+                // Check if the user has the required roles for this method
+                Method method = resourceInfo.getResourceMethod();
+                if (method.isAnnotationPresent(RoleRequired.class)) {
+                    RoleRequired roleRequired = method.getAnnotation(RoleRequired.class);
+
+                    boolean authorized = false;
+                    for (Role role : roleRequired.value()) {
+                        if (userRole == role) {
+                            authorized = true;
+                            break;
+                        }
+                    }
+
+                    if (!authorized) {
+                        requestContext.abortWith(Response.status(Response.Status.FORBIDDEN)
+                                .entity("Accès refusé : rôle manquant.")
+                                .build());
+                        return;
+                    }
+                }
 
         } catch (Exception e) {
             abortWithUnauthorized(requestContext);
@@ -70,6 +99,29 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                         .header(HttpHeaders.WWW_AUTHENTICATE,
                                 AUTHENTICATION_SCHEME + " realm=\"" + REALM + "\"")
                         .build());
+    }
+
+    private Role validateTokenAndGetRole(String token) throws Exception {
+        validateToken(token);
+        if (!state.getTokenService().isAuthorizedToAccess(token)) {
+            throw new Exception("Token invalide");
+        }
+
+        Token tokenValidate = getTokenIfExist(token);
+
+        // Méthode fictive pour récupérer les rôles de l'utilisateur à partir du token
+        return tokenValidate.getRole();
+    }
+
+    private Token getTokenIfExist(String token){
+        for (Map.Entry<Long, Token> tok: state.getTokenService().getTokens().entrySet()) {
+            if(tok.getValue().getKey().equals(token)){
+                logger.log(Level.INFO, "Valid token : {0}", tok.getValue().getKey());
+                return tok.getValue();
+            }
+        }
+        logger.log(Level.WARNING, "No valid token for given token");
+        return null;
     }
 
     private void validateToken(String token) throws Exception {
