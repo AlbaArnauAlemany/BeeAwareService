@@ -32,7 +32,7 @@ public class ForeCastService {
     }
 
     public void forecastAllLocation(Map<Long, Location> locations) {
-        logger.log( Level.INFO, "Retrieving pollen per locations....");
+        logger.log(Level.INFO, "Retrieving pollen per locations....");
         for (Map.Entry<Long, Location> loc: locations.entrySet()) {
             logger.log( Level.INFO, "Location : {0}", loc);
             pollenForecast(loc.getValue(), 1);

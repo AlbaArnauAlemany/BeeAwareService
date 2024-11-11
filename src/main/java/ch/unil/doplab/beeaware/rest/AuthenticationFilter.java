@@ -1,7 +1,9 @@
 package ch.unil.doplab.beeaware.rest;
 
+import ch.unil.doplab.beeaware.domain.ApplicationState;
 import ch.unil.doplab.beeaware.service.TokenService;
 import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
@@ -20,7 +22,8 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
     private static final String REALM = "example";
     private static final String AUTHENTICATION_SCHEME = "Bearer";
-    private TokenService tokenService = new TokenService();
+    @Inject
+    private ApplicationState state;
     private Logger logger = Logger.getLogger(AuthenticationFilter.class.getName());
 
     @Override
@@ -70,7 +73,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     }
 
     private void validateToken(String token) throws Exception {
-        if(!tokenService.isAuthorizedToAccess(token)){
+        if(!state.getTokenService().isAuthorizedToAccess(token)){
             throw new Exception("No valid token founded");
         }
     }

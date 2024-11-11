@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 @Setter
 public class TokenService {
     private Long tokenId = 0L;
-    private static Map<Long, Token> tokens = new HashMap<>();
+    private Map<Long, Token> tokens = new HashMap<>();
     private Logger logger = Logger.getLogger(LocationService.class.getName());
 
     public void addToken(@NotNull Token token) {
