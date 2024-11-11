@@ -16,15 +16,13 @@ import java.util.logging.Logger;
 @Setter
 public class TokenService {
     private Long tokenId = 0L;
-    private Map<Long, Token> tokens = new HashMap<>();
+    private static Map<Long, Token> tokens = new HashMap<>();
     private Logger logger = Logger.getLogger(LocationService.class.getName());
 
     public void addToken(@NotNull Token token) {
-
-
         logger.log( Level.INFO, "Adding token...");
         for (Map.Entry<Long, Token> tok: tokens.entrySet()) {
-            if (tok.getValue().getBeezzerId() == token.getBeezzerId()) {
+            if (tok.getValue().getBeezzerId() == token.getBeezzerId() && isDateValide(token)) {
                 logger.log(Level.WARNING, "Token for beezzer {0} already exists", tok.getValue().getBeezzerId());
                 return;
             }
@@ -35,19 +33,14 @@ public class TokenService {
     }
 
     public boolean isDateValide(Token token){
-        logger.log(Level.WARNING, "Token isn't valid");
-        return token.getExpiration().before(new Date());
+        logger.log(Level.WARNING, "Token date isn't valid");
+        return token.getExpiration().after(new Date());
     }
 
     public boolean isAuthorizedToAccess(String token){
-        logger.log(Level.WARNING, "Token size : {0}", tokens.entrySet().size());
-
-        logger.log(Level.WARNING, "Start with TokenString : {0}", token);
         for (Map.Entry<Long, Token> tok: tokens.entrySet()) {
-            logger.log(Level.WARNING, "TokenString : {0}", token);
-            logger.log(Level.WARNING, "Saved token : {0}", tok.getValue().getKey());
             if(tok.getValue().getKey().equals(token)){
-                logger.log(Level.WARNING, "Valid until : {0}", tok.getValue().getExpiration());
+                logger.log(Level.INFO, "Valid until : {0}", tok.getValue().getExpiration());
                 if(isDateValide(tok.getValue())){
                     return true;
                 }

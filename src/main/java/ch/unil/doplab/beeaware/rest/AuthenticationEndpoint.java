@@ -50,10 +50,6 @@ public class AuthenticationEndpoint {
 
     private Long authenticate(String username, String password) throws Exception {
         for (Map.Entry<Long, Beezzer> bee: state.getBeezzerService().getBeezzers().entrySet()) {
-            logger.log( Level.SEVERE, username);
-            logger.log( Level.SEVERE, password);
-            logger.log( Level.SEVERE, bee.getValue().getUsername());
-            logger.log( Level.SEVERE, bee.getValue().getPassword());
             if (username != null && password != null &&
                     username.equals(bee.getValue().getUsername()) &&
                     checkPassword(password, bee.getValue().getPassword())) {
@@ -71,7 +67,7 @@ public class AuthenticationEndpoint {
         Date now = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(now);
-        calendar.add(Calendar.HOUR, 1);
+        calendar.add(Calendar.HOUR, 2);
         Date plusOneHour = calendar.getTime();
         Token token = new Token(tokenString, plusOneHour, userId);
         state.getTokenService().addToken(token);

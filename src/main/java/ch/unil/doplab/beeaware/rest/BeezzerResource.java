@@ -11,7 +11,6 @@ import jakarta.ws.rs.core.MediaType;
 import java.util.LinkedList;
 import java.util.List;
 
-// TODO: GOOD BeezzerResource
 @Path("/beezzers")
 public class BeezzerResource {
     @Inject
