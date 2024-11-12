@@ -4,9 +4,6 @@ import ch.unil.doplab.beeaware.Domain.Beezzer;
 import ch.unil.doplab.beeaware.Domain.PollenLocationIndex;
 import ch.unil.doplab.beeaware.Domain.Role;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
@@ -14,11 +11,14 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.Calendar;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Utilis {
     @Inject
     private ApplicationState state;
 
+    private static Logger logger = Logger.getLogger(Utilis.class.getName());
 
     public static boolean isSameDay(@NotNull Date date1, @NotNull Date date2) {
         LocalDate localDate1 = date1.toInstant()

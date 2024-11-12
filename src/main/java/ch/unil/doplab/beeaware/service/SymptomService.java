@@ -20,42 +20,23 @@ import java.util.logging.Logger;
 @Setter
 public class SymptomService {
     private Long idSymptom = 0L;
-    private final Map<Long, Symptom> symptoms = new HashMap<>();
+    private static final Map<Long, Symptom> symptoms = new HashMap<>();
     private Logger logger = Logger.getLogger(SymptomService.class.getName());
 
     public void addSymptom(@NotNull Symptom symptom){
         SymptomsDTO symptomsDTO = new SymptomsDTO(symptom);
         logger.log( Level.INFO, "Adding symptom....", symptomsDTO);
-        Date todayDate = new Date();
-        symptom.setDate(todayDate);
         for (Map.Entry<Long, Symptom> sym: symptoms.entrySet()) {
-            if (Utilis.isSameDay(sym.getValue().getDate(), todayDate)) {
+            if (Utilis.isSameDay(sym.getValue().getDate(), symptom.getDate()) && sym.getValue().getBeezzerId() == symptom.getBeezzerId()) {
                 symptom.setId(sym.getValue().getId());
                 symptoms.put(sym.getValue().getId(), symptom);
-                logger.log( Level.INFO, "Symptom replaced : {0}", symptomsDTO);
+                logger.log(Level.INFO, "Symptom replaced : {0}", symptomsDTO);
                 return;
             }
         }
-        symptom.setId(idSymptom++);
-        symptoms.put(symptom.getBeezzerId(), symptom);
-        logger.log( Level.INFO, "Symptom added : {0}", symptomsDTO);
-    }
-
-    public void addSymptom(@NotNull Symptom symptom, @NotNull Date date) {
-        SymptomsDTO symptomsDTO = new SymptomsDTO(symptom);
-        logger.log( Level.INFO, "Adding symptom....", symptomsDTO);
-        symptom.setDate(date);
-        for (Map.Entry<Long, Symptom> sym: symptoms.entrySet()) {
-            if (Utilis.isSameDay(sym.getValue().getDate(), date)) {
-                symptom.setId(sym.getValue().getId());
-                symptoms.put(sym.getValue().getId(), symptom);
-                logger.log( Level.INFO, "Symptom replaced : {0}", symptomsDTO);
-                return;
-            }
-        }
-        symptom.setId(idSymptom++);
-        symptoms.put(symptom.getBeezzerId(), symptom);
-        logger.log( Level.INFO, "Symptom added : {0}", symptomsDTO);
+        symptom.setId(idSymptom);
+        symptoms.put(idSymptom++, symptom);
+        logger.log(Level.INFO, "Symptom added : {0}", symptomsDTO);
     }
 
     public List<SymptomsDTO> getSymptoms(@NotNull Long beezzerId) {
@@ -64,6 +45,7 @@ public class SymptomService {
         for (Map.Entry<Long, Symptom> sym: symptoms.entrySet()) {
             if (beezzerId.equals(sym.getValue().getBeezzerId())) {
                 symptomsBeezzer.add(new SymptomsDTO(sym.getValue()));
+                logger.log( Level.INFO, "Symptom : {0}", symptomsBeezzer.get(symptomsBeezzer.size()-1));
             }
         }
         return symptomsBeezzer;

@@ -65,21 +65,27 @@ public class ApplicationState {
             for (Map.Entry<Long, Beezzer> beezzer: beezzerService.getBeezzers().entrySet()) {
                 logger.log(Level.INFO, beezzer.toString());
             }
+
+
+            Date d3 = new GregorianCalendar(2024, Calendar.FEBRUARY, 11).getTime();
+            Date d4 = new GregorianCalendar(2024, Calendar.FEBRUARY, 15).getTime();
+
             Symptom symptom1 = new Symptom(ony.getId(), ch.unil.doplab.beeaware.Domain.Level.HIGH_REACTION, false);
             Symptom symptom2 = new Symptom(ony.getId(), ch.unil.doplab.beeaware.Domain.Level.MODERATE_REACTION, false);
             Symptom symptom3 = new Symptom(ony.getId(), ch.unil.doplab.beeaware.Domain.Level.LOW_REACTION, true);
+            Symptom symptom4 = new Symptom(ony.getId(), ch.unil.doplab.beeaware.Domain.Level.LOW_REACTION, true);
+
+            symptom3.setDate(d3);
+            symptom4.setDate(d4);
+
             symptomService.addSymptom(symptom1);
             symptomService.addSymptom(symptom2);
-
-            Date d1 = new GregorianCalendar(2024, Calendar.FEBRUARY, 11).getTime();
-            Date d2 = new GregorianCalendar(2024, Calendar.FEBRUARY, 21).getTime();
-
-            symptomService.addSymptom(symptom1, d1);
-            symptomService.addSymptom(symptom3, d2);
-            symptomService.addSymptom(symptom2);
+            symptomService.addSymptom(symptom3);
+            symptomService.addSymptom(symptom4);
 
             for (SymptomsDTO symptom:symptomService.getSymptoms(ony.getId())) {
                 System.out.println(symptom);
+                logger.log(Level.INFO, "{0}", symptom);
             }
 
             foreCastService.forecastAllLocation(locationService.getLocations());
