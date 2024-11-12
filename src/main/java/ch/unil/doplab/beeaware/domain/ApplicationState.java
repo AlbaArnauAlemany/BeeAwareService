@@ -71,9 +71,9 @@ public class ApplicationState {
             Date d3 = new GregorianCalendar(2024, Calendar.FEBRUARY, 11).getTime();
             Date d4 = new GregorianCalendar(2024, Calendar.FEBRUARY, 15).getTime();
 
-            Symptom symptom1 = new Symptom(ony.getId(), ch.unil.doplab.beeaware.Domain.Level.HIGH_REACTION, false);
-            Symptom symptom2 = new Symptom(ony.getId(), ch.unil.doplab.beeaware.Domain.Level.MODERATE_REACTION, false);
-            Symptom symptom3 = new Symptom(ony.getId(), ch.unil.doplab.beeaware.Domain.Level.LOW_REACTION, true);
+            Symptom symptom1 = new Symptom(ony.getId(), Reaction.HIGH_REACTION, false);
+            Symptom symptom2 = new Symptom(ony.getId(), Reaction.MODERATE_REACTION, false);
+            Symptom symptom3 = new Symptom(ony.getId(), Reaction.LOW_REACTION, true);
             Symptom symptom4 = new Symptom(ony.getId(), ch.unil.doplab.beeaware.Domain.Level.LOW_REACTION, true);
 
             symptom3.setDate(d3);

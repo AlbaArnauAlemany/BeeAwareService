@@ -21,7 +21,8 @@ public class LocationService {
     private Logger logger = Logger.getLogger(LocationService.class.getName());
 
     public void addLocation(@NotNull Location location) {
-        logger.log(Level.INFO, "Adding location...", location);
+        LocationDTO locationDTO = new LocationDTO(location);
+        logger.log(Level.INFO, "Adding location...", locationDTO);
         for (Map.Entry<Long, Location> loc : locations.entrySet()) {
             if (loc.getValue().equals(location)) {
                 logger.log(Level.WARNING, "Location already exists: {0}", location);
@@ -44,13 +45,13 @@ public class LocationService {
 
     public boolean removeLocation(Long idLocation) {
         var location = locations.get(idLocation);
-        var locationDTO = new LocationDTO(location);
         logger.log(Level.INFO, "Removing Location...");
         if (location == null) {
             logger.log(Level.WARNING, "Location with ID {0} doesn't exist.", idLocation);
             return false;
 
         }
+        var locationDTO = new LocationDTO(location);
         locations.remove(idLocation);
         logger.log(Level.INFO, "Location deleted : {0}", locationDTO);
         return true;

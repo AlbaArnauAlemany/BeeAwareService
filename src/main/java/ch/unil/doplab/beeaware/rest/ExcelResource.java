@@ -1,5 +1,6 @@
 package ch.unil.doplab.beeaware.rest;
 
+import ch.unil.doplab.beeaware.Domain.Role;
 import ch.unil.doplab.beeaware.domain.ApplicationState;
 import ch.unil.doplab.beeaware.service.ExcelService;
 import jakarta.inject.Inject;
@@ -21,6 +22,8 @@ public class ExcelResource {
     private ApplicationState state;
 
     @GET
+    @Secured
+    @SameID
     @Path("/download/{id}")
     @Produces("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     public Response downloadExcelFile(@PathParam("id") Long id) {

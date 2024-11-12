@@ -25,7 +25,7 @@ public class BeezzerService {
     private Logger logger = Logger.getLogger(BeezzerService.class.getName());
 
     public void addBeezzer(@NotNull Beezzer beezzer) {
-        logger.log(Level.INFO, "Adding Beezzer...");
+        logger.log(Level.INFO, "Adding Beezzer {0}...", beezzer.getUsername());
         for (Map.Entry<Long, Beezzer> bee : beezzers.entrySet()) {
             if (beezzer.getUsername() != null &&
                     bee.getValue().getUsername() != null &&
@@ -64,7 +64,7 @@ public class BeezzerService {
     }
 
     public void setBeezzer(@NotNull Beezzer beezzer) {
-        logger.log(Level.INFO, "Setting Beezzer...", beezzer.getUsername());
+        logger.log(Level.INFO, "Setting Beezzer {0}...", beezzer.getUsername());
         beezzers.put(beezzer.getId(), beezzer);
     }
 
@@ -92,15 +92,11 @@ public class BeezzerService {
     }
 
     public void addAllergen(String stringPollen, Long idBeezzer) {
+        logger.log( Level.INFO, "Trying to add allergen {0} for Beezzer id {1}...", new Object[]{stringPollen, String.valueOf(idBeezzer)});
         var pollen = Pollen.getPollenByName(stringPollen);
         var beezzer = beezzers.get(idBeezzer);
-        logger.log(Level.INFO, "Adding allergen for Beezzer id " + idBeezzer + "...");
         if (beezzer == null) {
             logger.log(Level.WARNING, "Beezzer with id {0} doesn't exist.", idBeezzer);
-            return;
-        }
-        if (!Pollen.getPredefinedPollens().contains(pollen)) {
-            logger.log(Level.WARNING, "This pollen is not available in your country.");
             return;
         }
         if (beezzer.getAllergens().containsKey(pollen.getId())) {
@@ -112,24 +108,24 @@ public class BeezzerService {
 
     public AllergenDTO getBeezzerAllergens(Long idBeezzer) {
         var beezzer = beezzers.get(idBeezzer);
-        logger.log(Level.INFO, "Searching allergens for Beezzer...");
-        AllergenDTO allergenDTO = new AllergenDTO(beezzer.getAllergens());
+        logger.log( Level.INFO, "Searching allergens for Beezzer with id {0}...", idBeezzer);
         if (beezzer == null) {
             logger.log(Level.WARNING, "Beezzer with id {0} doesn't exist.", idBeezzer);
             return null;
         }
+        AllergenDTO allergenDTO = new AllergenDTO(beezzer.getAllergens());
         return allergenDTO;
     }
 
     public boolean removeAllergen(Long idAllergen, Long idBeezzer) {
         var beezzer = beezzers.get(idBeezzer);
-        var allergen = beezzer.getAllergens().get(idAllergen);
-        var pollenDTO = new PollenDTO(allergen);
-        logger.log(Level.INFO, "Removing Allergen...", pollenDTO);
+        logger.log( Level.INFO, "Removing Allergen...");
         if (beezzer == null) {
             logger.log(Level.WARNING, "Beezzer with id {0} doesn't exist.", idBeezzer);
             return false;
         }
+        var allergen = beezzer.getAllergens().get(idAllergen);
+        var pollenDTO = new PollenDTO(allergen);
         if (allergen == null) {
             logger.log(Level.WARNING, "Allergen with ID {0} doesn't exist.", idAllergen);
             return false;
