@@ -49,14 +49,14 @@ public class BeezzerService {
         var beezzer = beezzers.get(idBeezzer);
         logger.log( Level.INFO, "Searching for Beezzer...");
         if (beezzer == null) {
-            logger.log( Level.WARNING, "Beezzer with id {0} doesn't exist.", idBeezzer);
+            logger.log(Level.WARNING, "Beezzer with id {0} doesn't exist.", idBeezzer);
             return null;
         }
         return new BeezzerDTO(beezzer);
     }
 
     public List<BeezzerDTO> getAllBeezzers() {
-        logger.log( Level.INFO, "Searching for all registered Beezzers...");
+        logger.log(Level.INFO, "Searching for all registered Beezzers...");
         List<BeezzerDTO> allBeezzers = new ArrayList<>();
         for (Map.Entry<Long, Beezzer> beezzer : beezzers.entrySet()){
             allBeezzers.add(new BeezzerDTO(beezzer.getValue()));
@@ -65,7 +65,7 @@ public class BeezzerService {
     }
 
     public void setBeezzer(@NotNull Beezzer beezzer) {
-        logger.log( Level.INFO, "Setting Beezzer...", beezzer.getUsername());
+        logger.log(Level.INFO, "Setting Beezzer...", beezzer.getUsername());
         beezzers.put(beezzer.getId(), beezzer);
     }
 
@@ -94,9 +94,8 @@ public class BeezzerService {
 
     public void addAllergen(String stringPollen, Long idBeezzer) {
         var pollen = Pollen.getPollenByName(stringPollen);
-        PollenDTO pollenDTO = new PollenDTO(pollen);
         var beezzer = beezzers.get(idBeezzer);
-        logger.log( Level.INFO, "Adding Allergen " + pollenDTO + " for Beezzer id " + idBeezzer + "...");
+        logger.log( Level.INFO, "Adding allergen for Beezzer id " + idBeezzer + "...");
         if (beezzer == null) {
             logger.log( Level.WARNING, "Beezzer with id {0} doesn't exist.", idBeezzer);
             return;

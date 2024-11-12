@@ -63,9 +63,9 @@ public class ApplicationState {
             for (Map.Entry<Long, Beezzer> beezzer: beezzerService.getBeezzers().entrySet()) {
                 logger.log( Level.INFO, beezzer.toString());
             }
-            Symptom symptom1 = new Symptom(ony.getId(), 8, false);
-            Symptom symptom2 = new Symptom(ony.getId(), 5, false);
-            Symptom symptom3 = new Symptom(ony.getId(), 3, true);
+            Symptom symptom1 = new Symptom(ony.getId(), ch.unil.doplab.beeaware.Domain.Level.HIGH_REACTION, false);
+            Symptom symptom2 = new Symptom(ony.getId(), ch.unil.doplab.beeaware.Domain.Level.MODERATE_REACTION, false);
+            Symptom symptom3 = new Symptom(ony.getId(), ch.unil.doplab.beeaware.Domain.Level.LOW_REACTION, true);
             symptomService.addSymptom(symptom1);
             symptomService.addSymptom(symptom2);
 

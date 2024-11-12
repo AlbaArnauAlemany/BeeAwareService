@@ -15,9 +15,17 @@ public class BeezzerDTO {
     private AllergenDTO allergens;
 
     public BeezzerDTO(Beezzer beezzer){
-        this.username = beezzer.getUsername();
-        this.email = beezzer.getEmail();
-        this.location = new LocationDTO(beezzer.getLocation());
-        this.allergens = new AllergenDTO(beezzer.getAllergens());
+        if(beezzer.getUsername() != null) {
+            this.username = beezzer.getUsername();
+        }
+        if(beezzer.getEmail() != null) {
+            this.email = beezzer.getEmail();
+        }
+        if(beezzer.getLocation() != null) {
+            this.location = new LocationDTO(beezzer.getLocation());
+        }
+        if(beezzer.getAllergens() != null) {
+            this.allergens = new AllergenDTO(beezzer.getAllergens());
+        }
     }
 }

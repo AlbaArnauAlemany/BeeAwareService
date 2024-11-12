@@ -70,14 +70,37 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
                     if (!authorized) {
                         requestContext.abortWith(Response.status(Response.Status.FORBIDDEN)
-                                .entity("Accès refusé : rôle manquant.")
+                                .entity("Access denied: Missing role")
                                 .build());
                         return;
                     }
                 }
 
+                if (method.isAnnotationPresent(SameID.class)) {
+                    Token currentUserToken = getTokenIfExist(token);
+                    if(currentUserToken.getRole() != Role.ADMIN) {
+                        Long requestedBeezzerId = extractUserIdFromRequest(requestContext);
+
+                        if (requestedBeezzerId == null || !requestedBeezzerId.equals(currentUserToken.getBeezzerId())) {
+                            requestContext.abortWith(Response.status(Response.Status.FORBIDDEN)
+                                    .entity("Access denied: Beezzer ID inccorect")
+                                    .build());
+                        }
+                    }
+                }
+
         } catch (Exception e) {
             abortWithUnauthorized(requestContext);
+        }
+    }
+
+    private Long extractUserIdFromRequest(ContainerRequestContext requestContext) {
+        String userIdParam = requestContext.getUriInfo().getPathParameters().getFirst("beezerId");
+        try {
+            return userIdParam != null ? Long.parseLong(userIdParam) : null;
+        } catch (NumberFormatException e) {
+            logger.log(Level.WARNING, "Invalid user ID format: {0}", userIdParam);
+            return null;
         }
     }
 
