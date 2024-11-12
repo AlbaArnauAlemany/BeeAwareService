@@ -180,21 +180,25 @@ public class ForeCastService {
     }
 
     public void pollenForecast(Location location, int days) {
-        String url = String.format(
-                "https://pollen.googleapis.com/v1/forecast:lookup?key=%s&location.longitude=%s&location.latitude=%s&days=%s",
-                APIKEY, location.getCoordinate().getLongitude(), location.getCoordinate().getLatitude(), days);
-
         try {
-            NetHttpTransport httpTransport = new NetHttpTransport();
-            HttpRequestFactory requestFactory = httpTransport.createRequestFactory();
-            HttpRequest request = requestFactory.buildGetRequest(new com.google.api.client.http.GenericUrl(url));
-            HttpResponse response = request.execute();
+            if (location.getCoordinate() != null) {
+                String url = String.format(
+                        "https://pollen.googleapis.com/v1/forecast:lookup?key=%s&location.longitude=%s&location.latitude=%s&days=%s",
+                        APIKEY, location.getCoordinate().getLongitude(), location.getCoordinate().getLatitude(), days);
+                NetHttpTransport httpTransport = new NetHttpTransport();
+                HttpRequestFactory requestFactory = httpTransport.createRequestFactory();
+                HttpRequest request = requestFactory.buildGetRequest(new com.google.api.client.http.GenericUrl(url));
+                HttpResponse response = request.execute();
 
-            String jsonResponse = response.parseAsString();
-            ObjectMapper objectMapper = new ObjectMapper();
-            PollenLocationIndex pollenInfo = objectMapper.readValue(jsonResponse, PollenLocationIndex.class);
-            pollenInfo.setLocation(location);
-            pollenLocationIndexService.addPollenLocationIndex(pollenInfo);
+                String jsonResponse = response.parseAsString();
+                ObjectMapper objectMapper = new ObjectMapper();
+                PollenLocationIndex pollenInfo = objectMapper.readValue(jsonResponse, PollenLocationIndex.class);
+                pollenInfo.setLocation(location);
+                pollenLocationIndexService.addPollenLocationIndex(pollenInfo);
+            } else {
+                logger.log( Level.SEVERE, "Error, coordinate null");
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

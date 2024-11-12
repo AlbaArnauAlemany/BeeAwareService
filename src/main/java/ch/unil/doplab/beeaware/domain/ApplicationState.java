@@ -8,10 +8,6 @@ import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.Getter;
 import lombok.Setter;
-import org.jetbrains.annotations.NotNull;
-
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,8 +56,14 @@ public class ApplicationState {
             beezzerService.addAllergen("Grasses", ony.getId());
             beezzerService.addAllergen("Weed", ony.getId());
 
+            Location locationAlb = new Location(1020, "CH");
+            location.setCoordinate(geoApiService.getCoordinates(location.getNPA(), location.getCountry()));
+            locationService.addLocation(locationAlb);
+            Beezzer alb = new Beezzer("alb", "alb@unil.ch", "Q.-wDw123", location, Role.ADMIN);
+            beezzerService.addBeezzer(alb);
+
             for (Map.Entry<Long, Beezzer> beezzer: beezzerService.getBeezzers().entrySet()) {
-                logger.log( Level.INFO, beezzer.toString());
+                logger.log(Level.INFO, beezzer.toString());
             }
             Symptom symptom1 = new Symptom(ony.getId(), ch.unil.doplab.beeaware.Domain.Level.HIGH_REACTION, false);
             Symptom symptom2 = new Symptom(ony.getId(), ch.unil.doplab.beeaware.Domain.Level.MODERATE_REACTION, false);

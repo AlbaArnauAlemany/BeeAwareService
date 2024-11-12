@@ -78,8 +78,10 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
                 if (method.isAnnotationPresent(SameID.class)) {
                     Token currentUserToken = getTokenIfExist(token);
+                    logger.log(Level.INFO, "Current Beezzer: {0}", currentUserToken);
                     if(currentUserToken.getRole() != Role.ADMIN) {
-                        Long requestedBeezzerId = extractUserIdFromRequest(requestContext);
+                        Long requestedBeezzerId = extractBeezzerIdFromRequest(requestContext);
+                        logger.log(Level.INFO, "BeezzerID user: {0}", requestedBeezzerId);
 
                         if (requestedBeezzerId == null || !requestedBeezzerId.equals(currentUserToken.getBeezzerId())) {
                             requestContext.abortWith(Response.status(Response.Status.FORBIDDEN)
@@ -94,8 +96,8 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         }
     }
 
-    private Long extractUserIdFromRequest(ContainerRequestContext requestContext) {
-        String userIdParam = requestContext.getUriInfo().getPathParameters().getFirst("beezerId");
+    private Long extractBeezzerIdFromRequest(ContainerRequestContext requestContext) {
+        String userIdParam = requestContext.getUriInfo().getPathParameters().getFirst("id");
         try {
             return userIdParam != null ? Long.parseLong(userIdParam) : null;
         } catch (NumberFormatException e) {

@@ -49,11 +49,12 @@ public class AuthenticationEndpoint {
     private Logger logger = Logger.getLogger(AuthenticationEndpoint.class.getName());
 
     private Long authenticate(String username, String password) throws Exception {
+        logger.log(Level.SEVERE, "Beezzer {0} trying to authenticate", username);
         for (Map.Entry<Long, Beezzer> bee: state.getBeezzerService().getBeezzers().entrySet()) {
             if (username != null && password != null &&
                     username.equals(bee.getValue().getUsername()) &&
                     checkPassword(password, bee.getValue().getPassword())) {
-                logger.log(Level.FINE, "User {0} successfully connected", username);
+                logger.log(Level.INFO, "Beezzer {0} successfully connected", username);
                 return bee.getValue().getId();
             }
         }

@@ -18,6 +18,8 @@ public class BeezzerResource {
     private ApplicationState state;
 
     @GET
+    @Secured
+    @RoleRequired({Role.ADMIN})
     @Produces(MediaType.APPLICATION_JSON)
     public List<BeezzerDTO> getAllBeezzers() {
         return new LinkedList<>(state.getBeezzerService().getAllBeezzers());
@@ -25,6 +27,8 @@ public class BeezzerResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    @SameID
     @Path("/{id}")
     public BeezzerDTO getBeezzer(@PathParam("id") Long id) {
         return state.getBeezzerService().getBeezzer(id);
