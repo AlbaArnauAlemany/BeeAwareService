@@ -1,6 +1,7 @@
 package ch.unil.doplab.beeaware.rest;
 
 import ch.unil.doplab.beeaware.Domain.PollenLocationIndex;
+import ch.unil.doplab.beeaware.Domain.Role;
 import ch.unil.doplab.beeaware.domain.ApplicationState;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
@@ -27,6 +28,8 @@ public class ServiceResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    @RoleRequired(Role.ADMIN)
     @Path("/pollenlocationsindex")
     public Map<Long, PollenLocationIndex> getPollenLocationIndex() {
         return state.getPollenLocationIndexService().getPollenLocationIndexMap();

@@ -2,7 +2,7 @@ package ch.unil.doplab.beeaware.service;
 
 import ch.unil.doplab.beeaware.DTO.SymptomsDTO;
 import ch.unil.doplab.beeaware.Domain.Symptom;
-import ch.unil.doplab.beeaware.domain.Utilis;
+import ch.unil.doplab.beeaware.domain.Utils;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static org.apache.http.client.utils.DateUtils.parseDate;
 
 @Getter
 @Setter
@@ -22,7 +24,7 @@ public class SymptomService {
         SymptomsDTO symptomsDTO = new SymptomsDTO(symptom);
         logger.log(Level.INFO, "Adding symptom....", symptomsDTO);
         for (Map.Entry<Long, Symptom> sym : symptoms.entrySet()) {
-            if (Utilis.isSameDay(sym.getValue().getDate(), symptom.getDate()) && sym.getValue().getBeezzerId() == symptom.getBeezzerId()) {
+            if (Utils.isSameDay(sym.getValue().getDate(), symptom.getDate()) && sym.getValue().getBeezzerId() == symptom.getBeezzerId()) {
                 symptom.setId(sym.getValue().getId());
                 symptoms.put(sym.getValue().getId(), symptom);
                 logger.log(Level.INFO, "Symptom replaced : {0}", symptomsDTO);
@@ -32,6 +34,15 @@ public class SymptomService {
         symptom.setId(idSymptom);
         symptoms.put(idSymptom++, symptom);
         logger.log(Level.INFO, "Symptom added : {0}", symptomsDTO);
+    }
+
+    public List<SymptomsDTO> getAllSymptoms() {
+        logger.log( Level.INFO, "Searching for all registered symptoms...");
+        List<SymptomsDTO> symptomsList = new ArrayList<>();
+        for (Map.Entry<Long, Symptom> sym: symptoms.entrySet()) {
+                symptomsList.add(new SymptomsDTO(sym.getValue()));
+            }
+        return symptomsList;
     }
 
     public List<SymptomsDTO> getSymptoms(@NotNull Long beezzerId) {
@@ -46,12 +57,13 @@ public class SymptomService {
         return symptomsBeezzer;
     }
 
-    public List<SymptomsDTO> getSymptoms(@NotNull Long beezzerId, @NotNull Date date) {
-        logger.log(Level.INFO, "Searching for Beezzer " + beezzerId + " for following day: " + date + "...");
+    public List<SymptomsDTO> getSymptoms(@NotNull Long beezzerId, String stringDate){
+        Date date = parseDate(stringDate);
+        logger.log( Level.INFO, "Searching symptoms for Beezzer {0} for the following day: {1}...", new Object[]{String.valueOf(beezzerId), String.valueOf(date)});
         List<SymptomsDTO> symptomsDate = new ArrayList<>();
         for (Map.Entry<Long, Symptom> sym : symptoms.entrySet()) {
             if (beezzerId.equals(sym.getValue().getBeezzerId())
-                    && Utilis.isSameDay(sym.getValue().getDate(), date)) {
+                    && Utils.isSameDay(sym.getValue().getDate(), date)) {
                 symptomsDate.add(new SymptomsDTO(sym.getValue()));
             }
         }
@@ -60,13 +72,13 @@ public class SymptomService {
 
     public boolean removeSymptom(Long idSymptom) {
         var symptom = symptoms.get(idSymptom);
-        var symptomDTO = new SymptomsDTO(symptom);
         logger.log(Level.INFO, "Removing Symptom...");
         if (symptom == null) {
             logger.log(Level.WARNING, "Symptom with ID {0} doesn't exist.", idSymptom);
             return false;
 
         }
+        var symptomDTO = new SymptomsDTO(symptom);
         symptoms.remove(idSymptom);
         logger.log(Level.INFO, "Symptom deleted : {0}", symptomDTO);
         return true;

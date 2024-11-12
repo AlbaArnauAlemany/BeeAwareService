@@ -37,6 +37,8 @@ public class BeezzerResource {
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
+    @Secured
+    @RoleRequired({Role.ADMIN})
     @Path("/setBeezzer")
     public void setBeezzer(Beezzer beezzer) {
         state.getBeezzerService().setBeezzer(beezzer);
@@ -52,6 +54,8 @@ public class BeezzerResource {
 
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    @RoleRequired({Role.ADMIN})
     @Path("/{id}")
     public boolean removeBeezzer(@PathParam("id") Long id) {
         return state.getBeezzerService().removeBeezzer(id);
@@ -70,23 +74,29 @@ public class BeezzerResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/allergens/{pollen}&{beezzerID}")
-    public void addAllergen(@PathParam("pollen") String stringPollen, @PathParam("beezzerID") Long idBeezzer) {
+    @Secured
+    @SameID
+    @Path("/{beezzerid}/allergens")
+    public void addAllergen(@PathParam("beezzerid") Long idBeezzer, @QueryParam("pollen") String stringPollen) {
         state.getBeezzerService().addAllergen(stringPollen, idBeezzer);
     }
 
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/allergens/{allergenid}&{beezzerid}")
-    public boolean removeAllergen(@PathParam("allergenid") Long idAllergen, @PathParam("beezzerid") Long idBeezzer) {
+    @Secured
+    @SameID
+    @Path("/{beezzerid}/allergens")
+    public boolean removeAllergen(@PathParam("beezzerid") Long idBeezzer, @QueryParam("allergenid") Long idAllergen) {
         return state.getBeezzerService().removeAllergen(idAllergen, idBeezzer);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/allergens{beezzerID}")
-    public AllergenDTO getBeezzerAllergens(@PathParam("beezzerID") Long idBeezzer) {
+    @Secured
+    @SameID
+    @Path("/{beezzerid}/allergens")
+    public AllergenDTO getBeezzerAllergens(@PathParam("beezzerid") Long idBeezzer) {
         return state.getBeezzerService().getBeezzerAllergens(idBeezzer);
     }
 }
