@@ -10,7 +10,7 @@ import jakarta.ws.rs.core.MediaType;
 
 import java.util.List;
 
-@Path("/symptoms")
+@Path("/symptom")
 public class SymptomResource {
     @Inject
     private ApplicationState state;

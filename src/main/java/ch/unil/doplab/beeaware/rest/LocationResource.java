@@ -11,7 +11,7 @@ import jakarta.ws.rs.core.MediaType;
 import java.util.LinkedList;
 import java.util.List;
 
-@Path("/locations")
+@Path("/location")
 public class LocationResource {
     @Inject
     private ApplicationState state;
@@ -27,7 +27,7 @@ public class LocationResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
     @RoleRequired(Role.ADMIN)
-    public List<LocationDTO> getAllRegisteredLocations() {
+    public List<LocationDTO> getAllLocations() {
         return new LinkedList<>(state.getLocationService().getAllRegisteredLocations());
     }
 

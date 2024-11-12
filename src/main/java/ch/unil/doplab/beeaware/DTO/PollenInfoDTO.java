@@ -17,6 +17,7 @@ public class PollenInfoDTO {
     private String crossReaction;
     private Date date;
 
+
     public PollenInfoDTO(PollenLocationIndex.PollenTypeInfo pollenTypeDailyInfo) {
         this.displayName = pollenTypeDailyInfo.getDisplayName();
         this.index = pollenTypeDailyInfo.getIndexInfo().getValue();
@@ -30,6 +31,7 @@ public class PollenInfoDTO {
         this.recommendation = pollenDailyInfo.getIndexInfo().getIndexDescription();
         this.crossReaction = pollenDailyInfo.getPlantDescription().getCrossReaction();
     }
+
 
     @Override
     public String toString() {
