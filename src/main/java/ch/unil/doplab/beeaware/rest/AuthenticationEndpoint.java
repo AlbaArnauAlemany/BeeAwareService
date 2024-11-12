@@ -18,7 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static ch.unil.doplab.beeaware.Domain.PasswordUtilis.checkPassword;
-
+//https://stackoverflow.com/questions/26777083/how-to-implement-rest-token-based-authentication-with-jax-rs-and-jersey
 @Path("/authentication")
 public class AuthenticationEndpoint {
     @Inject
