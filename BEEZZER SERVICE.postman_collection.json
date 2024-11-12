@@ -1,0 +1,634 @@
+{
+	"info": {
+		"_postman_id": "d23d98ea-6f86-4d6b-8aed-3a2290093bd1",
+		"name": "BEEZZER SERVICE",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "AUTHENTIFICATION",
+			"item": [
+				{
+					"name": "AUTHENTIFICATION ONY",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "Ony",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Q.-wDw124",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/authentication",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"authentication"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "Ony",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "Q.-wDw124",
+									"disabled": true
+								},
+								{
+									"key": null,
+									"value": "application/x-www-form-urlencoded",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AUTHENTIFICATION ALBA",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "alb",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Q.-wDw123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/authentication",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"authentication"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "Ony",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "Q.-wDw124",
+									"disabled": true
+								},
+								{
+									"key": null,
+									"value": "application/x-www-form-urlencoded",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "BEEZZER",
+			"item": [
+				{
+					"name": "Remove Beezzer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "62dhjd52p4emu55hgg3skij295",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"beezzers",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Beezzer Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "62dhjd52p4emu55hgg3skij295",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"beezzers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put a Beezzer Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "62dhjd52p4emu55hgg3skij295",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/setBeezzer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"beezzers",
+								"setBeezzer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get allergens for a Beezzer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "62dhjd52p4emu55hgg3skij295",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/lallergens/ocation/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"beezzers",
+								"lallergens",
+								"ocation",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get for a Beezzer the location Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "62dhjd52p4emu55hgg3skij295",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/location/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"beezzers",
+								"location",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Beezzers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "62dhjd52p4emu55hgg3skij295",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"beezzers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get specific Beezzer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "p7hei9mntnou67lhgaqf5ehk60",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"beezzers",
+								"0"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "EXCEL",
+			"item": [
+				{
+					"name": "Download symptoms excel",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/excel/download/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"excel",
+								"download",
+								"0"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "LOCATION",
+			"item": [
+				{
+					"name": "Add location",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/location",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"location"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all locations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/location",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"location"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a location",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/location/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"location",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "POLLEN LOCATION INDEX",
+			"item": [
+				{
+					"name": "Get pollen location index",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/pollenLocationIndex",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"pollenLocationIndex"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add a pollen location index Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/pollenLocationIndex",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"pollenLocationIndex"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a pollen location index Copy",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/pollenLocationIndex/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"pollenLocationIndex",
+								"0"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SERVICE",
+			"item": [
+				{
+					"name": "Reset service Beeaware",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/service/reset",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"service",
+								"reset"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SYMPTOM",
+			"item": [
+				{
+					"name": "Add a symptom",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/symptom",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"symptom"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a symptoms",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/symptoms/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"symptoms",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a symptom",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/symptoms/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"symptoms",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all symptoms",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/symptoms",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"symptoms"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
