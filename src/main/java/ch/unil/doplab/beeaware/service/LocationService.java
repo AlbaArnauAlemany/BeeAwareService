@@ -16,27 +16,27 @@ import java.util.logging.Logger;
 @Getter
 @Setter
 public class LocationService {
-    private Long idLocation = 0L;
     private final Map<Long, Location> locations = new HashMap<>();
+    private Long idLocation = 0L;
     private Logger logger = Logger.getLogger(LocationService.class.getName());
 
     public void addLocation(@NotNull Location location) {
-        logger.log( Level.INFO, "Adding location...", location);
-        for (Map.Entry<Long, Location> loc: locations.entrySet()) {
+        logger.log(Level.INFO, "Adding location...", location);
+        for (Map.Entry<Long, Location> loc : locations.entrySet()) {
             if (loc.getValue().equals(location)) {
-                logger.log( Level.WARNING, "Location already exists: {0}", location);
+                logger.log(Level.WARNING, "Location already exists: {0}", location);
                 return;
             }
         }
-        location.setId(idLocation++);;
+        location.setId(idLocation++);
         locations.put(idLocation, location);
-        logger.log( Level.INFO, "New location added : {0}", location);
+        logger.log(Level.INFO, "New location added : {0}", location);
     }
 
     public List<LocationDTO> getAllRegisteredLocations() {
-        logger.log( Level.INFO, "Searching for all registered locations (returns LocationDTO objects)...");
-        List <LocationDTO> allLocations = new ArrayList<>();
-        for (Map.Entry<Long, Location> loc: locations.entrySet()) {
+        logger.log(Level.INFO, "Searching for all registered locations (returns LocationDTO objects)...");
+        List<LocationDTO> allLocations = new ArrayList<>();
+        for (Map.Entry<Long, Location> loc : locations.entrySet()) {
             allLocations.add(new LocationDTO(loc.getValue()));
         }
         return allLocations;
@@ -45,14 +45,14 @@ public class LocationService {
     public boolean removeLocation(Long idLocation) {
         var location = locations.get(idLocation);
         var locationDTO = new LocationDTO(location);
-        logger.log( Level.INFO, "Removing Location...");
+        logger.log(Level.INFO, "Removing Location...");
         if (location == null) {
-            logger.log( Level.WARNING, "Location with ID {0} doesn't exist.", idLocation);
+            logger.log(Level.WARNING, "Location with ID {0} doesn't exist.", idLocation);
             return false;
 
         }
         locations.remove(idLocation);
-        logger.log( Level.INFO, "Location deleted : {0}", locationDTO);
+        logger.log(Level.INFO, "Location deleted : {0}", locationDTO);
         return true;
     }
 }

@@ -23,7 +23,7 @@ public class DailyTaskService {
     private ForeCastService foreCastService;
     @Inject
     private ApplicationState state;
-    private Logger logger = Logger.getLogger(DailyTaskService.class.getName());
+    private final Logger logger = Logger.getLogger(DailyTaskService.class.getName());
 
     @PostConstruct
     public void init() {
@@ -42,14 +42,13 @@ public class DailyTaskService {
             foreCastService.forecastAllLocation(state.getLocationService().getLocations());
         }
 
-        long initialDelay = TimeUnit.MILLISECONDS.convert(
-                nextRun.toEpochSecond() - now.toEpochSecond(), TimeUnit.SECONDS);
+        long initialDelay = TimeUnit.MILLISECONDS.convert(nextRun.toEpochSecond() - now.toEpochSecond(), TimeUnit.SECONDS);
 
         scheduler.scheduleAtFixedRate(this::runDailyTask, initialDelay, TimeUnit.DAYS.toMillis(1), TimeUnit.MILLISECONDS);
     }
 
     private void runDailyTask() {
-        logger.log( Level.INFO, "Start scheduled forecast at {0}", new Date());
+        logger.log(Level.INFO, "Start scheduled forecast at {0}", new Date());
         foreCastService.forecastAllLocation(state.getLocationService().getLocations());
     }
 }

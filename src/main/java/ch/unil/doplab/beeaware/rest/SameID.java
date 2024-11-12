@@ -11,4 +11,5 @@ import static java.lang.annotation.ElementType.METHOD;
 @NameBinding
 @Retention(RetentionPolicy.RUNTIME)
 @Target({METHOD})
-public @interface SameID {}
+public @interface SameID {
+}

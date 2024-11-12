@@ -1,13 +1,14 @@
 package ch.unil.doplab.beeaware.domain;
 
+import ch.unil.doplab.beeaware.DTO.PollenInfoDTO;
 import ch.unil.doplab.beeaware.DTO.SymptomsDTO;
 import ch.unil.doplab.beeaware.Domain.*;
-import ch.unil.doplab.beeaware.DTO.PollenInfoDTO;
 import ch.unil.doplab.beeaware.service.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,7 +48,7 @@ public class ApplicationState {
     private void populateApplicationState() {
         // Alba: Utils.testModeOn(); used in StudyBuddy!!
         try {
-            logger.log( Level.SEVERE, "Populating application");
+            logger.log(Level.SEVERE, "Populating application");
             Location location = new Location(1024, "CH");
             location.setCoordinate(geoApiService.getCoordinates(location.getNPA(), location.getCountry()));
             locationService.addLocation(location);
@@ -62,7 +63,7 @@ public class ApplicationState {
             Beezzer alb = new Beezzer("alb", "alb@unil.ch", "Q.-wDw123", location, Role.ADMIN);
             beezzerService.addBeezzer(alb);
 
-            for (Map.Entry<Long, Beezzer> beezzer: beezzerService.getBeezzers().entrySet()) {
+            for (Map.Entry<Long, Beezzer> beezzer : beezzerService.getBeezzers().entrySet()) {
                 logger.log(Level.INFO, beezzer.toString());
             }
 
@@ -83,7 +84,7 @@ public class ApplicationState {
             symptomService.addSymptom(symptom3);
             symptomService.addSymptom(symptom4);
 
-            for (SymptomsDTO symptom:symptomService.getSymptoms(ony.getId())) {
+            for (SymptomsDTO symptom : symptomService.getSymptoms(ony.getId())) {
                 System.out.println(symptom);
                 logger.log(Level.INFO, "{0}", symptom);
             }
@@ -92,17 +93,17 @@ public class ApplicationState {
 
             List<PollenInfoDTO> pollenShortDTOs = foreCastService.getIndex(ony);
             for (PollenInfoDTO pollen : pollenShortDTOs) {
-                logger.log( Level.INFO, pollen.toString());
+                logger.log(Level.INFO, pollen.toString());
             }
 
-            for (Map.Entry<Long, PollenLocationIndex> pollenLocationIndex: pollenLocationIndexService.getPollenLocationIndexMap().entrySet()) {
-                logger.log( Level.INFO, pollenLocationIndex.toString());
+            for (Map.Entry<Long, PollenLocationIndex> pollenLocationIndex : pollenLocationIndexService.getPollenLocationIndexMap().entrySet()) {
+                logger.log(Level.INFO, pollenLocationIndex.toString());
             }
 
             // Utils.testModeOff(); used in StudyBuddy!!
-        } catch (Exception e){
-            logger.log( Level.SEVERE, "Error during populate users");
-            logger.log( Level.SEVERE, e.getMessage());
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error during populate users");
+            logger.log(Level.SEVERE, e.getMessage());
         }
     }
 }

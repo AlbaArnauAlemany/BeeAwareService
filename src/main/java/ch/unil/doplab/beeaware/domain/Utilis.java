@@ -8,17 +8,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Date;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Objects;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Utilis {
+    private static final Logger logger = Logger.getLogger(Utilis.class.getName());
     @Inject
     private ApplicationState state;
-
-    private static Logger logger = Logger.getLogger(Utilis.class.getName());
 
     public static boolean isSameDay(@NotNull Date date1, @NotNull Date date2) {
         LocalDate localDate1 = date1.toInstant()

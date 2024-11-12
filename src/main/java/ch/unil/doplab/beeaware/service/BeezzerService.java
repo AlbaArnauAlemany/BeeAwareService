@@ -8,7 +8,6 @@ import ch.unil.doplab.beeaware.Domain.Beezzer;
 import ch.unil.doplab.beeaware.Domain.Pollen;
 import lombok.Getter;
 import lombok.Setter;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -21,17 +20,17 @@ import java.util.logging.Logger;
 @Getter
 @Setter
 public class BeezzerService {
-    private Long idBeezzer = 0L;
     private final Map<Long, Beezzer> beezzers = new HashMap<>();
+    private Long idBeezzer = 0L;
     private Logger logger = Logger.getLogger(BeezzerService.class.getName());
 
-    public void addBeezzer(@NotNull Beezzer beezzer){
-        logger.log( Level.INFO, "Adding Beezzer...");
-        for (Map.Entry<Long, Beezzer> bee: beezzers.entrySet()) {
+    public void addBeezzer(@NotNull Beezzer beezzer) {
+        logger.log(Level.INFO, "Adding Beezzer...");
+        for (Map.Entry<Long, Beezzer> bee : beezzers.entrySet()) {
             if (beezzer.getUsername() != null &&
                     bee.getValue().getUsername() != null &&
                     beezzer.getUsername().equals(bee.getValue().getUsername())) {
-                logger.log( Level.WARNING, "Username {0} already used. Please try a new one.", beezzer.getUsername());
+                logger.log(Level.WARNING, "Username {0} already used. Please try a new one.", beezzer.getUsername());
                 return;
             }
         }
@@ -42,12 +41,12 @@ public class BeezzerService {
         } else {
             beezzers.put(beezzer.getId(), beezzer);
         }
-        logger.log( Level.INFO, "New Beezzer added : {0}", beezzer.getUsername());
+        logger.log(Level.INFO, "New Beezzer added : {0}", beezzer.getUsername());
     }
 
     public BeezzerDTO getBeezzer(Long idBeezzer) {
         var beezzer = beezzers.get(idBeezzer);
-        logger.log( Level.INFO, "Searching for Beezzer...");
+        logger.log(Level.INFO, "Searching for Beezzer...");
         if (beezzer == null) {
             logger.log(Level.WARNING, "Beezzer with id {0} doesn't exist.", idBeezzer);
             return null;
@@ -58,7 +57,7 @@ public class BeezzerService {
     public List<BeezzerDTO> getAllBeezzers() {
         logger.log(Level.INFO, "Searching for all registered Beezzers...");
         List<BeezzerDTO> allBeezzers = new ArrayList<>();
-        for (Map.Entry<Long, Beezzer> beezzer : beezzers.entrySet()){
+        for (Map.Entry<Long, Beezzer> beezzer : beezzers.entrySet()) {
             allBeezzers.add(new BeezzerDTO(beezzer.getValue()));
         }
         return allBeezzers;
@@ -84,9 +83,9 @@ public class BeezzerService {
 
     public LocationDTO getBeezzerLocation(Long beezzerId) {
         var beezzer = beezzers.get(beezzerId);
-        logger.log( Level.INFO, "Searching location for Beezzer...");
+        logger.log(Level.INFO, "Searching location for Beezzer...");
         if (beezzer == null) {
-            logger.log( Level.WARNING, "Beezzer with id {0} doesn't exist.", beezzerId);
+            logger.log(Level.WARNING, "Beezzer with id {0} doesn't exist.", beezzerId);
             return null;
         }
         return new LocationDTO(beezzer.getLocation());
@@ -95,17 +94,17 @@ public class BeezzerService {
     public void addAllergen(String stringPollen, Long idBeezzer) {
         var pollen = Pollen.getPollenByName(stringPollen);
         var beezzer = beezzers.get(idBeezzer);
-        logger.log( Level.INFO, "Adding allergen for Beezzer id " + idBeezzer + "...");
+        logger.log(Level.INFO, "Adding allergen for Beezzer id " + idBeezzer + "...");
         if (beezzer == null) {
-            logger.log( Level.WARNING, "Beezzer with id {0} doesn't exist.", idBeezzer);
+            logger.log(Level.WARNING, "Beezzer with id {0} doesn't exist.", idBeezzer);
             return;
         }
         if (!Pollen.getPredefinedPollens().contains(pollen)) {
-            logger.log( Level.WARNING,"This pollen is not available in your country.");
+            logger.log(Level.WARNING, "This pollen is not available in your country.");
             return;
         }
         if (beezzer.getAllergens().containsKey(pollen.getId())) {
-            logger.log( Level.WARNING,"This allergen is already saved to your list.");
+            logger.log(Level.WARNING, "This allergen is already saved to your list.");
             return;
         }
         beezzer.getAllergens().put(pollen.getId(), pollen);
@@ -113,10 +112,10 @@ public class BeezzerService {
 
     public AllergenDTO getBeezzerAllergens(Long idBeezzer) {
         var beezzer = beezzers.get(idBeezzer);
-        logger.log( Level.INFO, "Searching allergens for Beezzer...");
+        logger.log(Level.INFO, "Searching allergens for Beezzer...");
         AllergenDTO allergenDTO = new AllergenDTO(beezzer.getAllergens());
         if (beezzer == null) {
-            logger.log( Level.WARNING, "Beezzer with id {0} doesn't exist.", idBeezzer);
+            logger.log(Level.WARNING, "Beezzer with id {0} doesn't exist.", idBeezzer);
             return null;
         }
         return allergenDTO;
@@ -126,18 +125,18 @@ public class BeezzerService {
         var beezzer = beezzers.get(idBeezzer);
         var allergen = beezzer.getAllergens().get(idAllergen);
         var pollenDTO = new PollenDTO(allergen);
-        logger.log( Level.INFO, "Removing Allergen...", pollenDTO);
+        logger.log(Level.INFO, "Removing Allergen...", pollenDTO);
         if (beezzer == null) {
-            logger.log( Level.WARNING, "Beezzer with id {0} doesn't exist.", idBeezzer);
+            logger.log(Level.WARNING, "Beezzer with id {0} doesn't exist.", idBeezzer);
             return false;
         }
         if (allergen == null) {
-            logger.log( Level.WARNING, "Allergen with ID {0} doesn't exist.", idAllergen);
+            logger.log(Level.WARNING, "Allergen with ID {0} doesn't exist.", idAllergen);
             return false;
 
         }
         beezzer.getAllergens().remove(idAllergen);
-        logger.log( Level.INFO, "Allergen deleted: {0}", pollenDTO);
+        logger.log(Level.INFO, "Allergen deleted: {0}", pollenDTO);
         return true;
     }
 }

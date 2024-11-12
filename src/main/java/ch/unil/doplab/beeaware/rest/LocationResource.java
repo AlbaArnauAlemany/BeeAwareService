@@ -1,7 +1,6 @@
 package ch.unil.doplab.beeaware.rest;
 
 import ch.unil.doplab.beeaware.DTO.LocationDTO;
-import ch.unil.doplab.beeaware.Domain.Beezzer;
 import ch.unil.doplab.beeaware.Domain.Location;
 import ch.unil.doplab.beeaware.domain.ApplicationState;
 import jakarta.inject.Inject;

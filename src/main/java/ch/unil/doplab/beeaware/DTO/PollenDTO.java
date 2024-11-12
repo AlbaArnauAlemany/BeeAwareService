@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PollenDTO {
     private String pollenNameEN;
-
     public PollenDTO(Pollen pollen) {
         this.pollenNameEN = pollen.getPollenNameEN();
     }

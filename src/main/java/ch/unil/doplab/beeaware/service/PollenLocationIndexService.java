@@ -1,13 +1,11 @@
 package ch.unil.doplab.beeaware.service;
 
-import ch.unil.doplab.beeaware.DTO.PollenInfoDTO;
 import ch.unil.doplab.beeaware.Domain.PollenLocationIndex;
 import ch.unil.doplab.beeaware.domain.Utilis;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -22,9 +20,9 @@ public class PollenLocationIndexService {
     private Logger logger = Logger.getLogger(PollenLocationIndexService.class.getName());
 
     public void addPollenLocationIndex(@NotNull PollenLocationIndex pollenLocationIndex) {
-        for (Map.Entry<Long, PollenLocationIndex>  pil: pollenLocationIndexMap.entrySet()) {
+        for (Map.Entry<Long, PollenLocationIndex> pil : pollenLocationIndexMap.entrySet()) {
             if (pil.getValue().getLocation() != null && pil.getValue().getLocation().equals(pollenLocationIndex.getLocation())) {
-                logger.log( Level.WARNING, "pollenLocationIndex already exists: {0}", pollenLocationIndex);
+                logger.log(Level.WARNING, "pollenLocationIndex already exists: {0}", pollenLocationIndex);
                 if (Utilis.isSameDay(Utilis.formatDate(pil.getValue().getDailyInfo().get(0).getDate()), Utilis.formatDate(pollenLocationIndex.getDailyInfo().get(0).getDate()))) {
                     pollenLocationIndexMap.put(pil.getValue().getId(), pollenLocationIndex);
                     return;
@@ -33,19 +31,19 @@ public class PollenLocationIndexService {
         }
         pollenLocationIndex.setId(idPollenLocationIndex++);
         pollenLocationIndexMap.put(idPollenLocationIndex, pollenLocationIndex);
-        logger.log( Level.INFO, "New pollenLocationIndex added : {0}", pollenLocationIndex);
+        logger.log(Level.INFO, "New pollenLocationIndex added : {0}", pollenLocationIndex);
     }
 
     public boolean removePollenLocationIndex(Long idPollenLocationIndex) {
         var pollenLocationIndex = pollenLocationIndexMap.get(idPollenLocationIndex);
-        logger.log( Level.INFO, "Removing PollenLocationIndex...");
+        logger.log(Level.INFO, "Removing PollenLocationIndex...");
         if (pollenLocationIndex == null) {
-            logger.log( Level.WARNING, "PollenLocationIndex with ID {0} doesn't exist.", idPollenLocationIndex);
+            logger.log(Level.WARNING, "PollenLocationIndex with ID {0} doesn't exist.", idPollenLocationIndex);
             return false;
 
         }
         pollenLocationIndexMap.remove(idPollenLocationIndex);
-        logger.log( Level.INFO, "PollenLocationIndex deleted: {0}", idPollenLocationIndex);
+        logger.log(Level.INFO, "PollenLocationIndex deleted: {0}", idPollenLocationIndex);
         return true;
     }
 }

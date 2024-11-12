@@ -15,19 +15,17 @@ import java.util.logging.Logger;
 
 @Path("/excel")
 public class ExcelResource {
+    private final Logger logger = Logger.getLogger(ExcelResource.class.getName());
     ExcelService excelService = new ExcelService();
     @Inject
     private ApplicationState state;
-    private final Logger logger = Logger.getLogger(ExcelResource.class.getName());
 
     @GET
     @Path("/download/{id}")
     @Produces("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     public Response downloadExcelFile(@PathParam("id") Long id) {
         try {
-            return Response.ok(excelService.excelWrite(state.getSymptomService().getSymptoms(id)))
-                    .header("Content-Disposition", "attachment; filename=symptoms.xlsx")
-                    .build();
+            return Response.ok(excelService.excelWrite(state.getSymptomService().getSymptoms(id))).header("Content-Disposition", "attachment; filename=symptoms.xlsx").build();
 
         } catch (IOException e) {
             logger.log(Level.SEVERE, "{0}", e.getMessage());

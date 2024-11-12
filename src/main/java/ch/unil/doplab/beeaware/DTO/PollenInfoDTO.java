@@ -17,14 +17,14 @@ public class PollenInfoDTO {
     private String crossReaction;
     private Date date;
 
-    public PollenInfoDTO(PollenLocationIndex.PollenTypeInfo pollenTypeDailyInfo){
+    public PollenInfoDTO(PollenLocationIndex.PollenTypeInfo pollenTypeDailyInfo) {
         this.displayName = pollenTypeDailyInfo.getDisplayName();
         this.index = pollenTypeDailyInfo.getIndexInfo().getValue();
         this.recommendation = pollenTypeDailyInfo.getIndexInfo().getIndexDescription();
         this.crossReaction = "";
     }
 
-    public PollenInfoDTO(PollenLocationIndex.PlantInfo pollenDailyInfo){
+    public PollenInfoDTO(PollenLocationIndex.PlantInfo pollenDailyInfo) {
         this.displayName = pollenDailyInfo.getDisplayName();
         this.index = pollenDailyInfo.getIndexInfo().getValue();
         this.recommendation = pollenDailyInfo.getIndexInfo().getIndexDescription();
@@ -33,6 +33,6 @@ public class PollenInfoDTO {
 
     @Override
     public String toString() {
-        return "Name : " + displayName + ", Index : " + index + "\n" + "Recommandation : " + recommendation+ "\n" + "Cross : " + crossReaction;
+        return "Name : " + displayName + ", Index : " + index + "\n" + "Recommandation : " + recommendation + "\n" + "Cross : " + crossReaction;
     }
 }

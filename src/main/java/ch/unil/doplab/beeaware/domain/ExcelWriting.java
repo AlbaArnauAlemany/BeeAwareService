@@ -2,8 +2,6 @@ package ch.unil.doplab.beeaware.domain;
 
 
 import ch.unil.doplab.beeaware.DTO.SymptomsDTO;
-import ch.unil.doplab.beeaware.Domain.Symptom;
-import ch.unil.doplab.beeaware.rest.ExcelResource;
 import jakarta.inject.Inject;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,10 +18,11 @@ import java.util.logging.Logger;
 @Setter
 @NoArgsConstructor
 public class ExcelWriting {
+    Workbook workbook;
     @Inject
     private ApplicationState state;
-    Workbook workbook;
     private Logger logger = Logger.getLogger(ExcelWriting.class.getName());
+
     public ExcelWriting(List<SymptomsDTO> symptomsDTO) {
         workbook = new XSSFWorkbook();
 

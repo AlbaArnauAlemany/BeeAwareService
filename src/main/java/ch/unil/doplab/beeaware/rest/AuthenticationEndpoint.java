@@ -23,11 +23,12 @@ import static ch.unil.doplab.beeaware.Domain.PasswordUtilis.checkPassword;
 public class AuthenticationEndpoint {
     @Inject
     private ApplicationState state;
+    private final Logger logger = Logger.getLogger(AuthenticationEndpoint.class.getName());
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response authenticateUser(@FormParam("username") String username,
-                                     @FormParam("password") String password) {
+    public Response authenticateUser(@FormParam("username") String username, @FormParam("password") String password) {
 
         try {
 
@@ -41,24 +42,20 @@ public class AuthenticationEndpoint {
             return Response.ok(token).build();
 
         } catch (Exception e) {
-            logger.log( Level.SEVERE, e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage());
             return Response.status(Response.Status.FORBIDDEN).build();
         }
     }
 
-    private Logger logger = Logger.getLogger(AuthenticationEndpoint.class.getName());
-
     private Long authenticate(String username, String password) throws Exception {
         logger.log(Level.SEVERE, "Beezzer {0} trying to authenticate", username);
-        for (Map.Entry<Long, Beezzer> bee: state.getBeezzerService().getBeezzers().entrySet()) {
-            if (username != null && password != null &&
-                    username.equals(bee.getValue().getUsername()) &&
-                    checkPassword(password, bee.getValue().getPassword())) {
+        for (Map.Entry<Long, Beezzer> bee : state.getBeezzerService().getBeezzers().entrySet()) {
+            if (username != null && password != null && username.equals(bee.getValue().getUsername()) && checkPassword(password, bee.getValue().getPassword())) {
                 logger.log(Level.INFO, "Beezzer {0} successfully connected", username);
                 return bee.getValue().getId();
             }
         }
-        logger.log( Level.SEVERE, "Error during authentication");
+        logger.log(Level.SEVERE, "Error during authentication");
         throw new Exception("No match with user or password");
     }
 

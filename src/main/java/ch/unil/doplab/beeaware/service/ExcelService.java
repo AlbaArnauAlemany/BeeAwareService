@@ -13,8 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 public class ExcelService {
     public byte[] excelWrite(List<SymptomsDTO> symptomsDTOs) throws IOException {
-
-
         ExcelWriting excelWriting = new ExcelWriting(symptomsDTOs);
 
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {

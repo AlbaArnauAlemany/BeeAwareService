@@ -13,6 +13,7 @@ import lombok.Setter;
 public class LocationDTO {
     private String country;
     private int NPA;
+
     public LocationDTO(Location location) {
         this.NPA = location.getNPA();
         this.country = location.getCountry();
