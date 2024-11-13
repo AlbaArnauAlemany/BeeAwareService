@@ -21,10 +21,13 @@ public class SymptomService {
     private Logger logger = Logger.getLogger(SymptomService.class.getName());
 
     public void addSymptom(@NotNull Symptom symptom) {
+        if (symptom.getDate() == null) {
+            symptom.setDate(new Date());
+        }
         SymptomsDTO symptomsDTO = new SymptomsDTO(symptom);
-        logger.log(Level.INFO, "Adding symptom....", symptomsDTO);
+        logger.log(Level.INFO, "Adding symptom {0}....", symptomsDTO);
         for (Map.Entry<Long, Symptom> sym : symptoms.entrySet()) {
-            if (Utils.isSameDay(sym.getValue().getDate(), symptom.getDate()) && sym.getValue().getBeezzerId() == symptom.getBeezzerId()) {
+            if (Utils.isSameDay(sym.getValue().getDate(), symptom.getDate()) && sym.getValue().getBeezzerId().equals(symptom.getBeezzerId())) {
                 symptom.setId(sym.getValue().getId());
                 symptoms.put(sym.getValue().getId(), symptom);
                 logger.log(Level.INFO, "Symptom replaced : {0}", symptomsDTO);
@@ -45,7 +48,7 @@ public class SymptomService {
         return symptomsList;
     }
 
-    public List<SymptomsDTO> getSymptoms(@NotNull Long beezzerId) {
+    public List<SymptomsDTO> getSymptom(@NotNull Long beezzerId) {
         logger.log(Level.INFO, "Searching for Beezzer {0} symptoms...", beezzerId);
         List<SymptomsDTO> symptomsBeezzer = new ArrayList<>();
         for (Map.Entry<Long, Symptom> sym : symptoms.entrySet()) {
@@ -57,7 +60,7 @@ public class SymptomService {
         return symptomsBeezzer;
     }
 
-    public List<SymptomsDTO> getSymptoms(@NotNull Long beezzerId, String stringDate){
+    public List<SymptomsDTO> getSymptomForDate(@NotNull Long beezzerId, String stringDate){
         Date date = parseDate(stringDate);
         logger.log( Level.INFO, "Searching symptoms for Beezzer {0} for the following day: {1}...", new Object[]{String.valueOf(beezzerId), String.valueOf(date)});
         List<SymptomsDTO> symptomsDate = new ArrayList<>();

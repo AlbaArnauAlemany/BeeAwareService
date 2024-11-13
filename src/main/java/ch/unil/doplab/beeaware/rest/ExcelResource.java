@@ -1,6 +1,5 @@
 package ch.unil.doplab.beeaware.rest;
 
-import ch.unil.doplab.beeaware.Domain.Role;
 import ch.unil.doplab.beeaware.domain.ApplicationState;
 import ch.unil.doplab.beeaware.service.ExcelService;
 import jakarta.inject.Inject;
@@ -28,7 +27,7 @@ public class ExcelResource {
     @Produces("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     public Response downloadExcelFile(@PathParam("id") Long id) {
         try {
-            return Response.ok(excelService.excelWrite(state.getSymptomService().getSymptoms(id))).header("Content-Disposition", "attachment; filename=symptoms.xlsx").build();
+            return Response.ok(excelService.excelWrite(state.getSymptomService().getSymptom(id))).header("Content-Disposition", "attachment; filename=symptoms.xlsx").build();
 
         } catch (IOException e) {
             logger.log(Level.SEVERE, "{0}", e.getMessage());

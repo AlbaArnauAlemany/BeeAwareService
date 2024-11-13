@@ -1,6 +1,7 @@
 package ch.unil.doplab.beeaware.service;
 
 import ch.unil.doplab.beeaware.Domain.Coordinate;
+import ch.unil.doplab.beeaware.Domain.Location;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.errors.ApiException;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+// TODO: Pourquoi pas mettre ça dans le domain et dès qu'on créé une location on l'utilise?
 public class GeoApiService {
     /**
      * Creates and configures a GeoApiContext object to use the Google Geocoding API.
@@ -33,18 +35,18 @@ public class GeoApiService {
      * Retrieves the latitude and longitude coordinates for a specified location using
      * the Google Geocoding API.
      *
-     * @return An array containing the latitude and longitude of the {@code Location}.
      * @throws ApiException         If the API encounters an error while processing the request.
      * @throws InterruptedException If the API request is interrupted.
      * @throws IOException          If an input or output exception occurs.
      */
-    @NotNull
-    public Coordinate getCoordinates(int NPA, String country) throws ApiException, InterruptedException, IOException {
+    public void getCoordinates(@NotNull Location location) throws ApiException, InterruptedException, IOException {
+        int NPA = location.getNPA();
+        String country = location.getCountry();
         GeocodingResult result = GeocodingApi.geocode(getGeoApiContext(), String.valueOf(NPA)).components(ComponentFilter.country(country)).language("fr").await()[0];
         double lat = Math.round(result.geometry.location.lat * 100000.0) / 100000.0;
         double lng = Math.round(result.geometry.location.lng * 100000.0) / 100000.0;
         logger.log(Level.INFO, "Coordinate : {0}, Country : {1}, Latitude : {2}, Longitude : {3}", new Object[]{String.valueOf(NPA), country, String.valueOf(lat), String.valueOf(lng)});
 
-        return new Coordinate(lat, lng);
-    }
+        location.setCoordinate(new Coordinate(lat, lng));
+        }
 }

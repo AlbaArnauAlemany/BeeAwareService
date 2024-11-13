@@ -22,7 +22,7 @@ public class LocationService {
 
     public void addLocation(@NotNull Location location) {
         LocationDTO locationDTO = new LocationDTO(location);
-        logger.log(Level.INFO, "Adding location...", locationDTO);
+        logger.log(Level.INFO, "Adding location {0}...", locationDTO);
         for (Map.Entry<Long, Location> loc : locations.entrySet()) {
             if (loc.getValue().equals(location)) {
                 logger.log(Level.WARNING, "Location already exists: {0}", location);

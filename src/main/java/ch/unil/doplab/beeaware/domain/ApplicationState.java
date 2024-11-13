@@ -46,11 +46,10 @@ public class ApplicationState {
     }
 
     private void populateApplicationState() {
-        // Alba: Utils.testModeOn(); used in StudyBuddy!!
         try {
             logger.log(Level.SEVERE, "Populating application");
             Location location = new Location(1024, "CH");
-            location.setCoordinate(geoApiService.getCoordinates(location.getNPA(), location.getCountry()));
+            geoApiService.getCoordinates(location);
             locationService.addLocation(location);
             Beezzer ony = new Beezzer("Ony", "o@unil.ch", "Q.-wDw124", location, Role.BEEZZER);
             beezzerService.addBeezzer(ony);
@@ -58,7 +57,7 @@ public class ApplicationState {
             beezzerService.addAllergen("Weed", ony.getId());
 
             Location locationAlb = new Location(1020, "CH");
-            location.setCoordinate(geoApiService.getCoordinates(location.getNPA(), location.getCountry()));
+            geoApiService.getCoordinates(locationAlb);
             locationService.addLocation(locationAlb);
             Beezzer alb = new Beezzer("alb", "alb@unil.ch", "Q.-wDw123", location, Role.ADMIN);
             beezzerService.addBeezzer(alb);
@@ -71,9 +70,9 @@ public class ApplicationState {
             Date d3 = new GregorianCalendar(2024, Calendar.FEBRUARY, 11).getTime();
             Date d4 = new GregorianCalendar(2024, Calendar.FEBRUARY, 15).getTime();
 
-            Symptom symptom1 = new Symptom(ony.getId(), Reaction.HIGH_REACTION, false);
-            Symptom symptom2 = new Symptom(ony.getId(), Reaction.MODERATE_REACTION, false);
-            Symptom symptom3 = new Symptom(ony.getId(), Reaction.LOW_REACTION, true);
+            Symptom symptom1 = new Symptom(ony.getId(), ch.unil.doplab.beeaware.Domain.Level.HIGH_REACTION, false);
+            Symptom symptom2 = new Symptom(ony.getId(), ch.unil.doplab.beeaware.Domain.Level.MODERATE_REACTION, false);
+            Symptom symptom3 = new Symptom(ony.getId(), ch.unil.doplab.beeaware.Domain.Level.LOW_REACTION, true);
             Symptom symptom4 = new Symptom(ony.getId(), ch.unil.doplab.beeaware.Domain.Level.LOW_REACTION, true);
 
             symptom3.setDate(d3);
@@ -84,14 +83,14 @@ public class ApplicationState {
             symptomService.addSymptom(symptom3);
             symptomService.addSymptom(symptom4);
 
-            for (SymptomsDTO symptom : symptomService.getSymptoms(ony.getId())) {
+            for (SymptomsDTO symptom : symptomService.getSymptom(ony.getId())) {
                 System.out.println(symptom);
                 logger.log(Level.INFO, "{0}", symptom);
             }
 
             foreCastService.forecastAllLocation(locationService.getLocations());
 
-            List<PollenInfoDTO> pollenShortDTOs = foreCastService.getIndex(ony);
+            List<PollenInfoDTO> pollenShortDTOs = foreCastService.getIndex(ony.getId());
             for (PollenInfoDTO pollen : pollenShortDTOs) {
                 logger.log(Level.INFO, pollen.toString());
             }
@@ -100,7 +99,6 @@ public class ApplicationState {
                 logger.log(Level.INFO, pollenLocationIndex.toString());
             }
 
-            // Utils.testModeOff(); used in StudyBuddy!!
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error during populate users");
             logger.log(Level.SEVERE, e.getMessage());

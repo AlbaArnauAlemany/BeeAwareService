@@ -7,12 +7,16 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BeezzerDTO {
+    private Long id;
     private String username;
     private String email;
     private LocationDTO location;
     private AllergenDTO allergens;
 
     public BeezzerDTO(Beezzer beezzer) {
+        if (beezzer.getId() != null) {
+            this.id = beezzer.getId();
+        }
         if (beezzer.getUsername() != null) {
             this.username = beezzer.getUsername();
         }

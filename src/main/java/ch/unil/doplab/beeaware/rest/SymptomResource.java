@@ -29,17 +29,17 @@ public class SymptomResource {
     @Secured
     @SameID
     @Path("/{id}")
-    public List<SymptomsDTO> getSymptoms(@PathParam("id") Long id) {
-        return state.getSymptomService().getSymptoms(id);
+    public List<SymptomsDTO> getSymptom(@PathParam("id") Long id) {
+        return state.getSymptomService().getSymptom(id);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
     @SameID
-    @Path("/{id}")
-    public List<SymptomsDTO> getSymptoms(@PathParam("id") Long id, @QueryParam("date") String stringDate) {
-        return state.getSymptomService().getSymptoms(id, stringDate);
+    @Path("/{id}/{date}")
+    public List<SymptomsDTO> getSymptomForDate(@PathParam("id") Long id, @PathParam("date") String stringDate) {
+        return state.getSymptomService().getSymptomForDate(id, stringDate);
     }
 
     @GET
