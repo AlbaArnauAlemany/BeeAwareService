@@ -12,6 +12,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static ch.unil.doplab.beeaware.domain.Utils.isDateBefore;
 import static ch.unil.doplab.beeaware.domain.Utils.parseDate;
 
 @Getter
@@ -28,7 +29,7 @@ public class SymptomService {
         SymptomsDTO symptomsDTO = new SymptomsDTO(symptom);
         logger.log(Level.INFO, "Adding symptom {0}....", symptomsDTO);
         for (Map.Entry<Long, Symptom> sym : symptoms.entrySet()) {
-            if (Utils.isSameDay(sym.getValue().getDate(), symptom.getDate()) && sym.getValue().getBeezzerId().equals(symptom.getBeezzerId())) {
+            if (Utils.isSameDate(sym.getValue().getDate(), symptom.getDate()) && sym.getValue().getBeezzerId().equals(symptom.getBeezzerId())) {
                 symptom.setId(sym.getValue().getId());
                 symptoms.put(sym.getValue().getId(), symptom);
                 logger.log(Level.INFO, "Symptom replaced : {0}", symptomsDTO);
@@ -77,11 +78,28 @@ public class SymptomService {
             Date date = parseDate(stringDate);
             logger.log(Level.INFO, "Searching symptom for Beezzer {0} for the following day: {1}...", new Object[]{String.valueOf(beezzerId), String.valueOf(date)});
             for (Map.Entry<Long, Symptom> sym : symptoms.entrySet()) {
-                if (beezzerId.equals(sym.getValue().getBeezzerId()) && Utils.isSameDay(sym.getValue().getDate(), date)) {
+                if (beezzerId.equals(sym.getValue().getBeezzerId()) && Utils.isSameDate(sym.getValue().getDate(), date)) {
                     return new SymptomsDTO(sym.getValue());
                 }
             }
             return null;
+        } catch (Exception e){
+            return null;
+        }
+    }
+
+    public List<SymptomsDTO> getSymptomForRange(@NotNull Long beezzerId, String stringDateFrom, String stringDateTo) {
+        try {
+            List<SymptomsDTO> symptomsDto = new ArrayList<>();
+            Date dateFrom = parseDate(stringDateFrom);
+            Date dateTo = parseDate(stringDateTo);
+            logger.log(Level.INFO, "Searching symptom for Beezzer {0} between {1} and {2}...", new Object[]{String.valueOf(beezzerId), stringDateFrom, stringDateTo});
+            for (Map.Entry<Long, Symptom> sym : symptoms.entrySet()) {
+                if (beezzerId.equals(sym.getValue().getBeezzerId()) && Utils.isDateAfter(sym.getValue().getDate(), dateFrom) && isDateBefore(sym.getValue().getDate(), dateTo)) {
+                    symptomsDto.add(new SymptomsDTO(sym.getValue()));
+                }
+            }
+            return symptomsDto;
         } catch (Exception e){
             return null;
         }

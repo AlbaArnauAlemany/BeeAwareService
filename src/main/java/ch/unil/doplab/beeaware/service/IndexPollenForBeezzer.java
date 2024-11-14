@@ -36,7 +36,7 @@ public class IndexPollenForBeezzer {
         List<PollenInfoDTO> pollenShortDTOs = new ArrayList<>();
         for (Map.Entry<Long, PollenLocationIndex> pollenLocationIndex : pollenLocationIndexService.getPollenLocationIndexMap().entrySet()) {
             if (pollenLocationIndex.getValue().getLocation().equals(beezzer.getLocation())) {
-                if (date == null || Utils.isSameDay(pollenLocationIndex.getValue().getDate(), date)) {
+                if (date == null || Utils.isSameDate(pollenLocationIndex.getValue().getDate(), date)) {
                     for (Map.Entry<Long, Pollen> pollen : beezzer.getAllergens().entrySet()) {
                         if (pollenLocationIndex.getValue().getDisplayName().equals(pollen.getValue().getPollenNameEN())) {
                             pollenShortDTOs.add(new PollenInfoDTO(pollenLocationIndex.getValue()));

@@ -45,6 +45,15 @@ public class SymptomResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
     @SameID
+    @Path("/{id}/date/{datefrom}/{dateto}")
+    public List<SymptomsDTO> getSymptomForRange(@PathParam("id") Long id, @PathParam("datefrom") String stringDateFrom, @PathParam("dateto") String stringDateTo) {
+        return state.getSymptomService().getSymptomForRange(id, stringDateFrom, stringDateTo);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    @SameID
     @Path("/{id}/{idSymptom}")
     public SymptomsDTO getSymptomWithId(@PathParam("id") Long id, @PathParam("idSymptom") Long idSymptom) {
         return state.getSymptomService().getSymptom(id, idSymptom);

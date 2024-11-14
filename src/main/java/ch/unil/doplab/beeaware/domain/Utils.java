@@ -19,14 +19,32 @@ public class Utils {
     @Inject
     private ApplicationState state;
 
-    public static boolean isSameDay(@NotNull Date date1, @NotNull Date date2) {
+
+    private static List<LocalDate> convertDateToLocalDate(@NotNull Date date1, @NotNull Date date2) {
         LocalDate localDate1 = date1.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
         LocalDate localDate2 = date2.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
-        return localDate1.isEqual(localDate2);
+        List<LocalDate> dates = new ArrayList<>();
+        dates.add(localDate1);
+        dates.add(localDate2);
+        return dates;
+    }
+    public static boolean isSameDate(@NotNull Date date1, @NotNull Date date2) {
+        List<LocalDate> dates = convertDateToLocalDate(date1, date2);
+        return dates.get(0).isEqual(dates.get(1));
+    }
+
+    public static boolean isDateAfter(@NotNull Date date1, @NotNull Date date2) {
+        List<LocalDate> dates = convertDateToLocalDate(date1, date2);
+        return dates.get(0).isAfter(dates.get(1)) || dates.get(0).isEqual(dates.get(1));
+    }
+
+    public static boolean isDateBefore(@NotNull Date date1, @NotNull Date date2) {
+        List<LocalDate> dates = convertDateToLocalDate(date1, date2);
+        return dates.get(0).isBefore(dates.get(1)) || dates.get(0).isEqual(dates.get(1));
     }
 
     public static Date formatDate(PollenLocationInfo.Date dailyInfo) {
