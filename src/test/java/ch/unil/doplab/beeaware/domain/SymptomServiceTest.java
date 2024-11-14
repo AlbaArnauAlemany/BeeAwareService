@@ -29,10 +29,10 @@ public class SymptomServiceTest {
         symptomsList = new SymptomService();
 
         // Initiate symptoms
-        sympAlex = new Symptom(0L, Level.HIGH_REACTION, false);
-        sympDafne = new Symptom(1L, Level.NO_REACTION, false);
-        sympPaul = new Symptom(2L, Level.LOW_REACTION, true);
-        sympClara = new Symptom(3L, Level.MODERATE_REACTION, true);
+        sympAlex = new Symptom(0L, Reaction.HIGH_REACTION, false);
+        sympDafne = new Symptom(1L, Reaction.NO_REACTION, false);
+        sympPaul = new Symptom(2L, Reaction.LOW_REACTION, true);
+        sympClara = new Symptom(3L, Reaction.MODERATE_REACTION, true);
 
         // ADD symptoms to the SYMPTOMS LIST
         symptomsList.addSymptom(sympAlex);
@@ -50,7 +50,7 @@ public class SymptomServiceTest {
         assertEquals(4, allSymptoms.size());
 
         // Add a new symptom with the same date and beezzerId as sympAlex to check replacement
-        Symptom duplicateSymptom = new Symptom(0L, Level.VERY_HIGH_REACTION, false, new Date());
+        Symptom duplicateSymptom = new Symptom(0L, Reaction.VERY_HIGH_REACTION, false, new Date());
         symptomsList.addSymptom(duplicateSymptom);
         assertEquals(4, symptomsList.getAllSymptoms().size()); // Ensure symptom count remains the same (since it should replace sympAlex)
     }
@@ -59,13 +59,13 @@ public class SymptomServiceTest {
     void testGetSymptom() {
 
         // Assert that getSymptom() for a beezzer will return the correct number of symptoms added for this beezzer
-        Symptom sympDafneBis = new Symptom(1L, Level.NO_REACTION, false, parseDate("2024-11-11"));
+        Symptom sympDafneBis = new Symptom(1L, Reaction.NO_REACTION, false, parseDate("2024-11-11"));
         symptomsList.addSymptom(sympDafneBis);
         List<SymptomsDTO> symptomsDafne = symptomsList.getSymptom(1L);
         assertEquals(2, symptomsDafne.size());
 
         // Assert that getSymptomForDate() for a specific date and beezzer will return only one symptom
-        Symptom sympPaulBis = new Symptom(2L, Level.NO_REACTION, true, parseDate("2024-11-13"));
+        Symptom sympPaulBis = new Symptom(2L, Reaction.NO_REACTION, true, parseDate("2024-11-13"));
         symptomsList.addSymptom(sympPaulBis);
         List<SymptomsDTO> symptomsForDate = symptomsList.getSymptomForDate(2L, "2024-11-13");
         assertEquals(1, symptomsForDate.size());

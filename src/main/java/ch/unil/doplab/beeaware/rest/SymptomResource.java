@@ -28,7 +28,7 @@ public class SymptomResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
     @SameID
-    @Path("/{id}")
+    @Path("/{id}/date")
     public List<SymptomsDTO> getSymptom(@PathParam("id") Long id) {
         return state.getSymptomService().getSymptom(id);
     }

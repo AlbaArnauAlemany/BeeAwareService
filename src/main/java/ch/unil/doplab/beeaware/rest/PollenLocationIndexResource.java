@@ -27,12 +27,7 @@ public class PollenLocationIndexResource {
     public List<PollenInfoDTO> getPollenLocationIndex() {
         List<PollenInfoDTO> pollenInfoDTOs = new ArrayList<>();
         for (Map.Entry<Long, PollenLocationIndex> pollenLocationIndex : state.getPollenLocationIndexService().getPollenLocationIndexMap().entrySet()) {
-            for (PollenLocationIndex.PollenTypeInfo pollenTypeInfo : pollenLocationIndex.getValue().getDailyInfo().get(0).getPollenTypeInfo()) {
-                pollenInfoDTOs.add(new PollenInfoDTO(pollenTypeInfo));
-            }
-            for (PollenLocationIndex.PlantInfo plantInfo : pollenLocationIndex.getValue().getDailyInfo().get(0).getPlantInfo()) {
-                pollenInfoDTOs.add(new PollenInfoDTO(plantInfo));
-            }
+            pollenInfoDTOs.add(new PollenInfoDTO(pollenLocationIndex.getValue()));
         }
         return pollenInfoDTOs;
     }

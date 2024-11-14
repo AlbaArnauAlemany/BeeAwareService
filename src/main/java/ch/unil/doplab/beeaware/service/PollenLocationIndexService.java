@@ -22,7 +22,7 @@ public class PollenLocationIndexService {
         for (Map.Entry<Long, PollenLocationIndex> pil : pollenLocationIndexMap.entrySet()) {
             if (pil.getValue().getLocation() != null && pil.getValue().getLocation().equals(pollenLocationIndex.getLocation())) {
                 logger.log(Level.WARNING, "pollenLocationIndex already exists: {0}", pollenLocationIndex);
-                if (Utils.isSameDay(Utils.formatDate(pil.getValue().getDailyInfo().get(0).getDate()), Utils.formatDate(pollenLocationIndex.getDailyInfo().get(0).getDate()))) {
+                if (Utils.isSameDay(pil.getValue().getDate(), pollenLocationIndex.getDate())) {
                     pollenLocationIndexMap.put(pil.getValue().getId(), pollenLocationIndex);
                     return;
                 }

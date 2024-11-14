@@ -1,9 +1,7 @@
 package ch.unil.doplab.beeaware.service;
 
 import ch.unil.doplab.beeaware.DTO.PollenInfoDTO;
-import ch.unil.doplab.beeaware.Domain.Beezzer;
-import ch.unil.doplab.beeaware.Domain.Location;
-import ch.unil.doplab.beeaware.Domain.PollenLocationIndex;
+import ch.unil.doplab.beeaware.Domain.*;
 import ch.unil.doplab.beeaware.domain.ApplicationState;
 import ch.unil.doplab.beeaware.domain.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,7 +24,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static ch.unil.doplab.beeaware.domain.Utils.formatDate;
+import static ch.unil.doplab.beeaware.domain.Utils.transformPollenInfoInPollenIndex;
 import static org.apache.http.client.utils.DateUtils.parseDate;
 
 @Getter
@@ -62,10 +60,8 @@ public class ForeCastService {
         List<PollenInfoDTO> PollenShortDTOs = new ArrayList<>();
         for (Map.Entry<Long, PollenLocationIndex> pollenLocationIndex : pollenLocationIndexService.getPollenLocationIndexMap().entrySet()) {
             if (pollenLocationIndex.getValue().getLocation().equals(beezzer.getLocation())) {
+                PollenShortDTOs.add(new PollenInfoDTO(pollenLocationIndex.getValue()));
 
-                for (PollenLocationIndex.DailyInfo dailyInfo : pollenLocationIndex.getValue().getDailyInfo()) {
-                    Utils.addPollenInfo(PollenShortDTOs, dailyInfo, beezzer);
-                }
             }
         }
         return PollenShortDTOs;
@@ -79,12 +75,8 @@ public class ForeCastService {
         List<PollenInfoDTO> PollenShortDTOs = new ArrayList<>();
         for (Map.Entry<Long, PollenLocationIndex> pollenLocationIndex : pollenLocationIndexService.getPollenLocationIndexMap().entrySet()) {
             if (pollenLocationIndex.getValue().getLocation().equals(beezzer.getLocation())) {
-
-                for (PollenLocationIndex.DailyInfo dailyInfo : pollenLocationIndex.getValue().getDailyInfo()) {
-
-                    if (Utils.isSameDay(formatDate(dailyInfo.getDate()), date)) {
-                        Utils.addPollenInfo(PollenShortDTOs, dailyInfo, beezzer);
-                    }
+                if (Utils.isSameDay(pollenLocationIndex.getValue().getDate(), date)) {
+                    PollenShortDTOs.add(new PollenInfoDTO(pollenLocationIndex.getValue()));
                 }
             }
         }
@@ -104,9 +96,12 @@ public class ForeCastService {
 
                 String jsonResponse = response.parseAsString();
                 ObjectMapper objectMapper = new ObjectMapper();
-                PollenLocationIndex pollenInfo = objectMapper.readValue(jsonResponse, PollenLocationIndex.class);
-                pollenInfo.setLocation(location);
-                pollenLocationIndexService.addPollenLocationIndex(pollenInfo);
+                PollenLocationInfo pollenInfo = objectMapper.readValue(jsonResponse, PollenLocationInfo.class);
+                logger.log(Level.INFO, "{0}", pollenInfo);
+                List<PollenLocationIndex> newPollenLocationInfo = transformPollenInfoInPollenIndex(pollenInfo, location);
+                for (PollenLocationIndex polLocIndex: newPollenLocationInfo) {
+                    pollenLocationIndexService.addPollenLocationIndex(polLocIndex);
+                }
             } else {
                 logger.log(Level.SEVERE, "Error, coordinate null");
             }

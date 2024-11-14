@@ -1,6 +1,6 @@
 package ch.unil.doplab.beeaware.DTO;
 
-import ch.unil.doplab.beeaware.Domain.Level;
+import ch.unil.doplab.beeaware.Domain.Reaction;
 import ch.unil.doplab.beeaware.Domain.Symptom;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,12 +12,12 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SymptomsDTO {
-    private Level level;
+    private Reaction level;
     private boolean antihistamine;
     private Date date;
 
     public SymptomsDTO(Symptom symptom) {
-        this.level = symptom.getLevel();
+        this.level = symptom.getReaction();
         this.antihistamine = symptom.isAntihistamine();
         this.date = symptom.getDate();
     }

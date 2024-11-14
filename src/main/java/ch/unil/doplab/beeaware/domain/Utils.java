@@ -1,10 +1,7 @@
 package ch.unil.doplab.beeaware.domain;
 
 import ch.unil.doplab.beeaware.DTO.PollenInfoDTO;
-import ch.unil.doplab.beeaware.Domain.Beezzer;
-import ch.unil.doplab.beeaware.Domain.Pollen;
-import ch.unil.doplab.beeaware.Domain.PollenLocationIndex;
-import ch.unil.doplab.beeaware.Domain.Role;
+import ch.unil.doplab.beeaware.Domain.*;
 import jakarta.inject.Inject;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +25,7 @@ public class Utils {
         return localDate1.isEqual(localDate2);
     }
 
-    public static Date formatDate(PollenLocationIndex.Date dailyInfo) {
+    public static Date formatDate(PollenLocationInfo.Date dailyInfo) {
         Calendar calendar = Calendar.getInstance();
         int year = dailyInfo.getYear();
         int month = dailyInfo.getMonth() - 1;
@@ -37,39 +34,17 @@ public class Utils {
         return calendar.getTime();
     }
 
-    public boolean isAdministrator(Long beezzerID) {
-        Beezzer beezzer = state.getBeezzerService().getBeezzers().get(beezzerID);
-        return Objects.equals(beezzer.getRole(), Role.ADMIN);
-    }
-
-    public static void addPollenInfo(List<PollenInfoDTO> PollenShortDTOsFct, PollenLocationIndex.DailyInfo dailyInfoFct, Beezzer beezzerFct) {
-        for (PollenLocationIndex.PollenTypeInfo pollenTypeDailyInfo : dailyInfoFct.getPollenTypeInfo()) {
-            for (Map.Entry<Long, Pollen> pollen : beezzerFct.getAllergens().entrySet()) {
-                Utils.addPollenInfo2(PollenShortDTOsFct, pollen.getValue().getPollenNameEN(), pollenTypeDailyInfo);
+    public static List<PollenLocationIndex> transformPollenInfoInPollenIndex(PollenLocationInfo pollenLocationInfo, Location location){
+        List<PollenLocationIndex> pollenLocationIndexList = new ArrayList<>();
+        for (PollenLocationInfo.DailyInfo dailyInfo : pollenLocationInfo.getDailyInfo()) {
+            for (PollenLocationInfo.PollenTypeInfo pollenTypeDailyInfo : dailyInfo.getPollenTypeInfo()) {
+                pollenLocationIndexList.add(new PollenLocationIndex(pollenTypeDailyInfo, formatDate(dailyInfo.getDate()), location));
+            }
+            for (PollenLocationInfo.PlantInfo pollenDailyInfo : dailyInfo.getPlantInfo()) {
+                pollenLocationIndexList.add(new PollenLocationIndex(pollenDailyInfo, formatDate(dailyInfo.getDate()), location));
             }
         }
-
-        for (PollenLocationIndex.PlantInfo pollenDailyInfo : dailyInfoFct.getPlantInfo()) {
-            for (Map.Entry<Long, Pollen> pollen : beezzerFct.getAllergens().entrySet()) {
-                Utils.addPollenInfo3(PollenShortDTOsFct, pollen.getValue().getPollenNameEN(), pollenDailyInfo);
-            }
-        }
-    }
-
-    public static void addPollenInfo2(List<PollenInfoDTO> PollenShortDTOsFct2, String pollenName2, PollenLocationIndex.PollenTypeInfo pollenTypeDailyInfoFct) {
-        if (pollenName2.equals(pollenTypeDailyInfoFct.getDisplayName())) {
-            if (pollenTypeDailyInfoFct.getIndexInfo() != null) {
-                PollenShortDTOsFct2.add(new PollenInfoDTO(pollenTypeDailyInfoFct));
-            }
-        }
-    }
-
-    public static void addPollenInfo3(List<PollenInfoDTO> PollenShortDTOsFct3, String pollenName3, PollenLocationIndex.PlantInfo pollenDailyInfoFct) {
-        if (pollenName3.equals(pollenDailyInfoFct.getDisplayName())) {
-            if (pollenDailyInfoFct.getIndexInfo() != null) {
-                PollenShortDTOsFct3.add(new PollenInfoDTO(pollenDailyInfoFct));
-            }
-        }
+        return pollenLocationIndexList;
     }
 
     // TODO: for the test part

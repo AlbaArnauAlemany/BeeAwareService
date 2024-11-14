@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 @Getter
 @Setter
 public class ApplicationState {
-    private Map<Long, PollenLocationIndex> PollenLocationIndexArray;
+    private Map<Long, PollenLocationInfo> PollenLocationIndexArray;
     private String APIKEY = ResourceBundle.getBundle("application").getString("API_KEY");
     private Map<Long, Long> allergens;
     private BeezzerService beezzerService;
@@ -28,6 +28,7 @@ public class ApplicationState {
     private GeoApiService geoApiService;
     private ForeCastService foreCastService;
     private TokenService tokenService;
+    private DailyTaskService dailyTaskService;
 
     private Logger logger = Logger.getLogger(ApplicationState.class.getName());
 
@@ -41,6 +42,7 @@ public class ApplicationState {
         geoApiService = new GeoApiService(APIKEY);
         foreCastService = new ForeCastService(APIKEY, pollenLocationIndexService);
         tokenService = new TokenService();
+        dailyTaskService = new DailyTaskService();
 
         populateApplicationState();
     }
@@ -70,10 +72,10 @@ public class ApplicationState {
             Date d3 = new GregorianCalendar(2024, Calendar.FEBRUARY, 11).getTime();
             Date d4 = new GregorianCalendar(2024, Calendar.FEBRUARY, 15).getTime();
 
-            Symptom symptom1 = new Symptom(ony.getId(), ch.unil.doplab.beeaware.Domain.Level.HIGH_REACTION, false);
-            Symptom symptom2 = new Symptom(ony.getId(), ch.unil.doplab.beeaware.Domain.Level.MODERATE_REACTION, false);
-            Symptom symptom3 = new Symptom(ony.getId(), ch.unil.doplab.beeaware.Domain.Level.LOW_REACTION, true);
-            Symptom symptom4 = new Symptom(ony.getId(), ch.unil.doplab.beeaware.Domain.Level.LOW_REACTION, true);
+            Symptom symptom1 = new Symptom(ony.getId(), Reaction.HIGH_REACTION, false);
+            Symptom symptom2 = new Symptom(ony.getId(), Reaction.MODERATE_REACTION, false);
+            Symptom symptom3 = new Symptom(ony.getId(), Reaction.LOW_REACTION, true);
+            Symptom symptom4 = new Symptom(ony.getId(), ch.unil.doplab.beeaware.Domain.Reaction.LOW_REACTION, true);
 
             symptom3.setDate(d3);
             symptom4.setDate(d4);
