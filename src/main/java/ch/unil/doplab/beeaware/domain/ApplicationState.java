@@ -27,6 +27,7 @@ public class ApplicationState {
     // private AllergenService allergenService;
     private GeoApiService geoApiService;
     private ForeCastService foreCastService;
+    private IndexPollenForBeezzer indexPollenForBeezzer;
     private TokenService tokenService;
     private DailyTaskService dailyTaskService;
 
@@ -41,6 +42,7 @@ public class ApplicationState {
         // allergenService = new AllergenService();
         geoApiService = new GeoApiService(APIKEY);
         foreCastService = new ForeCastService(APIKEY, pollenLocationIndexService);
+        indexPollenForBeezzer = new IndexPollenForBeezzer(beezzerService, foreCastService, pollenLocationIndexService);
         tokenService = new TokenService();
         dailyTaskService = new DailyTaskService();
 
@@ -90,9 +92,10 @@ public class ApplicationState {
                 logger.log(Level.INFO, "{0}", symptom);
             }
 
+            logger.log(Level.INFO, "Forecasting pollen information for all locations...");
             foreCastService.forecastAllLocation(locationService.getLocations());
 
-            List<PollenInfoDTO> pollenShortDTOs = foreCastService.getIndex(ony.getId());
+            List<PollenInfoDTO> pollenShortDTOs = indexPollenForBeezzer.getIndex(ony.getId());
             for (PollenInfoDTO pollen : pollenShortDTOs) {
                 logger.log(Level.INFO, pollen.toString());
             }
@@ -103,6 +106,7 @@ public class ApplicationState {
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error during populate users");
+            logger.log(Level.SEVERE, "{0}", e.getStackTrace()[0]);
             logger.log(Level.SEVERE, e.getMessage());
         }
     }

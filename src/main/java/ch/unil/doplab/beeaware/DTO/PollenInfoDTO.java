@@ -15,14 +15,17 @@ public class PollenInfoDTO {
     private String displayName;
     private int index;
     private Date date;
+    private int NPA;
 
     public PollenInfoDTO(PollenLocationIndex pollenLocationIndex) {
         this.displayName = pollenLocationIndex.getDisplayName();
         this.index = pollenLocationIndex.getIndex();
+        this.date = pollenLocationIndex.getDate();
+        this.NPA = pollenLocationIndex.getLocation().getNPA();
     }
 
     @Override
     public String toString() {
-        return "Name : " + displayName + ", Index : " + index;
+        return "Name : " + displayName + ", Index : " + index + ", Date : " + date + ", NPA : " + NPA;
     }
 }

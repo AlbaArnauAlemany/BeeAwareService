@@ -1,15 +1,17 @@
 package ch.unil.doplab.beeaware.domain;
 
-import ch.unil.doplab.beeaware.DTO.PollenInfoDTO;
-import ch.unil.doplab.beeaware.Domain.*;
+import ch.unil.doplab.beeaware.Domain.Location;
+import ch.unil.doplab.beeaware.Domain.PollenLocationIndex;
+import ch.unil.doplab.beeaware.Domain.PollenLocationInfo;
 import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.logging.Logger;
-
+@Singleton
 public class Utils {
     private static final Logger logger = Logger.getLogger(Utils.class.getName());
     @Inject

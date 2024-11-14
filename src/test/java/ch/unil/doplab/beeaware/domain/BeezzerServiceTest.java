@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class BeezzerServiceTest {
 
     private BeezzerService beezzerService;
-    private GeoApiService coordinatesSetUp;
+    private GeoApiService geoApiService;
     private ForeCastService foreCastService;
     private LocationService locationsList;
     private PollenLocationIndexService pollenLocationIndexService;
@@ -38,9 +38,9 @@ public class BeezzerServiceTest {
         // Initiate instances
         beezzerService = new BeezzerService();
         locationsList = new LocationService();
-        coordinatesSetUp = new GeoApiService(APIKEY);
+        geoApiService = new GeoApiService(APIKEY);
+        pollenLocationIndexService = new PollenLocationIndexService();
         foreCastService = new ForeCastService(APIKEY, pollenLocationIndexService);
-
         ecublens = new Location(1040, "CH");
         nyon = new Location(1260, "CH");
         vevey = new Location(1800, "CH");
@@ -52,10 +52,10 @@ public class BeezzerServiceTest {
         clara = new Beezzer("clara", "clara@unil.ch", "D-.gAf741", payerne, Role.BEEZZER);
 
         // GET coordinates for each location
-        coordinatesSetUp.getCoordinates(ecublens);
-        coordinatesSetUp.getCoordinates(nyon);
-        coordinatesSetUp.getCoordinates(vevey);
-        coordinatesSetUp.getCoordinates(payerne);
+        geoApiService.getCoordinates(ecublens);
+        geoApiService.getCoordinates(nyon);
+        geoApiService.getCoordinates(vevey);
+        geoApiService.getCoordinates(payerne);
 
         // ADD locations to LOCATIONS LIST
         locationsList.addLocation(ecublens);

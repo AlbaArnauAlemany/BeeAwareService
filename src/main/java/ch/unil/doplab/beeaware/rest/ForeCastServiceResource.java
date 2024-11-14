@@ -34,7 +34,7 @@ public class ForeCastServiceResource {
     @SameID
     @Path("/beezzer/{id}")
     public List<PollenInfoDTO> getIndex(@PathParam("id") Long beezzerId) {
-        return state.getForeCastService().getIndex(beezzerId);
+        return state.getIndexPollenForBeezzer().getIndex(beezzerId);
     }
 
     @GET
@@ -44,6 +44,6 @@ public class ForeCastServiceResource {
     @SameID
     @Path("/date/beezzer/{id}")
     public List<PollenInfoDTO> getIndex(@QueryParam("date") String date, @PathParam("id") Long beezzerId) {
-        return state.getForeCastService().getIndex(date, beezzerId);
+        return state.getIndexPollenForBeezzer().getIndex(date, beezzerId);
     }
 }

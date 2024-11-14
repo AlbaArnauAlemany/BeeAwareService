@@ -19,13 +19,15 @@ public class DailyTaskService {
 
     private ScheduledExecutorService scheduler;
     private ForeCastService foreCastService;
+    private PollenLocationIndexService pollenLocationIndexService;
     @Inject
     private ApplicationState state;
     private final Logger logger = Logger.getLogger(DailyTaskService.class.getName());
 
     @PostConstruct
     public void init() {
-        foreCastService = new ForeCastService(state.getAPIKEY(), state.getPollenLocationIndexService());
+        pollenLocationIndexService = new PollenLocationIndexService();
+        foreCastService = new ForeCastService(state.getAPIKEY(), pollenLocationIndexService);
         scheduler = Executors.newScheduledThreadPool(1);
 
         int targetHour = 10;

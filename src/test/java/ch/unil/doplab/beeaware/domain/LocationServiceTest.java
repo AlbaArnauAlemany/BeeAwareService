@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class LocationServiceTest {
 
     private LocationService locationService;
-    private GeoApiService coordinatesSetUp;
+    private GeoApiService geoApiService;
     private Location ecublens;
     private Location nyon;
     private Location vevey;
@@ -30,7 +30,7 @@ class LocationServiceTest {
     void setUp() {
         // Initiate instances
         locationService = new LocationService();
-        coordinatesSetUp = new GeoApiService(APIKEY);
+        geoApiService = new GeoApiService(APIKEY);
 
         ecublens = new Location(1040, "CH");
         nyon = new Location(1260, "CH");
@@ -38,10 +38,10 @@ class LocationServiceTest {
         payerne = new Location(1530, "CH");
 
         // GET coordinates for each location
-        coordinatesSetUp.getCoordinates(ecublens);
-        coordinatesSetUp.getCoordinates(nyon);
-        coordinatesSetUp.getCoordinates(vevey);
-        coordinatesSetUp.getCoordinates(payerne);
+        geoApiService.getCoordinates(ecublens);
+        geoApiService.getCoordinates(nyon);
+        geoApiService.getCoordinates(vevey);
+        geoApiService.getCoordinates(payerne);
 
         // ADD locations to LOCATIONS LIST
         locationService.addLocation(ecublens);
@@ -62,7 +62,7 @@ class LocationServiceTest {
 
         // Assert that duplicated locations are not added to the list
         Location ecublensBis = new Location(1040, "CH");
-        coordinatesSetUp.getCoordinates(ecublensBis);
+        geoApiService.getCoordinates(ecublensBis);
         locationService.addLocation(ecublensBis);
         assertEquals(4, allLocations.size());
     }
