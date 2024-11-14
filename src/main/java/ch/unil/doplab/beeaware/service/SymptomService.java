@@ -44,7 +44,18 @@ public class SymptomService {
         List<SymptomsDTO> symptomsList = new ArrayList<>();
         for (Map.Entry<Long, Symptom> sym: symptoms.entrySet()) {
                 symptomsList.add(new SymptomsDTO(sym.getValue()));
+        }
+        return symptomsList;
+    }
+
+    public List<SymptomsDTO> getAllSymptoms(Long id) {
+        logger.log( Level.INFO, "Searching for all registered symptoms...");
+        List<SymptomsDTO> symptomsList = new ArrayList<>();
+        for (Map.Entry<Long, Symptom> sym: symptoms.entrySet()) {
+            if(sym.getValue().getBeezzerId() == id) {
+                symptomsList.add(new SymptomsDTO(sym.getValue()));
             }
+        }
         return symptomsList;
     }
 
@@ -60,17 +71,23 @@ public class SymptomService {
         return symptomsBeezzer;
     }
 
-    public List<SymptomsDTO> getSymptomForDate(@NotNull Long beezzerId, String stringDate){
-        Date date = parseDate(stringDate, new String[]{"yyyy-MM-dd"}); // TODO: How to make every one input the same format for the date?
-        logger.log( Level.INFO, "Searching symptoms for Beezzer {0} for the following day: {1}...", new Object[]{String.valueOf(beezzerId), String.valueOf(date)});
-        List<SymptomsDTO> symptomsDate = new ArrayList<>();
+    public SymptomsDTO getSymptomForDate(@NotNull Long beezzerId, String stringDate){
+        Date date = parseDate(stringDate);
+        logger.log( Level.INFO, "Searching symptom for Beezzer {0} for the following day: {1}...", new Object[]{String.valueOf(beezzerId), String.valueOf(date)});
         for (Map.Entry<Long, Symptom> sym : symptoms.entrySet()) {
-            if (beezzerId.equals(sym.getValue().getBeezzerId())
-                    && Utils.isSameDay(sym.getValue().getDate(), date)) {
-                symptomsDate.add(new SymptomsDTO(sym.getValue()));
+            if (beezzerId.equals(sym.getValue().getBeezzerId()) && Utils.isSameDay(sym.getValue().getDate(), date)) {
+                return new SymptomsDTO(sym.getValue());
             }
         }
-        return symptomsDate;
+        return new SymptomsDTO();
+    }
+
+    public SymptomsDTO getSymptom(@NotNull Long beezzerId, Long idSymptom){
+        logger.log( Level.INFO, "Searching symptom for Beezzer {0} symptom: {1}...", new Object[]{String.valueOf(beezzerId), idSymptom});
+        if (beezzerId.equals(symptoms.get(idSymptom).getBeezzerId().equals(beezzerId))) {
+            return new SymptomsDTO(symptoms.get(idSymptom));
+        }
+        return new SymptomsDTO();
     }
 
     public boolean removeSymptom(Long idSymptom) {

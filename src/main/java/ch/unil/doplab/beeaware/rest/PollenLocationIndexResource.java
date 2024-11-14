@@ -2,6 +2,7 @@ package ch.unil.doplab.beeaware.rest;
 
 import ch.unil.doplab.beeaware.DTO.PollenInfoDTO;
 import ch.unil.doplab.beeaware.Domain.PollenLocationIndex;
+import ch.unil.doplab.beeaware.Domain.Role;
 import ch.unil.doplab.beeaware.domain.ApplicationState;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -17,12 +18,16 @@ public class PollenLocationIndexResource {
     private ApplicationState state;
 
     @POST
+    @Secured
+    @RoleRequired(Role.ADMIN)
     @Consumes(MediaType.APPLICATION_JSON)
     public void addPollenLocationIndex(PollenLocationIndex pollenLocationIndex) {
         state.getPollenLocationIndexService().addPollenLocationIndex(pollenLocationIndex);
     }
 
     @GET
+    @Secured
+    @RoleRequired(Role.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public List<PollenInfoDTO> getPollenLocationIndex() {
         List<PollenInfoDTO> pollenInfoDTOs = new ArrayList<>();
@@ -33,6 +38,8 @@ public class PollenLocationIndexResource {
     }
 
     @DELETE
+    @Secured
+    @RoleRequired(Role.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public boolean removePollenLocationIndex(@PathParam("id") Long idPollenLocationIndex) {

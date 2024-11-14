@@ -27,8 +27,7 @@ public class SymptomResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
-    @SameID
-    @Path("/{id}/date")
+    @Path("/{id}")
     public List<SymptomsDTO> getSymptom(@PathParam("id") Long id) {
         return state.getSymptomService().getSymptom(id);
     }
@@ -37,9 +36,18 @@ public class SymptomResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
     @SameID
-    @Path("/{id}/{date}")
-    public List<SymptomsDTO> getSymptomForDate(@PathParam("id") Long id, @PathParam("date") String stringDate) {
+    @Path("/{id}/date/{date}")
+    public SymptomsDTO getSymptomForDate(@PathParam("id") Long id, @PathParam("date") String stringDate) {
         return state.getSymptomService().getSymptomForDate(id, stringDate);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    @SameID
+    @Path("/{id}/{idSymptom}")
+    public SymptomsDTO getSymptomWithId(@PathParam("id") Long id, @PathParam("idSymptom") Long idSymptom) {
+        return state.getSymptomService().getSymptom(id, idSymptom);
     }
 
     @GET
@@ -48,6 +56,16 @@ public class SymptomResource {
     @RoleRequired(Role.ADMIN)
     public List<SymptomsDTO> getAllSymptoms() {
         return state.getSymptomService().getAllSymptoms();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    @SameID
+    @RoleRequired(Role.ADMIN)
+    @Path("/{id}/all")
+    public List<SymptomsDTO> getAllSymptoms(@PathParam("id") Long id) {
+        return state.getSymptomService().getAllSymptoms(id);
     }
 
     @DELETE
