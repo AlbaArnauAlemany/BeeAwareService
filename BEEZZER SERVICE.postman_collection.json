@@ -152,20 +152,19 @@
 					"response": []
 				},
 				{
-					"name": "Add Beezzer Copy",
+					"name": "Add Beezzer",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "62dhjd52p4emu55hgg3skij295",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n{\r\n    \"allergens\": {\r\n        \"0\": {\r\n            \"pollenNameEN\": \"Grasses\"\r\n        }\r\n    },\r\n    \"email\": \"hay@unil.ch\",\r\n    \"location\": {\r\n        \"NPA\":1008,\r\n        \"country\":\"CH\"\r\n    },\r\n    \"password\": \"aaBcdd122.\",\r\n    \"username\": \"hay\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers",
 							"protocol": "http",
@@ -183,20 +182,19 @@
 					"response": []
 				},
 				{
-					"name": "Put a Beezzer Copy",
+					"name": "Put a Beezzer",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "62dhjd52p4emu55hgg3skij295",
-									"type": "string"
-								}
-							]
-						},
 						"method": "PUT",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n{\r\n    \"allergens\": {\r\n        \"8\": {\r\n            \"id\": 8,\r\n            \"pollenNameEN\": \"Grasses\"\r\n        },\r\n        \"11\": {\r\n            \"id\": 11,\r\n            \"pollenNameEN\": \"Weed\"\r\n        }\r\n    },\r\n    \"email\": \"ony@unil.ch\",\r\n    \"id\": 0,\r\n    \"location\": {\r\n        \"NPA\": 1024,\r\n        \"coordinate\": {\r\n            \"latitude\": 46.52851,\r\n            \"longitude\": 6.56057\r\n        },\r\n        \"country\": \"CH\",\r\n        \"id\": 0\r\n    },\r\n    \"password\": \"$2a$12$ggO/WmhsrsdUWZoIooFwCOU9GnPh66r8vEmShHYc.nskD4JYR25Eq\",\r\n    \"role\": \"BEEZZER\",\r\n    \"username\": \"Ony\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/setBeezzer",
 							"protocol": "http",
@@ -222,7 +220,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "62dhjd52p4emu55hgg3skij295",
+									"value": "vufs0f36ugesdsr7fdna28fehm",
 									"type": "string"
 								}
 							]
@@ -230,7 +228,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/lallergens/ocation/0",
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/0/allergens",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -240,9 +238,8 @@
 								"BeeAwareService-1.0-SNAPSHOT",
 								"api",
 								"beezzers",
-								"lallergens",
-								"ocation",
-								"0"
+								"0",
+								"allergens"
 							]
 						}
 					},
@@ -251,16 +248,6 @@
 				{
 					"name": "Get for a Beezzer the location Copy",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "62dhjd52p4emu55hgg3skij295",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -284,16 +271,6 @@
 				{
 					"name": "Get all Beezzers",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "62dhjd52p4emu55hgg3skij295",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -629,6 +606,100 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "FORECAST",
+			"item": [
+				{
+					"name": "Get index for a specific Beezzer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/forecast/beezzer/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"forecast",
+								"beezzer",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get index for a specific Beezzer Copy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/forecast/date/beezzer/0?date=11-14-2024",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"forecast",
+								"date",
+								"beezzer",
+								"0"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "11-14-2024"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "u7u6m0f9rhvvtml0ibssscagoe",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "{{host}}",
+			"value": "locallylskdsldkélakéalskélsd"
 		}
 	]
 }
