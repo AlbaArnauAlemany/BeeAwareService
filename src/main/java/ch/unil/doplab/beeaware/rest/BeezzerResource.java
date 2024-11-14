@@ -72,6 +72,16 @@ public class BeezzerResource {
         return state.getBeezzerService().getBeezzerLocation(id);
     }
 
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Secured
+    @SameID
+    @Path("/location/{id}")
+    public boolean setBeezzerLocation(@PathParam("id") Long idBeezzer, String locationJson) {
+        return state.getBeezzerService().setBeezzerLocation(idBeezzer, locationJson);
+    }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -100,6 +110,4 @@ public class BeezzerResource {
     public boolean removeAllergen(@PathParam("id") Long idBeezzer, @QueryParam("allergenid") Long idAllergen) {
         return state.getBeezzerService().removeAllergen(idAllergen, idBeezzer);
     }
-
-    //TODO : Ajouter la modification de location
 }
