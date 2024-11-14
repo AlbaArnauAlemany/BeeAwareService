@@ -2,7 +2,7 @@ package ch.unil.doplab.beeaware.service;
 
 import ch.unil.doplab.beeaware.DTO.PollenInfoDTO;
 import ch.unil.doplab.beeaware.Domain.Beezzer;
-import ch.unil.doplab.beeaware.Domain.Location;
+import ch.unil.doplab.beeaware.Domain.Pollen;
 import ch.unil.doplab.beeaware.Domain.PollenLocationIndex;
 import ch.unil.doplab.beeaware.domain.Utils;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static org.apache.http.client.utils.DateUtils.parseDate;
+import static ch.unil.doplab.beeaware.domain.Utils.parseDate;
 
 @Getter
 @Setter
@@ -29,41 +29,47 @@ public class IndexPollenForBeezzer {
     private ForeCastService foreCastService;
     private PollenLocationIndexService pollenLocationIndexService;
     private final Logger logger = Logger.getLogger(IndexPollenForBeezzer.class.getName());
-    public void forecastAllLocation(Map<Long, Location> locations) {
-        logger.log(Level.INFO, "Retrieving pollen per locations....");
-        for (Map.Entry<Long, Location> loc : locations.entrySet()) {
-            logger.log(Level.INFO, "Location : {0}", loc);
-            foreCastService.pollenForecast(loc.getValue(), 1);
+
+    private List<PollenInfoDTO> pollenInfoDTOList(Long beezzerId, Date date){
+        logger.log(Level.INFO, "Retrieving pollen for a specific Beezzer {0}", beezzerId);
+        Beezzer beezzer = beezzerService.getBeezzers().get(beezzerId);
+        List<PollenInfoDTO> pollenShortDTOs = new ArrayList<>();
+        for (Map.Entry<Long, PollenLocationIndex> pollenLocationIndex : pollenLocationIndexService.getPollenLocationIndexMap().entrySet()) {
+            if (pollenLocationIndex.getValue().getLocation().equals(beezzer.getLocation())) {
+                if (date == null || Utils.isSameDay(pollenLocationIndex.getValue().getDate(), date)) {
+                    for (Map.Entry<Long, Pollen> pollen : beezzer.getAllergens().entrySet()) {
+                        if (pollenLocationIndex.getValue().getDisplayName().equals(pollen.getValue().getPollenNameEN())) {
+                            pollenShortDTOs.add(new PollenInfoDTO(pollenLocationIndex.getValue()));
+                        }
+                    }
+                }
+            }
         }
+        return pollenShortDTOs;
+    }
+
+    private List<PollenInfoDTO> pollenInfoDTOList(Long beezzerId){
+        return pollenInfoDTOList(beezzerId, (Date) null);
+    }
+
+    private List<PollenInfoDTO> pollenInfoDTOList(Long beezzerId, String date) {
+        Date dateParsed = null;
+        try{
+            dateParsed = parseDate(date);
+        } catch (Exception e) {
+            logger.log(Level.WARNING, "Unable to parse date");
+        }
+        return pollenInfoDTOList(beezzerId, dateParsed);
     }
 
     // getIndex for a specific beezzer
     public List<PollenInfoDTO> getIndex(@NotNull Long beezzerId) {
-        Beezzer beezzer = beezzerService.getBeezzers().get(beezzerId);
-        logger.log(Level.INFO, "Retrieving pollen for a specific Beezzer...");
-        List<PollenInfoDTO> PollenShortDTOs = new ArrayList<>();
-        for (Map.Entry<Long, PollenLocationIndex> pollenLocationIndex : pollenLocationIndexService.getPollenLocationIndexMap().entrySet()) {
-            if (pollenLocationIndex.getValue().getLocation().equals(beezzer.getLocation())) {
-                PollenShortDTOs.add(new PollenInfoDTO(pollenLocationIndex.getValue()));
-
-            }
-        }
-        return PollenShortDTOs;
+        return pollenInfoDTOList(beezzerId);
     }
 
     // getIndex for a specific beezzer and date
     public List<PollenInfoDTO> getIndex(String stringDate, @NotNull Long beezzerId) {
-        Beezzer beezzer = beezzerService.getBeezzers().get(beezzerId);
-        Date date = parseDate(stringDate);
-        logger.log(Level.INFO, "Retrieving pollen for a specific Beezzer for the following day: {0}...", date);
-        List<PollenInfoDTO> PollenShortDTOs = new ArrayList<>();
-        for (Map.Entry<Long, PollenLocationIndex> pollenLocationIndex : pollenLocationIndexService.getPollenLocationIndexMap().entrySet()) {
-            if (pollenLocationIndex.getValue().getLocation().equals(beezzer.getLocation())) {
-                if (Utils.isSameDay(pollenLocationIndex.getValue().getDate(), date)) {
-                    PollenShortDTOs.add(new PollenInfoDTO(pollenLocationIndex.getValue()));
-                }
-            }
-        }
-        return PollenShortDTOs;
+        logger.log(Level.INFO, "Retrieving pollen for a specific date {0}", stringDate);
+        return pollenInfoDTOList(beezzerId, stringDate);
     }
 }

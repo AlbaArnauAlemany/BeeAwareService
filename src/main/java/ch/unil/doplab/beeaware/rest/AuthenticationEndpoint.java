@@ -29,16 +29,10 @@ public class AuthenticationEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response authenticateUser(@FormParam("username") String username, @FormParam("password") String password) {
-
         try {
-
-            // Authenticate the user using the credentials provided
             Long userId = authenticate(username, password);
-
-            // Issue a token for the user
             String token = issueToken(userId);
 
-            // Return the token on the response
             return Response.ok(token).build();
 
         } catch (Exception e) {
@@ -48,14 +42,14 @@ public class AuthenticationEndpoint {
     }
 
     private Long authenticate(String username, String password) throws Exception {
-        logger.log(Level.SEVERE, "Beezzer {0} trying to authenticate", username);
+        logger.log(Level.INFO, "Beezzer {0} trying to authenticate", username);
         for (Map.Entry<Long, Beezzer> bee : state.getBeezzerService().getBeezzers().entrySet()) {
             if (username != null && password != null && username.equals(bee.getValue().getUsername()) && checkPassword(password, bee.getValue().getPassword())) {
                 logger.log(Level.INFO, "Beezzer {0} successfully connected", username);
                 return bee.getValue().getId();
             }
         }
-        logger.log(Level.SEVERE, "Error during authentication");
+        logger.log(Level.WARNING, "Error during authentication");
         throw new Exception("No match with user or password");
     }
 

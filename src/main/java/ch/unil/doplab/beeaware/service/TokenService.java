@@ -21,9 +21,13 @@ public class TokenService {
     public void addToken(@NotNull Token token) {
         logger.log(Level.INFO, "Adding token...");
         for (Map.Entry<Long, Token> tok : tokens.entrySet()) {
-            if (tok.getValue().getBeezzerId() == token.getBeezzerId() && isDateValide(token)) {
-                logger.log(Level.WARNING, "Token for beezzer {0} already exists", tok.getValue().getBeezzerId());
-                return;
+            if (tok.getValue().getBeezzerId() == token.getBeezzerId()) {
+                if(isDateValide(token)) {
+                    logger.log(Level.WARNING, "Token for beezzer {0} already exists and still valid", tok.getValue().getBeezzerId());
+                    return;
+                } else {
+                    tokens.remove(tok.getKey());
+                }
             }
         }
         tokens.put(tokenId++, token);

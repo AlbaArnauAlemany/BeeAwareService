@@ -82,6 +82,15 @@ public class ApplicationState {
             symptom3.setDate(d3);
             symptom4.setDate(d4);
 
+
+            Date now = new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(now);
+            calendar.add(Calendar.HOUR, 2);
+            Date plusTwoHour = calendar.getTime();
+            Token token = new Token("u7u6m0f9rhvvtml0ibssscagoe", plusTwoHour, 1L, Role.ADMIN);
+            tokenService.addToken(token);
+
             symptomService.addSymptom(symptom1);
             symptomService.addSymptom(symptom2);
             symptomService.addSymptom(symptom3);

@@ -7,6 +7,8 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -67,5 +69,9 @@ public class Utils {
         }
         System.out.println();
     }
-
+    public static Date parseDate(String dateStr) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");
+        formatter.setLenient(false);
+        return formatter.parse(dateStr);
+    }
 }

@@ -1,31 +1,17 @@
 package ch.unil.doplab.beeaware.rest;
 
 import ch.unil.doplab.beeaware.DTO.PollenInfoDTO;
-import ch.unil.doplab.beeaware.Domain.Beezzer;
-import ch.unil.doplab.beeaware.Domain.Location;
-import ch.unil.doplab.beeaware.Domain.Pollen;
-import ch.unil.doplab.beeaware.Domain.Role;
 import ch.unil.doplab.beeaware.domain.ApplicationState;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 
 import java.util.List;
-import java.util.Map;
 
 @Path("/forecast")
-public class ForeCastServiceResource {
+public class IndexPollenForBeezzerResource {
     @Inject
     private ApplicationState state;
-
-    // TODO: To remove after creating CRON task
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Secured
-    @RoleRequired(Role.ADMIN)
-    public void forecastAllLocation(Map<Long, Location> locations) {
-        state.getForeCastService().forecastAllLocation(locations);
-    }
 
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
