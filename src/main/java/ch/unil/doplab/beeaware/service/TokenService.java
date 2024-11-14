@@ -32,8 +32,11 @@ public class TokenService {
     }
 
     public boolean isDateValide(Token token) {
-        logger.log(Level.WARNING, "Token date isn't valid");
         return token.getExpiration().after(new Date());
+    }
+
+    public boolean isDateValide(Date date) {
+        return date.after(new Date());
     }
 
     public boolean isAuthorizedToAccess(String token) {

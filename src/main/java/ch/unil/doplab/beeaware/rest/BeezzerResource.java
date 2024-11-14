@@ -76,8 +76,8 @@ public class BeezzerResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured
     @SameID
-    @Path("/{beezzerid}/allergens")
-    public void addAllergen(@PathParam("beezzerid") Long idBeezzer, @QueryParam("pollen") String stringPollen) {
+    @Path("/{id}/allergens")
+    public void addAllergen(@PathParam("id") Long idBeezzer, @QueryParam("pollen") String stringPollen) {
         state.getBeezzerService().addAllergen(stringPollen, idBeezzer);
     }
 
@@ -85,8 +85,8 @@ public class BeezzerResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
     @SameID
-    @Path("/{beezzerid}/allergens")
-    public boolean removeAllergen(@PathParam("beezzerid") Long idBeezzer, @QueryParam("allergenid") Long idAllergen) {
+    @Path("/{id}/allergens")
+    public boolean removeAllergen(@PathParam("id") Long idBeezzer, @QueryParam("allergenid") Long idAllergen) {
         return state.getBeezzerService().removeAllergen(idAllergen, idBeezzer);
     }
 
@@ -95,8 +95,8 @@ public class BeezzerResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured
     @SameID
-    @Path("/{beezzerid}/allergens")
-    public AllergenDTO getBeezzerAllergens(@PathParam("beezzerid") Long idBeezzer) {
+    @Path("/{id}/allergens")
+    public AllergenDTO getBeezzerAllergens(@PathParam("id") Long idBeezzer) {
         return state.getBeezzerService().getBeezzerAllergens(idBeezzer);
     }
 }
