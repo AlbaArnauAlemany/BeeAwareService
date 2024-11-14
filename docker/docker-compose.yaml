@@ -1,0 +1,17 @@
+version: '3.3' # specify docker-compose version
+
+# Define the services/containers to be run
+services:
+  payara:
+    image: payara/server-full
+    ports:
+      - "8080:8080"
+      - "8181:8181" # HTTPS listener
+      - "4848:4848" # HTTPS admin listener
+      - "9009:9009" # Debug port
+    restart: always
+#    environment:
+#    JVM_ARGS: ""
+#     - "AS_ADMIN_MASTERPASSWORD=admin" #default password is `changeit`
+    volumes:
+      - ./deployments:/opt/payara/deployments
