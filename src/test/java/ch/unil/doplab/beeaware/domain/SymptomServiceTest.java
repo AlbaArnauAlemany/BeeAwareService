@@ -59,13 +59,13 @@ public class SymptomServiceTest {
     void testGetSymptom() {
 
         // Assert that getSymptom() for a beezzer will return the correct number of symptoms added for this beezzer
-        Symptom sympDafneBis = new Symptom(1L, Reaction.NO_REACTION, false, parseDate("2024-11-11"));
+        Symptom sympDafneBis = new Symptom(1L, Reaction.HIGH_REACTION, true, parseDate("2024-11-11", new String[]{"yyyy-MM-dd"}));
         symptomsList.addSymptom(sympDafneBis);
         List<SymptomsDTO> symptomsDafne = symptomsList.getSymptom(1L);
         assertEquals(2, symptomsDafne.size());
 
         // Assert that getSymptomForDate() for a specific date and beezzer will return only one symptom
-        Symptom sympPaulBis = new Symptom(2L, Reaction.NO_REACTION, true, parseDate("2024-11-13"));
+        Symptom sympPaulBis = new Symptom(2L, Reaction.NO_REACTION, true, parseDate("2024-11-13", new String[]{"yyyy-MM-dd"}));
         symptomsList.addSymptom(sympPaulBis);
         List<SymptomsDTO> symptomsForDate = symptomsList.getSymptomForDate(2L, "2024-11-13");
         assertEquals(1, symptomsForDate.size());

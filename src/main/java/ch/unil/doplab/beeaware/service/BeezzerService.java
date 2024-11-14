@@ -82,7 +82,7 @@ public class BeezzerService {
 
             return beezzer;
         } catch (Exception e){
-            logger.log(Level.WARNING, "Unable to create new beezer");
+            logger.log(Level.WARNING, "Unable to create new beezzer");
             logger.log(Level.SEVERE, "{0}", e.getStackTrace());
             return null;
         }

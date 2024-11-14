@@ -61,7 +61,7 @@ public class SymptomService {
     }
 
     public List<SymptomsDTO> getSymptomForDate(@NotNull Long beezzerId, String stringDate){
-        Date date = parseDate(stringDate);
+        Date date = parseDate(stringDate, new String[]{"yyyy-MM-dd"}); // TODO: How to make every one input the same format for the date?
         logger.log( Level.INFO, "Searching symptoms for Beezzer {0} for the following day: {1}...", new Object[]{String.valueOf(beezzerId), String.valueOf(date)});
         List<SymptomsDTO> symptomsDate = new ArrayList<>();
         for (Map.Entry<Long, Symptom> sym : symptoms.entrySet()) {

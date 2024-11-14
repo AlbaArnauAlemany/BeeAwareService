@@ -69,6 +69,7 @@ public class Utils {
         }
         System.out.println();
     }
+
     public static Date parseDate(String dateStr) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");
         formatter.setLenient(false);
