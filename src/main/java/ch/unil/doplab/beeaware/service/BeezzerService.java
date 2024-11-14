@@ -107,10 +107,6 @@ public class BeezzerService {
         return allBeezzers;
     }
 
-    public Map<Long, Beezzer> getAllBeezzerss() {
-        return beezzers;
-    }
-
     public void setBeezzer(@NotNull Beezzer beezzer) {
         logger.log(Level.INFO, "Setting Beezzer {0}...", beezzer.getUsername());
         beezzers.put(beezzer.getId(), beezzer);

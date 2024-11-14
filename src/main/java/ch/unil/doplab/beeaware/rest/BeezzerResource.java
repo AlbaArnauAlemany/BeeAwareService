@@ -28,15 +28,6 @@ public class BeezzerResource {
     }
 
     @GET
-    @Secured
-    @RoleRequired({Role.ADMIN})
-    @Path("/all")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Map<Long, Beezzer> getAllBeezzerss() {
-        return state.getBeezzerService().getAllBeezzerss();
-    }
-
-    @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
     @SameID
@@ -81,6 +72,16 @@ public class BeezzerResource {
         return state.getBeezzerService().getBeezzerLocation(id);
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Secured
+    @SameID
+    @Path("/{id}/allergens")
+    public AllergenDTO getBeezzerAllergens(@PathParam("id") Long idBeezzer) {
+        return state.getBeezzerService().getBeezzerAllergens(idBeezzer);
+    }
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -100,13 +101,5 @@ public class BeezzerResource {
         return state.getBeezzerService().removeAllergen(idAllergen, idBeezzer);
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Secured
-    @SameID
-    @Path("/{id}/allergens")
-    public AllergenDTO getBeezzerAllergens(@PathParam("id") Long idBeezzer) {
-        return state.getBeezzerService().getBeezzerAllergens(idBeezzer);
-    }
+    //TODO : Ajouter la modification de location
 }
