@@ -6,6 +6,7 @@ import ch.unil.doplab.beeaware.DTO.LocationDTO;
 import ch.unil.doplab.beeaware.DTO.PollenDTO;
 import ch.unil.doplab.beeaware.Domain.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -161,8 +162,8 @@ public class BeezzerService {
     public boolean setBeezzerLocation(Long beezzerId, String jsonLocation) {
         try {
             logger.log(Level.INFO, "Set new Loation for Beezzer... {0}", jsonLocation);
-            Location location = objectMapper.readValue(jsonLocation, Location.class);
             Beezzer beezzer = getBeezzerIfExist(beezzerId);
+            Location location = objectMapper.readValue(jsonLocation, Location.class);
             beezzer.setLocation(searchForLocationAndAddIt(location));
             beezzers.put(beezzer.getId(), beezzer);
             return true;
@@ -185,6 +186,23 @@ public class BeezzerService {
             beezzer.getAllergens().put(pollen.getId(), pollen);
         } catch (Exception e){
             logger.log(Level.WARNING, "Error adding allergen");
+        }
+    }
+
+    public boolean addAllergenSet(String allergens, Long idBeezzer){
+        logger.log(Level.INFO, "Apply allergens set {0}...", allergens);
+        try {
+            Beezzer beezzer = getBeezzerIfExist(idBeezzer);
+            List<Pollen> pollens = objectMapper.readValue(
+                    allergens, new TypeReference<List<Pollen>>() {}
+            );
+            for (Pollen pollen : pollens) {
+                addAllergen(pollen.getPollenNameEN(), beezzer.getId());
+            }
+            return true;
+        } catch (Exception e){
+            logger.log(Level.WARNING, "Error adding new list of allergens");
+            return false;
         }
     }
 

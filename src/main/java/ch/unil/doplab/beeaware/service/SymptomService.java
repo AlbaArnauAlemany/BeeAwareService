@@ -7,11 +7,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.ParseException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static org.apache.http.client.utils.DateUtils.parseDate;
+import static ch.unil.doplab.beeaware.domain.Utils.parseDate;
 
 @Getter
 @Setter
@@ -71,15 +72,19 @@ public class SymptomService {
         return symptomsBeezzer;
     }
 
-    public SymptomsDTO getSymptomForDate(@NotNull Long beezzerId, String stringDate){
-        Date date = parseDate(stringDate);
-        logger.log( Level.INFO, "Searching symptom for Beezzer {0} for the following day: {1}...", new Object[]{String.valueOf(beezzerId), String.valueOf(date)});
-        for (Map.Entry<Long, Symptom> sym : symptoms.entrySet()) {
-            if (beezzerId.equals(sym.getValue().getBeezzerId()) && Utils.isSameDay(sym.getValue().getDate(), date)) {
-                return new SymptomsDTO(sym.getValue());
+    public SymptomsDTO getSymptomForDate(@NotNull Long beezzerId, String stringDate) {
+        try {
+            Date date = parseDate(stringDate);
+            logger.log(Level.INFO, "Searching symptom for Beezzer {0} for the following day: {1}...", new Object[]{String.valueOf(beezzerId), String.valueOf(date)});
+            for (Map.Entry<Long, Symptom> sym : symptoms.entrySet()) {
+                if (beezzerId.equals(sym.getValue().getBeezzerId()) && Utils.isSameDay(sym.getValue().getDate(), date)) {
+                    return new SymptomsDTO(sym.getValue());
+                }
             }
+            return null;
+        } catch (Exception e){
+            return null;
         }
-        return new SymptomsDTO();
     }
 
     public SymptomsDTO getSymptom(@NotNull Long beezzerId, Long idSymptom){

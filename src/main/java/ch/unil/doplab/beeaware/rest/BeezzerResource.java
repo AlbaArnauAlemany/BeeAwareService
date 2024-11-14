@@ -98,8 +98,18 @@ public class BeezzerResource {
     @Secured
     @SameID
     @Path("/{id}/allergens")
-    public void addAllergen(@PathParam("id") Long idBeezzer, @QueryParam("pollen") String stringPollen) {
+    public void addAllergen(@PathParam("id") Long idBeezzer, String stringPollen) {
         state.getBeezzerService().addAllergen(stringPollen, idBeezzer);
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Secured
+    @SameID
+    @Path("/{id}/allergensset")
+    public void addAllergenSet(@PathParam("id") Long idBeezzer, String stringPollens) {
+        state.getBeezzerService().addAllergenSet(stringPollens, idBeezzer);
     }
 
     @DELETE
