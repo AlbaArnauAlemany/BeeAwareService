@@ -2,7 +2,9 @@ package ch.unil.doplab.beeaware.service;
 
 import ch.unil.doplab.beeaware.DTO.LocationDTO;
 import ch.unil.doplab.beeaware.Domain.Location;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,10 +17,18 @@ import java.util.logging.Logger;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class LocationService {
     private final Map<Long, Location> locations = new HashMap<>();
     private Long idLocation = 0L;
     private Logger logger = Logger.getLogger(LocationService.class.getName());
+    private GeoApiService geoApiService;
+
+    public LocationService(GeoApiService geoApiService){
+        this();
+        this.geoApiService = geoApiService;
+    }
 
     public void addLocation(@NotNull Location location) {
         LocationDTO locationDTO = new LocationDTO(location);
@@ -32,6 +42,26 @@ public class LocationService {
         location.setId(idLocation++);
         locations.put(idLocation, location);
         logger.log(Level.INFO, "New location added : {0}", location);
+    }
+
+    public Location createLocation(@NotNull Location location) {
+        logger.log(Level.INFO, "Adding location {0}...", location);
+        for (Map.Entry<Long, Location> loc : locations.entrySet()) {
+            if (loc.getValue().equals(location)) {
+                logger.log(Level.WARNING, "Location already exists: {0}", location);
+                return loc.getValue();
+            }
+        }
+        try {
+            geoApiService.getCoordinates(location);
+        } catch (Exception e){
+            logger.log(Level.WARNING, "Error getting coordinates", location);
+            logger.log(Level.SEVERE, "{0}", e.getStackTrace());
+        }
+        location.setId(idLocation++);
+        locations.put(idLocation, location);
+        logger.log(Level.INFO, "New location added : {0}", location);
+        return location;
     }
 
     public List<LocationDTO> getAllRegisteredLocations() {

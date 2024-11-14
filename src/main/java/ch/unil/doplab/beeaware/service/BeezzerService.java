@@ -4,9 +4,12 @@ import ch.unil.doplab.beeaware.DTO.AllergenDTO;
 import ch.unil.doplab.beeaware.DTO.BeezzerDTO;
 import ch.unil.doplab.beeaware.DTO.LocationDTO;
 import ch.unil.doplab.beeaware.DTO.PollenDTO;
-import ch.unil.doplab.beeaware.Domain.Beezzer;
-import ch.unil.doplab.beeaware.Domain.Pollen;
+import ch.unil.doplab.beeaware.Domain.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,10 +22,19 @@ import java.util.logging.Logger;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class BeezzerService {
     private final Map<Long, Beezzer> beezzers = new HashMap<>();
     private Long idBeezzer = 0L;
     private Logger logger = Logger.getLogger(BeezzerService.class.getName());
+    private ObjectMapper objectMapper = new ObjectMapper();
+    private LocationService locationService;
+
+    public BeezzerService(LocationService locationService){
+        this();
+        this.locationService = locationService;
+    }
 
     public void addBeezzer(@NotNull Beezzer beezzer) {
         logger.log(Level.INFO, "Adding Beezzer {0}...", beezzer.getUsername());
@@ -44,6 +56,38 @@ public class BeezzerService {
         logger.log(Level.INFO, "New Beezzer added : {0}", beezzer.getUsername());
     }
 
+    public Beezzer createBeezzerFromJSON(@NotNull String jsonBeezzer) {
+        try {
+            logger.log(Level.INFO, "Adding Beezzer {0}...", jsonBeezzer);
+            Beezzer beezzer = objectMapper.readValue(jsonBeezzer, Beezzer.class);
+            beezzer.setPassword(PasswordUtilis.hashPassword(beezzer.getPassword()));
+            Location foundLocation = null;
+            for (Map.Entry<Long, Location> location: locationService.getLocations().entrySet()) {
+                if(location.getValue().getNPA() == beezzer.getLocation().getNPA() && location.getValue().getCountry().equals(beezzer.getLocation().getCountry())){
+                    foundLocation = location.getValue();
+                    break;
+                }
+            }
+            if (foundLocation == null) {
+                foundLocation = locationService.createLocation(beezzer.getLocation());
+            }
+            beezzer.setLocation(foundLocation);
+            beezzer.setRole(Role.BEEZZER);
+
+            for (Map.Entry<Long, Pollen> pollen: beezzer.getAllergens().entrySet()) {
+                addAllergen(pollen.getValue().getPollenNameEN(), idBeezzer);
+            }
+            beezzer.setId(null);
+            addBeezzer(beezzer);
+
+            return beezzer;
+        } catch (Exception e){
+            logger.log(Level.WARNING, "Unable to create new beezer");
+            logger.log(Level.SEVERE, "{0}", e.getStackTrace());
+            return null;
+        }
+    }
+
     public BeezzerDTO getBeezzer(Long idBeezzer) {
         var beezzer = beezzers.get(idBeezzer);
         logger.log(Level.INFO, "Searching for Beezzer...");
@@ -61,6 +105,10 @@ public class BeezzerService {
             allBeezzers.add(new BeezzerDTO(beezzer.getValue()));
         }
         return allBeezzers;
+    }
+
+    public Map<Long, Beezzer> getAllBeezzerss() {
+        return beezzers;
     }
 
     public void setBeezzer(@NotNull Beezzer beezzer) {

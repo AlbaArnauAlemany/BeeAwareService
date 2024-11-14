@@ -35,12 +35,12 @@ public class ApplicationState {
 
     @PostConstruct
     public void init() {
-        beezzerService = new BeezzerService();
-        locationService = new LocationService();
+        geoApiService = new GeoApiService(APIKEY);
+        locationService = new LocationService(geoApiService);
+        beezzerService = new BeezzerService(locationService);
         symptomService = new SymptomService();
         pollenLocationIndexService = new PollenLocationIndexService();
         // allergenService = new AllergenService();
-        geoApiService = new GeoApiService(APIKEY);
         foreCastService = new ForeCastService(APIKEY, pollenLocationIndexService);
         indexPollenForBeezzer = new IndexPollenForBeezzer(beezzerService, foreCastService, pollenLocationIndexService);
         tokenService = new TokenService();

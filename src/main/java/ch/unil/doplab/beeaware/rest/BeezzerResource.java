@@ -12,6 +12,7 @@ import jakarta.ws.rs.core.MediaType;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 @Path("/beezzers")
 public class BeezzerResource {
@@ -27,6 +28,15 @@ public class BeezzerResource {
     }
 
     @GET
+    @Secured
+    @RoleRequired({Role.ADMIN})
+    @Path("/all")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Map<Long, Beezzer> getAllBeezzerss() {
+        return state.getBeezzerService().getAllBeezzerss();
+    }
+
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
     @SameID
@@ -35,6 +45,7 @@ public class BeezzerResource {
         return state.getBeezzerService().getBeezzer(id);
     }
 
+    // TODO: Mettre es reponses a 200 pour toutes les ressources de toutes les classes
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured
@@ -47,9 +58,8 @@ public class BeezzerResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Beezzer addBeezzer(Beezzer beezzer) {
-        state.getBeezzerService().addBeezzer(beezzer);
-        return beezzer;
+    public BeezzerDTO addBeezzer(String beezzerJson) {
+        return new BeezzerDTO(state.getBeezzerService().createBeezzerFromJSON(beezzerJson));
     }
 
     @DELETE
