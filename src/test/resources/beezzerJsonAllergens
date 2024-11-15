@@ -1,0 +1,14 @@
+{
+    "allergens": {
+        "0": {
+            "pollenNameEN": "Pine"
+        }
+    },
+    "email": "lucas@unil.ch",
+    "location": {
+        "NPA":1040,
+        "country":"CH"
+    },
+    "password": "aaBcdd122.",
+    "username": "Lucas"
+}

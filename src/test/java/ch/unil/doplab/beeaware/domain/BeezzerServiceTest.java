@@ -1,13 +1,20 @@
 package ch.unil.doplab.beeaware.domain;
 
+import ch.unil.doplab.beeaware.DTO.AllergenDTO;
 import ch.unil.doplab.beeaware.DTO.BeezzerDTO;
 import ch.unil.doplab.beeaware.Domain.*;
 import ch.unil.doplab.beeaware.service.*;
 import ch.unil.doplab.beeaware.DTO.LocationDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -20,6 +27,7 @@ public class BeezzerServiceTest {
     private GeoApiService geoApiService;
     private ForeCastService foreCastService;
     private LocationService locationsList;
+    private SymptomService symptomService;
     private PollenLocationIndexService pollenLocationIndexService;
     private String APIKEY = ResourceBundle.getBundle("application").getString("API_KEY");
 
@@ -36,8 +44,9 @@ public class BeezzerServiceTest {
     @BeforeEach
     void setUp() {
         // Initiate instances
-        beezzerService = new BeezzerService();
-        locationsList = new LocationService();
+        locationsList = new LocationService(geoApiService);
+        symptomService = new SymptomService();
+        beezzerService = new BeezzerService(locationsList, symptomService);
         geoApiService = new GeoApiService(APIKEY);
         pollenLocationIndexService = new PollenLocationIndexService();
         foreCastService = new ForeCastService(APIKEY, pollenLocationIndexService);
@@ -51,17 +60,11 @@ public class BeezzerServiceTest {
         paul = new Beezzer("paul", "paul@unilc.h", "C-.rBx987", vevey, Role.BEEZZER);
         clara = new Beezzer("clara", "clara@unil.ch", "D-.gAf741", payerne, Role.BEEZZER);
 
-        // GET coordinates for each location
-        geoApiService.getCoordinates(ecublens);
-        geoApiService.getCoordinates(nyon);
-        geoApiService.getCoordinates(vevey);
-        geoApiService.getCoordinates(payerne);
-
         // ADD locations to LOCATIONS LIST
-        locationsList.addLocation(ecublens);
-        locationsList.addLocation(nyon);
-        locationsList.addLocation(vevey);
-        locationsList.addLocation(payerne);
+        locationsList.addOrCreateLocation(ecublens);
+        locationsList.addOrCreateLocation(nyon);
+        locationsList.addOrCreateLocation(vevey);
+        locationsList.addOrCreateLocation(payerne);
 
         // ADD locations to each beezzer
         alex.setLocation(ecublens);
@@ -106,6 +109,30 @@ public class BeezzerServiceTest {
         assertEquals(4, beezzerService.getAllBeezzers().size());
     }
 
+    @SneakyThrows
+    @Test
+    void testGetBeezzerIfExist() {
+
+        // Assert that the correct existing beezzer is returned
+        Long alexId = alex.getId();
+        assertNotNull(beezzerService.getBeezzerIfExist(alexId));
+        assertEquals(alexId, beezzerService.getBeezzerIfExist(alexId).getId());
+
+        // Assert that exception is thrown when beezzer doesn't exist
+        assertThrows(Exception.class, () -> beezzerService.getBeezzerIfExist(999L));
+    }
+
+    @SneakyThrows
+    @Test
+    void testBeezzerExist() {
+
+        // Assert that BeezzerExist return true when the Beezzer exists
+        assertTrue(beezzerService.beezzerExist(alex.getId()));
+
+        // Assert that BeezzerExist return false when the Beezzer doesn't exist
+        assertFalse(beezzerService.beezzerExist(999L));
+    }
+
     @Test
     void testGetBeezzer() {
         printMethodName();
@@ -117,8 +144,9 @@ public class BeezzerServiceTest {
         assertEquals(paulId, result.getId());
         assertEquals("paul", result.getUsername());
 
-        // Assert that using getBeezzer() with a non existent ID returns a null value
-        assertNull(beezzerService.getBeezzer(999L));
+        // Assert that exception is thrown when beezzer doesn't exist
+        assertThrows(Exception.class, () -> beezzerService.getBeezzer(999L));
+        // assertNull(beezzerService.getBeezzer(999L));
     }
 
     @Test
@@ -142,14 +170,15 @@ public class BeezzerServiceTest {
     void testRemoveBeezzers() {
         printMethodName();
 
-        // Assert that when using removeBeezzer, it correctly removes the beezzer form the beezzers list
-        boolean result = beezzerService.removeBeezzer(alex.getId());
-        assertTrue(result);
-        assertNull(beezzerService.getBeezzer(alex.getId()));
+        // Assert remove beezzer for valid id
+        Long alexId = alex.getId();
+        assertTrue(beezzerService.removeBeezzer(alexId));
 
-        // Asser that when removeBeezzer is used on an invalid id it returns false
-        boolean results = beezzerService.removeBeezzer(999L);
-        assertFalse(results);
+        // Assert that exception is thrown when beezzer doesn't exist
+        assertThrows(Exception.class, () -> beezzerService.getBeezzerIfExist(999L));
+
+        // Assert remove beezzer for non-existent id returns false
+        assertFalse(beezzerService.removeBeezzer(999L));
     }
 
     @Test
@@ -190,10 +219,11 @@ public class BeezzerServiceTest {
         printMethodName();
 
         // Assert if a change in username is correctly set using setBeezzer
-        clara.setUsername("newClara");
-        beezzerService.setBeezzer(clara);
-        BeezzerDTO updatedBeezzer = beezzerService.getBeezzer(clara.getId());
-        assertEquals("newClara", updatedBeezzer.getUsername());
+        dafne.setUsername("newDafne");
+        beezzerService.setBeezzer(dafne);
+        BeezzerDTO updatedBeezzer = beezzerService.getBeezzer(dafne.getId());
+        assertNotNull(updatedBeezzer);
+        assertEquals("newDafne", updatedBeezzer.getUsername());
     }
 
     @Test
@@ -203,9 +233,100 @@ public class BeezzerServiceTest {
         // Assert if the correction location is return using getBeezzerLocation()
         LocationDTO locationDTO = beezzerService.getBeezzerLocation(dafne.getId());
         assertNotNull(locationDTO);
+        assertNotNull(locationDTO);
         assertEquals(1260, locationDTO.getNPA());
 
         // Assert that location is null for an invalid beezzer ID
         assertNull(beezzerService.getBeezzerLocation(999L));
+    }
+
+    @Test
+    void testSearchForLocationAndAddIt() {
+        printMethodName();
+
+        // Assert if an existing location is returned
+        Location duplicatedLocation = new Location(1530, "CH");
+        Location foundLocation = beezzerService.searchForLocationAndAddIt(duplicatedLocation);
+        assertNotNull(foundLocation);
+        assertEquals(payerne, foundLocation);
+        assertEquals(payerne.hashCode(), foundLocation.hashCode());
+
+        // Assert that a new location is created when it doesn't exist in the service
+        Location newLocation = new Location(3000, "CH");
+        Location foundLocation2 = beezzerService.searchForLocationAndAddIt(newLocation);
+        assertNotNull(foundLocation2);
+        assertEquals(newLocation.getNPA(), foundLocation2.getNPA());
+        assertEquals(newLocation.getCountry(), foundLocation2.getCountry());
+        assertEquals(newLocation.hashCode(), foundLocation2.hashCode());
+    }
+
+    @SneakyThrows
+    @Test
+    void testCreateBeezzerFromJSON() {
+
+        // Assert that a valid Beezzer is created through a Json file
+        InputStream inputStream = BeezzerServiceTest.class.getClassLoader().getResourceAsStream("beezzerJson");
+        String beezzerJson = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        Beezzer result = beezzerService.createBeezzerFromJSON(beezzerJson);
+        assertNotNull(result);
+        assertEquals("Estelle", result.getUsername());
+        assertNotNull(result.getId());
+        assertNotNull(result.getPassword());
+        assertEquals(1040, result.getLocation().getNPA());
+        assertEquals("CH", result.getLocation().getCountry());
+        assertEquals(Role.BEEZZER, result.getRole());
+
+        // Assert that the Beezzer was created with the correct allergens
+        InputStream inputStream4 = BeezzerServiceTest.class.getClassLoader().getResourceAsStream("beezzerJsonAllergens");
+        String beezzerJson4 = new String(inputStream4.readAllBytes(), StandardCharsets.UTF_8);
+        Beezzer result4 = beezzerService.createBeezzerFromJSON(beezzerJson4);
+        assertNotNull(result4);
+        assertEquals("Lucas", result4.getUsername());
+        assertNotNull(result4.getId());
+        assertNotNull(result4.getPassword());
+        assertEquals(1040, result4.getLocation().getNPA());
+        assertEquals("CH", result4.getLocation().getCountry());
+        assertEquals(Role.BEEZZER, result4.getRole());
+        assertEquals(1, result4.getAllergens().size());
+        assertTrue(result4.getAllergens().containsKey(Long.valueOf(0)));
+        assertEquals("Pine", result4.getAllergens().get(Long.valueOf(0)).getPollenNameEN());
+    }
+
+    @SneakyThrows
+    @Test
+    void testSetBeezzerLocation() {
+        printMethodName();
+
+        // Assert that the location for an existing beezzer can be updated
+        InputStream inputStream = BeezzerServiceTest.class.getClassLoader().getResourceAsStream("locationJson");
+        String locationJson = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        assertTrue(beezzerService.setBeezzerLocation(paul.getId(), locationJson));
+        LocationDTO updatedLocation = beezzerService.getBeezzerLocation(paul.getId());
+        assertNotNull(updatedLocation);
+        assertEquals(1002, updatedLocation.getNPA());
+        assertEquals("CH", updatedLocation.getCountry());
+
+        // Assert the location cannot be updated if a Beezzer doesn't exist
+        assertFalse(beezzerService.setBeezzerLocation(999L, locationJson));
+        assertNull(beezzerService.getBeezzerLocation(999L));
+    }
+
+    @SneakyThrows
+    @Test
+    void testAddAllergenSet() {
+        String allergens = "["
+                + "{\"pollenNameEN\": \"Alder\"},"
+                + "{\"pollenNameEN\": \"ragweed\"}"
+                + "]";
+
+        // Assert that allergens for the existing beezzer can be updated(set)
+        assertTrue(beezzerService.addAllergenSet(allergens, dafne.getId()));
+        AllergenDTO updatedAllergens = beezzerService.getBeezzerAllergens(dafne.getId());
+        assertNotNull(updatedAllergens);
+        assertEquals(5, updatedAllergens.getPollenList().size());
+
+        // Assert the adding allergens will not be successful if a Beezzer doesn't exist
+        assertFalse(beezzerService.addAllergenSet(allergens, 999L));
+        assertNull(beezzerService.getBeezzerAllergens(999L));
     }
 }

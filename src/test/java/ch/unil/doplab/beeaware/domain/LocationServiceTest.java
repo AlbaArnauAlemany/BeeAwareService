@@ -2,8 +2,10 @@ package ch.unil.doplab.beeaware.domain;
 
 import ch.unil.doplab.beeaware.DTO.LocationDTO;
 import ch.unil.doplab.beeaware.Domain.Location;
+import ch.unil.doplab.beeaware.service.BeezzerService;
 import ch.unil.doplab.beeaware.service.GeoApiService;
 import ch.unil.doplab.beeaware.service.LocationService;
+import ch.unil.doplab.beeaware.service.SymptomService;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,8 @@ class LocationServiceTest {
 
     private LocationService locationService;
     private GeoApiService geoApiService;
+    private BeezzerService beezzerService;
+    private SymptomService symptomService;
     private Location ecublens;
     private Location nyon;
     private Location vevey;
@@ -29,52 +33,73 @@ class LocationServiceTest {
     @BeforeEach
     void setUp() {
         // Initiate instances
-        locationService = new LocationService();
         geoApiService = new GeoApiService(APIKEY);
+        locationService = new LocationService(geoApiService);
+        symptomService = new SymptomService();
+        beezzerService = new BeezzerService(locationService, symptomService);
 
         ecublens = new Location(1040, "CH");
         nyon = new Location(1260, "CH");
         vevey = new Location(1800, "CH");
         payerne = new Location(1530, "CH");
 
-        // GET coordinates for each location
-        geoApiService.getCoordinates(ecublens);
-        geoApiService.getCoordinates(nyon);
-        geoApiService.getCoordinates(vevey);
-        geoApiService.getCoordinates(payerne);
-
-        // ADD locations to LOCATIONS LIST
-        locationService.addLocation(ecublens);
-        locationService.addLocation(nyon);
-        locationService.addLocation(vevey);
-        locationService.addLocation(payerne);
+//        // ADD locations to LOCATIONS LIST
+//        locationService.addOrCreateLocation(ecublens);
+//        locationService.addOrCreateLocation(nyon);
+//        locationService.addOrCreateLocation(vevey);
+//        locationService.addOrCreateLocation(payerne);
     }
 
-    @SneakyThrows
     @Test
-    void testAddNewLocation() {
+    void testAddOrCreateLocationNewLocation() {
 
-        // Assert that all locations have been added correctly to the locations' list of the service
+        // Assert that Location was added correctly
+        Location createdLocation = locationService.addOrCreateLocation(ecublens);
+        assertNotNull(createdLocation);
+        assertNotNull(createdLocation.getId());
+        assertEquals(ecublens.getNPA(), createdLocation.getNPA());
+        assertEquals(ecublens.getCountry(), createdLocation.getCountry());
+
+        // Assert that the added Location is in All Registered Locations
         List<LocationDTO> allLocations = locationService.getAllRegisteredLocations();
-        assertEquals(4, allLocations.size());
-        assertEquals(1800, allLocations.get(2).getNPA());
-        assertEquals("CH", allLocations.get(0).getCountry());
+        assertTrue(allLocations.stream()
+                .anyMatch(loc -> loc.getNPA() == createdLocation.getNPA() &&
+                        loc.getCountry().equals(createdLocation.getCountry())));
+    }
 
-        // Assert that duplicated locations are not added to the list
-        Location ecublensBis = new Location(1040, "CH");
-        geoApiService.getCoordinates(ecublensBis);
-        locationService.addLocation(ecublensBis);
-        assertEquals(4, allLocations.size());
+    @Test
+    void testAddOrCreateLocationExistingLocation() {
+
+        // Assert that existing location was not duplicated
+        Location location = locationService.addOrCreateLocation(vevey);
+        Location locationDuplicated = locationService.addOrCreateLocation(vevey);
+        assertNotNull(locationDuplicated);
+        assertEquals(locationDuplicated.getId(), location.getId());
+        assertEquals(locationDuplicated.getNPA(), location.getNPA());
+        assertEquals(locationDuplicated.getCountry(), location.getCountry());
+        List<LocationDTO> allLocations = locationService.getAllRegisteredLocations();
+        assertEquals(1, allLocations.size());
+    }
+
+    @Test
+    void testAddOrCreateLocationInvalidLocation() {
+
+        // Assert that invalid Location was not added
+        Location invalidLocation = new Location(0, "INVALID_COUNTRY");
+        Location createdLocation = locationService.addOrCreateLocation(invalidLocation);
+        assertNull(createdLocation);
     }
 
     @Test
     void testRemoveLocation() {
 
         // Assert the removing a location by ID works
+        locationService.addOrCreateLocation(payerne);
+        locationService.addOrCreateLocation(nyon);
         Long payerneId = payerne.getId();
         assertTrue(locationService.removeLocation(payerneId));
         List<LocationDTO> allLocations = locationService.getAllRegisteredLocations();
-        assertEquals(3, allLocations.size());
+        assertEquals(1, allLocations.size());
 
         // Assert that removing a location by an invalid ID returns false
         assertFalse(locationService.removeLocation(999L));

@@ -1,0 +1,10 @@
+{
+  "username": "Estelle",
+  "email": "estelle@unil.ch",
+  "password": "E-.pLj852",
+  "location": {
+    "NPA": 1040,
+    "country": "CH"
+  },
+  "allergens": {}
+}
