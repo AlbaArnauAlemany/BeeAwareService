@@ -9,6 +9,7 @@ import ch.unil.doplab.beeaware.domain.ApplicationState;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -42,8 +43,9 @@ public class BeezzerResource {
     @Secured
     @RoleRequired({Role.ADMIN})
     @Path("/setBeezzer")
-    public void setBeezzer(Beezzer beezzer) {
+    public Response setBeezzer(Beezzer beezzer) {
         state.getBeezzerService().setBeezzer(beezzer);
+        return Response.ok().build();
     }
 
     @POST
