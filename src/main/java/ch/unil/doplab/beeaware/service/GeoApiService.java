@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-// TODO: Pourquoi pas mettre ça dans le domain et dès qu'on créé une location on l'utilise?
 public class GeoApiService {
     /**
      * Creates and configures a GeoApiContext object to use the Google Geocoding API.
@@ -42,11 +41,15 @@ public class GeoApiService {
     public void getCoordinates(@NotNull Location location) throws ApiException, InterruptedException, IOException {
         int NPA = location.getNPA();
         String country = location.getCountry();
-        GeocodingResult result = GeocodingApi.geocode(getGeoApiContext(), String.valueOf(NPA)).components(ComponentFilter.country(country)).language("fr").await()[0];
-        double lat = Math.round(result.geometry.location.lat * 100000.0) / 100000.0;
-        double lng = Math.round(result.geometry.location.lng * 100000.0) / 100000.0;
-        logger.log(Level.INFO, "Coordinate : {0}, Country : {1}, Latitude : {2}, Longitude : {3}", new Object[]{String.valueOf(NPA), country, String.valueOf(lat), String.valueOf(lng)});
+        try {
+            GeocodingResult result = GeocodingApi.geocode(getGeoApiContext(), String.valueOf(NPA)).components(ComponentFilter.country(country)).language("fr").await()[0];
+            double lat = Math.round(result.geometry.location.lat * 100000.0) / 100000.0;
+            double lng = Math.round(result.geometry.location.lng * 100000.0) / 100000.0;
+            logger.log(Level.INFO, "Coordinate : {0}, Country : {1}, Latitude : {2}, Longitude : {3}", new Object[]{String.valueOf(NPA), country, String.valueOf(lat), String.valueOf(lng)});
 
-        location.setCoordinate(new Coordinate(lat, lng));
+            location.setCoordinate(new Coordinate(lat, lng));
+        } catch (ApiException | InterruptedException | IOException e) {
+            logger.log(Level.WARNING, "Error while fetching coordinates for {1}, {2}: {3}", new Object[]{NPA, country, e.getMessage()});
         }
+    }
 }
