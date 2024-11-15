@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.ParseException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -96,10 +95,20 @@ public class SymptomService {
 
     public SymptomsDTO getSymptom(@NotNull Long beezzerId, Long idSymptom){
         logger.log( Level.INFO, "Searching symptom for Beezzer {0} symptom: {1}...", new Object[]{String.valueOf(beezzerId), idSymptom});
-        if (beezzerId.equals(symptoms.get(idSymptom).getBeezzerId().equals(beezzerId))) {
+        if (beezzerId.equals(symptoms.get(idSymptom).getBeezzerId())) {
             return new SymptomsDTO(symptoms.get(idSymptom));
         }
         return new SymptomsDTO();
+    }
+
+    public void removeSymptomsForBeezzer(@NotNull Long beezzerId) {
+        logger.log(Level.INFO, "Removing Symptom for Beezzer {0}...", beezzerId);
+        for (Map.Entry<Long, Symptom> sym : symptoms.entrySet()) {
+            if (sym.getValue().getBeezzerId().equals(beezzerId)) {
+                removeSymptom(sym.getValue().getId());
+                return;
+            }
+        }
     }
 
     public boolean removeSymptom(Long idSymptom) {
