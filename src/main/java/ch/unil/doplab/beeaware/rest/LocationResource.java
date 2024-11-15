@@ -20,7 +20,7 @@ public class LocationResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured
     public void addLocation(Location location) {
-        state.getLocationService().addLocation(location);
+        state.getLocationService().addOrCreateLocation(location);
     }
 
     @GET

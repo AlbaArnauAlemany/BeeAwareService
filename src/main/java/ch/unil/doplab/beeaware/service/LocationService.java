@@ -30,36 +30,27 @@ public class LocationService {
         this.geoApiService = geoApiService;
     }
 
-    public void addLocation(@NotNull Location location) {
+    public Location addOrCreateLocation(@NotNull Location location) {
         LocationDTO locationDTO = new LocationDTO(location);
         logger.log(Level.INFO, "Adding location {0}...", locationDTO);
-        for (Map.Entry<Long, Location> loc : locations.entrySet()) {
-            if (loc.getValue().equals(location)) {
-                logger.log(Level.WARNING, "Location already exists: {0}", location);
-                return;
-            }
-        }
-        location.setId(idLocation++);
-        locations.put(idLocation, location);
-        logger.log(Level.INFO, "New location added : {0}", location);
-    }
 
-    public Location createLocation(@NotNull Location location) {
-        logger.log(Level.INFO, "Adding location {0}...", location);
         for (Map.Entry<Long, Location> loc : locations.entrySet()) {
             if (loc.getValue().equals(location)) {
                 logger.log(Level.WARNING, "Location already exists: {0}", location);
                 return loc.getValue();
             }
         }
+
         try {
             geoApiService.getCoordinates(location);
-        } catch (Exception e){
-            logger.log(Level.WARNING, "Error getting coordinates", location);
+        } catch (Exception e) {
+            logger.log(Level.WARNING, "Error getting coordinates for location: {0}, the location might not exist!", location);
             logger.log(Level.SEVERE, "{0}", e.getStackTrace());
+            return null;
         }
-        location.setId(idLocation++);
-        locations.put(idLocation, location);
+
+        location.setId(idLocation);
+        locations.put(idLocation++, location);
         logger.log(Level.INFO, "New location added : {0}", location);
         return location;
     }
