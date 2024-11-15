@@ -37,8 +37,8 @@ public class ApplicationState {
     public void init() {
         geoApiService = new GeoApiService(APIKEY);
         locationService = new LocationService(geoApiService);
-        beezzerService = new BeezzerService(locationService);
         symptomService = new SymptomService();
+        beezzerService = new BeezzerService(locationService, symptomService);
         pollenLocationIndexService = new PollenLocationIndexService();
         // allergenService = new AllergenService();
         foreCastService = new ForeCastService(APIKEY, pollenLocationIndexService);
@@ -53,16 +53,14 @@ public class ApplicationState {
         try {
             logger.log(Level.SEVERE, "Populating application");
             Location location = new Location(1024, "CH");
-            geoApiService.getCoordinates(location);
-            locationService.addLocation(location);
+            locationService.addOrCreateLocation(location);
             Beezzer ony = new Beezzer("Ony", "o@unil.ch", "Q.-wDw124", location, Role.BEEZZER);
             beezzerService.addBeezzer(ony);
             beezzerService.addAllergen("Grasses", ony.getId());
             beezzerService.addAllergen("Weed", ony.getId());
 
             Location locationAlb = new Location(1020, "CH");
-            geoApiService.getCoordinates(locationAlb);
-            locationService.addLocation(locationAlb);
+            locationService.addOrCreateLocation(locationAlb);
             Beezzer alb = new Beezzer("alb", "alb@unil.ch", "Q.-wDw123", location, Role.ADMIN);
             beezzerService.addBeezzer(alb);
 
