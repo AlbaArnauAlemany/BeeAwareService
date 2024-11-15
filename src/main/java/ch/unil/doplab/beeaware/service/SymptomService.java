@@ -50,22 +50,11 @@ public class SymptomService {
         return symptomsList;
     }
 
-    public List<SymptomsDTO> getAllSymptoms(Long id) {
-        logger.log( Level.INFO, "Searching for all registered symptoms...");
-        List<SymptomsDTO> symptomsList = new ArrayList<>();
-        for (Map.Entry<Long, Symptom> sym: symptoms.entrySet()) {
-            if(sym.getValue().getBeezzerId() == id) {
-                symptomsList.add(new SymptomsDTO(sym.getValue()));
-            }
-        }
-        return symptomsList;
-    }
-
     public List<SymptomsDTO> getSymptom(@NotNull Long beezzerId) {
         logger.log(Level.INFO, "Searching for Beezzer {0} symptoms...", beezzerId);
         List<SymptomsDTO> symptomsBeezzer = new ArrayList<>();
         for (Map.Entry<Long, Symptom> sym : symptoms.entrySet()) {
-            if (beezzerId.equals(sym.getValue().getBeezzerId())) {
+            if (sym.getValue().getBeezzerId() == beezzerId) {
                 symptomsBeezzer.add(new SymptomsDTO(sym.getValue()));
                 logger.log(Level.INFO, "Symptom : {0}", symptomsBeezzer.get(symptomsBeezzer.size() - 1));
             }

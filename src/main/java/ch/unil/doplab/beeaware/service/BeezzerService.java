@@ -5,7 +5,6 @@ import ch.unil.doplab.beeaware.DTO.BeezzerDTO;
 import ch.unil.doplab.beeaware.DTO.LocationDTO;
 import ch.unil.doplab.beeaware.DTO.PollenDTO;
 import ch.unil.doplab.beeaware.Domain.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -98,12 +97,11 @@ public class BeezzerService {
 
     public BeezzerDTO getBeezzer(Long idBeezzer) {
         logger.log(Level.INFO, "Searching for Beezzer...");
-        var beezzer = beezzers.get(idBeezzer);
-        if (beezzer == null) {
-            logger.log(Level.WARNING, "Beezzer with id {0} doesn't exist.", idBeezzer);
-            return null;
+        try {
+            return new BeezzerDTO(getBeezzerIfExist(idBeezzer));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        return new BeezzerDTO(beezzer);
     }
 
     public List<BeezzerDTO> getAllBeezzers() {
@@ -124,12 +122,12 @@ public class BeezzerService {
         Beezzer beezzer = beezzers.get(id);
         if (beezzer == null) {
             logger.log(Level.WARNING, "Beezzer with ID {0} doesn't exist.", id);
-            throw new Exception("Beezzer does'nt exist");
+            throw new Exception("Beezzer doesn't exist");
         }
         return beezzer;
     }
 
-    public boolean isBeezzerExist(Long id){
+    public boolean beezzerExist(Long id){
         Beezzer beezzer = beezzers.get(id);
         if (beezzer == null) {
             logger.log(Level.WARNING, "Beezzer with ID {0} doesn't exist.", id);
@@ -141,7 +139,7 @@ public class BeezzerService {
 
     public boolean removeBeezzer(Long id) {
         logger.log(Level.INFO, "Removing Beezzer...");
-        if(!isBeezzerExist(id)){
+        if(!beezzerExist(id)){
             return false;
         }
         beezzers.remove(id);
@@ -155,7 +153,7 @@ public class BeezzerService {
             return new LocationDTO(getBeezzerIfExist(beezzerId).getLocation());
         } catch (Exception e){
             logger.log(Level.WARNING, "Error getting location for beezzer : \n{0}", e.getStackTrace());
-            return new LocationDTO();
+            return null;
         }
     }
 

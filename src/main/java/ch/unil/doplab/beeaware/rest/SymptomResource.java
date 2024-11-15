@@ -67,15 +67,6 @@ public class SymptomResource {
         return state.getSymptomService().getAllSymptoms();
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Secured
-    @SameID
-    @RoleRequired(Role.ADMIN)
-    @Path("/{id}/all")
-    public List<SymptomsDTO> getAllSymptoms(@PathParam("id") Long id) {
-        return state.getSymptomService().getAllSymptoms(id);
-    }
 
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)

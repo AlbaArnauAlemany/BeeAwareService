@@ -193,7 +193,7 @@ public class BeezzerServiceTest {
         clara.setUsername("newClara");
         beezzerService.setBeezzer(clara);
         BeezzerDTO updatedBeezzer = beezzerService.getBeezzer(clara.getId());
-        assertEquals("newAlexUsername", updatedBeezzer.getUsername());
+        assertEquals("newClara", updatedBeezzer.getUsername());
     }
 
     @Test
@@ -203,7 +203,7 @@ public class BeezzerServiceTest {
         // Assert if the correction location is return using getBeezzerLocation()
         LocationDTO locationDTO = beezzerService.getBeezzerLocation(dafne.getId());
         assertNotNull(locationDTO);
-        assertEquals("1260", locationDTO.getNPA());
+        assertEquals(1260, locationDTO.getNPA());
 
         // Assert that location is null for an invalid beezzer ID
         assertNull(beezzerService.getBeezzerLocation(999L));

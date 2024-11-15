@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 import java.util.Date;
 import java.util.List;
 
+import static ch.unil.doplab.beeaware.domain.Utils.parseDate;
 import static ch.unil.doplab.beeaware.domain.Utils.printMethodName;
-import static org.apache.http.client.utils.DateUtils.parseDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SymptomServiceTest {
@@ -55,21 +55,43 @@ public class SymptomServiceTest {
         assertEquals(4, symptomsList.getAllSymptoms().size()); // Ensure symptom count remains the same (since it should replace sympAlex)
     }
 
+    @SneakyThrows
     @Test
     void testGetSymptom() {
 
         // Assert that getSymptom() for a beezzer will return the correct number of symptoms added for this beezzer
-        Symptom sympDafneBis = new Symptom(1L, Reaction.HIGH_REACTION, true, parseDate("2024-11-11", new String[]{"yyyy-MM-dd"}));
+        Symptom sympDafneBis = new Symptom(1L, Reaction.HIGH_REACTION, true, parseDate("11-13-2024"));
         symptomsList.addSymptom(sympDafneBis);
         List<SymptomsDTO> symptomsDafne = symptomsList.getSymptom(1L);
         assertEquals(2, symptomsDafne.size());
 
-        // Assert that getSymptomForDate() for a specific date and beezzer will return only one symptom
-        Symptom sympPaulBis = new Symptom(2L, Reaction.NO_REACTION, true, parseDate("2024-11-13", new String[]{"yyyy-MM-dd"}));
+        // Assert that getSymptomForDate() for a specific date and beezzer ID will return only one symptom
+        Symptom sympPaulBis = new Symptom(2L, Reaction.NO_REACTION, true, parseDate("11-13-2024"));
         symptomsList.addSymptom(sympPaulBis);
-        SymptomsDTO symptomsForDate = symptomsList.getSymptomForDate(2L, "2024-11-13");
-        assertEquals(1, 1);
-        // TODO : Revoir ce test pour l'adapter au nouveau fonctionnement de symptom
+        SymptomsDTO symptomsForDate = symptomsList.getSymptomForDate(2L, "11-13-2024");
+        SymptomsDTO tested = new SymptomsDTO(sympPaulBis);
+        assertEquals((tested).toString(), (symptomsForDate).toString());
+
+        // Assert that getSymptomForDate() for a specific symptom ID and beezzer ID will return only one symptom
+        Symptom sympClaraBis = new Symptom(3L, Reaction.LOW_REACTION, true, parseDate("11-09-2024"));
+        symptomsList.addSymptom(sympClaraBis);
+        SymptomsDTO symptomsForClara = symptomsList.getSymptom(3L, sympClaraBis.getId());
+        SymptomsDTO testing = new SymptomsDTO(sympClaraBis);
+        assertEquals((testing).toString(), symptomsForClara.toString());
+
+
+        // Assert that testGetSymptomForRange() for a specific beezzer and a range of dates will return the symptoms for those days
+        Symptom sympPaulDay1 = new Symptom(2L, Reaction.MODERATE_REACTION, true, parseDate("11-09-2024"));
+        Symptom sympPaulDay2 = new Symptom(2L, Reaction.HIGH_REACTION, false, parseDate("11-10-2024"));
+        Symptom sympPaulDay3 = new Symptom(2L, Reaction.LOW_REACTION, true, parseDate("11-12-2024"));
+
+        symptomsList.addSymptom(sympPaulDay1);
+        symptomsList.addSymptom(sympPaulDay2);
+        symptomsList.addSymptom(sympPaulDay3);
+
+        List<SymptomsDTO> symptomsRange = symptomsList.getSymptomForRange(2L, "11-09-2024", "11-12-2024");
+        assertEquals(3, symptomsRange.size());
+
     }
 
     @Test
