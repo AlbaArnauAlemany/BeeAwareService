@@ -72,7 +72,7 @@ public class BeezzerResource {
         return state.getBeezzerService().getBeezzerLocation(id);
     }
 
-    @POST
+    @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured
