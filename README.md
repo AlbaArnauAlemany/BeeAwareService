@@ -27,8 +27,6 @@ To initialize the service project follow these steps:
     API_KEY='YOUR_GOOGLE_API_KEY_HERE'
     ```
 
-API_KEY=AIzagfggfhj54KJHGJHjkhkjjYVOByqwEQ
-
 2. **Docker Configuration**:
     A Docker configuration is available if you want to try the service without
     installing Payara.
