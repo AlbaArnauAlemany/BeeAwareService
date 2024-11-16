@@ -119,14 +119,6 @@ public class BeezzerResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
     @SameID
-    @Path("/{id}/{allergenid}")
-    public boolean removeAllergen(@PathParam("id") Long id, @PathParam("allergenid") Long allergenid) {
-        return state.getBeezzerService().removeAllergen(allergenid, id);
-    }
-    @DELETE
-    @Produces(MediaType.APPLICATION_JSON)
-    @Secured
-    @SameID
     @Path("/{id}/allergens")
     public boolean removeAllAllergen(@PathParam("id") Long idBeezzer, String stringPollen) {
         return state.getBeezzerService().removeAllergen(stringPollen, idBeezzer);
