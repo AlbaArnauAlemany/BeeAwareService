@@ -1,7 +1,7 @@
 package ch.unil.doplab.beeaware.service;
 
 import ch.unil.doplab.beeaware.Domain.PollenLocationIndex;
-import ch.unil.doplab.beeaware.domain.Utils;
+import ch.unil.doplab.beeaware.Utilis.Utils;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;

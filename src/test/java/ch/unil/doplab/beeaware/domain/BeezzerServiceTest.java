@@ -5,20 +5,16 @@ import ch.unil.doplab.beeaware.DTO.BeezzerDTO;
 import ch.unil.doplab.beeaware.Domain.*;
 import ch.unil.doplab.beeaware.service.*;
 import ch.unil.doplab.beeaware.DTO.LocationDTO;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static ch.unil.doplab.beeaware.domain.Utils.printMethodName;
+import static ch.unil.doplab.beeaware.Utilis.Utils.printMethodName;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BeezzerServiceTest {

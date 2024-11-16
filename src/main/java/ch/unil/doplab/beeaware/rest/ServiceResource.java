@@ -2,6 +2,8 @@ package ch.unil.doplab.beeaware.rest;
 
 import ch.unil.doplab.beeaware.Domain.PollenLocationIndex;
 import ch.unil.doplab.beeaware.Domain.Role;
+import ch.unil.doplab.beeaware.Utilis.RoleRequired;
+import ch.unil.doplab.beeaware.Utilis.Secured;
 import ch.unil.doplab.beeaware.domain.ApplicationState;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;

@@ -1,4 +1,4 @@
-package ch.unil.doplab.beeaware.rest;
+package ch.unil.doplab.beeaware.Utilis;
 
 import jakarta.ws.rs.NameBinding;
 

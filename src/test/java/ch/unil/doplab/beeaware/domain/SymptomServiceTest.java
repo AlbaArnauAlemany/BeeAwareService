@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 import java.util.Date;
 import java.util.List;
 
-import static ch.unil.doplab.beeaware.domain.Utils.parseDate;
-import static ch.unil.doplab.beeaware.domain.Utils.printMethodName;
+import static ch.unil.doplab.beeaware.Utilis.Utils.parseDate;
+import static ch.unil.doplab.beeaware.Utilis.Utils.printMethodName;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SymptomServiceTest {

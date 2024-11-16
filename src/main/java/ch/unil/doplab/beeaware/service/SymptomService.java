@@ -2,7 +2,7 @@ package ch.unil.doplab.beeaware.service;
 
 import ch.unil.doplab.beeaware.DTO.SymptomsDTO;
 import ch.unil.doplab.beeaware.Domain.Symptom;
-import ch.unil.doplab.beeaware.domain.Utils;
+import ch.unil.doplab.beeaware.Utilis.Utils;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
@@ -11,8 +11,8 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static ch.unil.doplab.beeaware.domain.Utils.isDateBefore;
-import static ch.unil.doplab.beeaware.domain.Utils.parseDate;
+import static ch.unil.doplab.beeaware.Utilis.Utils.isDateBefore;
+import static ch.unil.doplab.beeaware.Utilis.Utils.parseDate;
 
 @Getter
 @Setter

@@ -4,7 +4,7 @@ import ch.unil.doplab.beeaware.DTO.PollenInfoDTO;
 import ch.unil.doplab.beeaware.Domain.Beezzer;
 import ch.unil.doplab.beeaware.Domain.Pollen;
 import ch.unil.doplab.beeaware.Domain.PollenLocationIndex;
-import ch.unil.doplab.beeaware.domain.Utils;
+import ch.unil.doplab.beeaware.Utilis.Utils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static ch.unil.doplab.beeaware.domain.Utils.parseDate;
+import static ch.unil.doplab.beeaware.Utilis.Utils.parseDate;
 
 @Getter
 @Setter

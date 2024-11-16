@@ -1,8 +1,9 @@
-package ch.unil.doplab.beeaware.domain;
+package ch.unil.doplab.beeaware.Utilis;
 
 import ch.unil.doplab.beeaware.Domain.Location;
 import ch.unil.doplab.beeaware.Domain.PollenLocationIndex;
 import ch.unil.doplab.beeaware.Domain.PollenLocationInfo;
+import ch.unil.doplab.beeaware.domain.ApplicationState;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
