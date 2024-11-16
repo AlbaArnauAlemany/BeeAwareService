@@ -13,7 +13,6 @@ import jakarta.ws.rs.core.Response;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 @Path("/beezzers")
 public class BeezzerResource {
@@ -37,6 +36,7 @@ public class BeezzerResource {
         return state.getBeezzerService().getBeezzer(id);
     }
 
+    // TODO: Mettre es reponses a 200 pour toutes les ressources de toutes les classes
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured
@@ -119,8 +119,17 @@ public class BeezzerResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
     @SameID
+    @Path("/{id}/{allergenid}")
+    public boolean removeAllergen(@PathParam("id") Long id, @PathParam("allergenid") Long allergenid) {
+        return state.getBeezzerService().removeAllergen(allergenid, id);
+    }
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    @SameID
     @Path("/{id}/allergens")
-    public boolean removeAllergen(@PathParam("id") Long idBeezzer, String stringPollen) {
+    public boolean removeAllAllergen(@PathParam("id") Long idBeezzer, String stringPollen) {
         return state.getBeezzerService().removeAllergen(stringPollen, idBeezzer);
     }
+    //TODO : VERIFIER LE CONSUME ET PRODUCE DE CHAQUE FONCTION
 }

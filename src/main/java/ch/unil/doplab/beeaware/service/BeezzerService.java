@@ -345,7 +345,7 @@ public class BeezzerService {
             logger.log(Level.WARNING, "Error remove allergen");
             return false;
         } catch (Exception e){
-            logger.log(Level.WARNING, "Error remove allergen");
+            logger.log( Level.INFO, "Error remove allergen {0}\n{1}\n", new Object[]{e.getMessage(), e.getStackTrace()});
             return false;
         }
     }
