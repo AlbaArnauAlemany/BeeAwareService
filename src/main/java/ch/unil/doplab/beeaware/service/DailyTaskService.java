@@ -4,6 +4,9 @@ import ch.unil.doplab.beeaware.domain.ApplicationState;
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Singleton;
 import jakarta.inject.Inject;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -14,41 +17,44 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@Singleton
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class DailyTaskService {
 
     private ScheduledExecutorService scheduler;
     private ForeCastService foreCastService;
     private PollenLocationIndexService pollenLocationIndexService;
-    @Inject
-    private ApplicationState state;
+
+    private LocationService locationService;
     private final Logger logger = Logger.getLogger(DailyTaskService.class.getName());
 
-    @PostConstruct
-    public void init() {
-        pollenLocationIndexService = new PollenLocationIndexService();
-        foreCastService = new ForeCastService(state.getAPIKEY(), pollenLocationIndexService);
+
+    public DailyTaskService(ForeCastService foreCastService, PollenLocationIndexService pollenLocationIndexService, LocationService locationService) {
+        this.pollenLocationIndexService = pollenLocationIndexService;
+        this.foreCastService = foreCastService;
+        this.locationService = locationService;
         scheduler = Executors.newScheduledThreadPool(1);
 
-        int targetHour = 10;
-        int targetMinute = 45;
+        int targetHour = 6;
+        int targetMinute = 0;
 
 
         ZonedDateTime now = ZonedDateTime.now(ZoneId.systemDefault());
         ZonedDateTime nextRun = now.withHour(targetHour).withMinute(targetMinute).withSecond(0);
-
+        logger.log(Level.INFO, "Now {0}", now);
+        logger.log(Level.INFO, "Next run {0}", nextRun);
         if (now.compareTo(nextRun) > 0) {
             nextRun = nextRun.plusDays(1);
-            foreCastService.forecastAllLocation(state.getLocationService().getLocations());
+            foreCastService.forecastAllLocation(locationService.getLocations());
         }
 
         long initialDelay = TimeUnit.MILLISECONDS.convert(nextRun.toEpochSecond() - now.toEpochSecond(), TimeUnit.SECONDS);
-
         scheduler.scheduleAtFixedRate(this::runDailyTask, initialDelay, TimeUnit.DAYS.toMillis(1), TimeUnit.MILLISECONDS);
     }
 
     private void runDailyTask() {
         logger.log(Level.INFO, "Start scheduled forecast at {0}", new Date());
-        foreCastService.forecastAllLocation(state.getLocationService().getLocations());
+        foreCastService.forecastAllLocation(locationService.getLocations());
     }
 }

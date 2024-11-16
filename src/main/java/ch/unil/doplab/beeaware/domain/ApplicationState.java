@@ -6,6 +6,8 @@ import ch.unil.doplab.beeaware.Domain.*;
 import ch.unil.doplab.beeaware.service.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Initialized;
+import jakarta.inject.Inject;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,7 +27,6 @@ public class ApplicationState {
     private BeezzerService beezzerService;
     private SymptomService symptomService;
     private PollenLocationIndexService pollenLocationIndexService;
-    // private AllergenService allergenService;
     private ForeCastService foreCastService;
     private IndexPollenForBeezzer indexPollenForBeezzer;
     private TokenService tokenService;
@@ -40,11 +41,10 @@ public class ApplicationState {
         symptomService = new SymptomService();
         beezzerService = new BeezzerService(locationService, symptomService);
         pollenLocationIndexService = new PollenLocationIndexService();
-        // allergenService = new AllergenService();
         foreCastService = new ForeCastService(APIKEY, pollenLocationIndexService);
         indexPollenForBeezzer = new IndexPollenForBeezzer(beezzerService, foreCastService, pollenLocationIndexService);
         tokenService = new TokenService();
-        dailyTaskService = new DailyTaskService();
+        dailyTaskService = new DailyTaskService(foreCastService, pollenLocationIndexService, locationService);
 
         populateApplicationState();
     }
@@ -68,7 +68,6 @@ public class ApplicationState {
                 logger.log(Level.INFO, beezzer.toString());
             }
 
-
             Date d3 = new GregorianCalendar(2024, Calendar.FEBRUARY, 11).getTime();
             Date d4 = new GregorianCalendar(2024, Calendar.FEBRUARY, 15).getTime();
 
@@ -79,7 +78,6 @@ public class ApplicationState {
 
             symptom3.setDate(d3);
             symptom4.setDate(d4);
-
 
             Date now = new Date();
             Calendar calendar = Calendar.getInstance();
