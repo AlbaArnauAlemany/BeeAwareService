@@ -25,7 +25,6 @@ public class DailyTaskService {
     private ScheduledExecutorService scheduler;
     private ForeCastService foreCastService;
     private PollenLocationIndexService pollenLocationIndexService;
-
     private LocationService locationService;
     private final Logger logger = Logger.getLogger(DailyTaskService.class.getName());
 
@@ -38,7 +37,6 @@ public class DailyTaskService {
 
         int targetHour = 6;
         int targetMinute = 0;
-
 
         ZonedDateTime now = ZonedDateTime.now(ZoneId.systemDefault());
         ZonedDateTime nextRun = now.withHour(targetHour).withMinute(targetMinute).withSecond(0);
