@@ -99,7 +99,7 @@ public class BeezzerResource {
     @Secured
     @SameID
     @Path("/{id}/allergens")
-    public Response addAllergen(@PathParam("id") Long idBeezzer, String stringPollen) {
+    public Response addAllergen(@PathParam("id") Long idBeezzer, @QueryParam("stringPollen") String stringPollen) {
         state.getBeezzerService().addAllergen(stringPollen, idBeezzer);
         return Response.ok().build();
     }
