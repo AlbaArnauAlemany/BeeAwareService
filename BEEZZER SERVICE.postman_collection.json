@@ -120,19 +120,30 @@
 			"name": "BEEZZER",
 			"item": [
 				{
-					"name": "Remove Beezzer",
+					"name": "Get all Beezzers",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "62dhjd52p4emu55hgg3skij295",
-									"type": "string"
-								}
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"beezzers"
 							]
-						},
-						"method": "DELETE",
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get specific Beezzer",
+					"request": {
+						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/0",
@@ -146,6 +157,37 @@
 								"api",
 								"beezzers",
 								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set a Beezzer",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n{\r\n    \"allergens\": {\r\n        \"8\": {\r\n            \"id\": 8,\r\n            \"pollenNameEN\": \"Grasses\"\r\n        },\r\n        \"11\": {\r\n            \"id\": 11,\r\n            \"pollenNameEN\": \"Weed\"\r\n        }\r\n    },\r\n    \"email\": \"ony@unil.ch\",\r\n    \"id\": 0,\r\n    \"location\": {\r\n        \"NPA\": 1024,\r\n        \"coordinate\": {\r\n            \"latitude\": 46.52851,\r\n            \"longitude\": 6.56057\r\n        },\r\n        \"country\": \"CH\",\r\n        \"id\": 0\r\n    },\r\n    \"password\": \"$2a$12$ggO/WmhsrsdUWZoIooFwCOU9GnPh66r8vEmShHYc.nskD4JYR25Eq\",\r\n    \"role\": \"BEEZZER\",\r\n    \"username\": \"Ony\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/setBeezzer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"beezzers",
+								"setBeezzer"
 							]
 						}
 					},
@@ -182,21 +224,12 @@
 					"response": []
 				},
 				{
-					"name": "Put a Beezzer",
+					"name": "Remove Beezzer",
 					"request": {
-						"method": "PUT",
+						"method": "DELETE",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "\r\n{\r\n    \"allergens\": {\r\n        \"8\": {\r\n            \"id\": 8,\r\n            \"pollenNameEN\": \"Grasses\"\r\n        },\r\n        \"11\": {\r\n            \"id\": 11,\r\n            \"pollenNameEN\": \"Weed\"\r\n        }\r\n    },\r\n    \"email\": \"ony@unil.ch\",\r\n    \"id\": 0,\r\n    \"location\": {\r\n        \"NPA\": 1024,\r\n        \"coordinate\": {\r\n            \"latitude\": 46.52851,\r\n            \"longitude\": 6.56057\r\n        },\r\n        \"country\": \"CH\",\r\n        \"id\": 0\r\n    },\r\n    \"password\": \"$2a$12$ggO/WmhsrsdUWZoIooFwCOU9GnPh66r8vEmShHYc.nskD4JYR25Eq\",\r\n    \"role\": \"BEEZZER\",\r\n    \"username\": \"Ony\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/setBeezzer",
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -206,47 +239,14 @@
 								"BeeAwareService-1.0-SNAPSHOT",
 								"api",
 								"beezzers",
-								"setBeezzer"
+								"2"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Get allergens for a Beezzer",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "vufs0f36ugesdsr7fdna28fehm",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/0/allergens",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"BeeAwareService-1.0-SNAPSHOT",
-								"api",
-								"beezzers",
-								"0",
-								"allergens"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get for a Beezzer the location Copy",
+					"name": "Get Beezzer location",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -269,43 +269,21 @@
 					"response": []
 				},
 				{
-					"name": "Get all Beezzers",
+					"name": "Set Beezzer Location",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"BeeAwareService-1.0-SNAPSHOT",
-								"api",
-								"beezzers"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get specific Beezzer",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "p7hei9mntnou67lhgaqf5ehk60",
-									"type": "string"
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"NPA\":1012,\r\n    \"country\":\"CH\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
-							]
+							}
 						},
-						"method": "GET",
-						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/0",
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/location/0",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -315,7 +293,115 @@
 								"BeeAwareService-1.0-SNAPSHOT",
 								"api",
 								"beezzers",
+								"location",
 								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get allergens for a Beezzer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/0/allergens",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"beezzers",
+								"0",
+								"allergens"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Beezzer allergen",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/1/allergens?stringPollen=Ragweed",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"beezzers",
+								"1",
+								"allergens"
+							],
+							"query": [
+								{
+									"key": "stringPollen",
+									"value": "Ragweed"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set Beezzer allergen Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"pollenNameEN\": \"Tree\"\r\n    },\r\n    {\r\n        \"pollenNameEN\": \"Ragweed\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/0/allergensset",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"beezzers",
+								"0",
+								"allergensset"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set Beezzer allergen list",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/0/8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"beezzers",
+								"0",
+								"8"
 							]
 						}
 					},
@@ -352,6 +438,64 @@
 			]
 		},
 		{
+			"name": "FORECAST",
+			"item": [
+				{
+					"name": "Get index for a specific Beezzer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/forecast/beezzer/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"forecast",
+								"beezzer",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get index for a specific Beezzer Copy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/forecast/date/beezzer/0?date=11-14-2024",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"forecast",
+								"date",
+								"beezzer",
+								"0"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "11-14-2024"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "LOCATION",
 			"item": [
 				{
@@ -359,6 +503,15 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"NPA\":1015,\r\n    \"country\":\"CH\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/location",
 							"protocol": "http",
@@ -402,7 +555,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/location/1",
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/location/4",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -412,7 +565,7 @@
 								"BeeAwareService-1.0-SNAPSHOT",
 								"api",
 								"location",
-								"1"
+								"4"
 							]
 						}
 					},
@@ -449,6 +602,15 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"NPA\": 1022,\r\n        \"date\": \"2025-11-14T19:59:26.8Z[UTC]\",\r\n        \"displayName\": \"Grass\",\r\n        \"index\": 0,\r\n        \"location\":{\r\n            \"NPA\":1015,\r\n            \"country\":\"CH\"\r\n        }\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/pollenLocationIndex",
 							"protocol": "http",
@@ -541,12 +703,12 @@
 					"response": []
 				},
 				{
-					"name": "Get a symptoms",
+					"name": "Get a symptom date",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/symptoms/0",
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/symptom/0/date/11-14-2020",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -555,8 +717,10 @@
 							"path": [
 								"BeeAwareService-1.0-SNAPSHOT",
 								"api",
-								"symptoms",
-								"0"
+								"symptom",
+								"0",
+								"date",
+								"11-14-2020"
 							]
 						}
 					},
@@ -604,42 +768,14 @@
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "FORECAST",
-			"item": [
-				{
-					"name": "Get index for a specific Beezzer",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/forecast/beezzer/0",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"BeeAwareService-1.0-SNAPSHOT",
-								"api",
-								"forecast",
-								"beezzer",
-								"0"
-							]
-						}
-					},
-					"response": []
 				},
 				{
-					"name": "Get index for a specific Beezzer Copy",
+					"name": "Get symptoms range of date",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/forecast/date/beezzer/0?date=11-14-2024",
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/symptom/0/date/03-01-2024/11-13-2024",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -648,16 +784,11 @@
 							"path": [
 								"BeeAwareService-1.0-SNAPSHOT",
 								"api",
-								"forecast",
+								"symptom",
+								"0",
 								"date",
-								"beezzer",
-								"0"
-							],
-							"query": [
-								{
-									"key": "date",
-									"value": "11-14-2024"
-								}
+								"03-01-2024",
+								"11-13-2024"
 							]
 						}
 					},
