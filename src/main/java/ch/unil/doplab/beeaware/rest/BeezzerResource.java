@@ -37,7 +37,6 @@ public class BeezzerResource {
         return state.getBeezzerService().getBeezzer(id);
     }
 
-    // TODO: Mettre es reponses a 200 pour toutes les ressources de toutes les classes
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured
@@ -100,8 +99,9 @@ public class BeezzerResource {
     @Secured
     @SameID
     @Path("/{id}/allergens")
-    public void addAllergen(@PathParam("id") Long idBeezzer, String stringPollen) {
+    public Response addAllergen(@PathParam("id") Long idBeezzer, String stringPollen) {
         state.getBeezzerService().addAllergen(stringPollen, idBeezzer);
+        return Response.ok().build();
     }
 
     @POST
@@ -110,8 +110,9 @@ public class BeezzerResource {
     @Secured
     @SameID
     @Path("/{id}/allergensset")
-    public void addAllergenSet(@PathParam("id") Long idBeezzer, String stringPollens) {
+    public Response addAllergenSet(@PathParam("id") Long idBeezzer, String stringPollens) {
         state.getBeezzerService().addAllergenSet(stringPollens, idBeezzer);
+        return Response.ok().build();
     }
 
     @DELETE
@@ -119,7 +120,7 @@ public class BeezzerResource {
     @Secured
     @SameID
     @Path("/{id}/allergens")
-    public boolean removeAllergen(@PathParam("id") Long idBeezzer, @QueryParam("allergenid") Long idAllergen) {
-        return state.getBeezzerService().removeAllergen(idAllergen, idBeezzer);
+    public boolean removeAllergen(@PathParam("id") Long idBeezzer, String stringPollen) {
+        return state.getBeezzerService().removeAllergen(stringPollen, idBeezzer);
     }
 }

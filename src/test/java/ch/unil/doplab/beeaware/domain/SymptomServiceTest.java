@@ -4,7 +4,6 @@ import ch.unil.doplab.beeaware.DTO.SymptomsDTO;
 import ch.unil.doplab.beeaware.Domain.*;
 import ch.unil.doplab.beeaware.service.*;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

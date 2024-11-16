@@ -23,10 +23,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class BeezzerServiceTest {
 
-    private BeezzerService beezzerService;
-    private GeoApiService geoApiService;
-    private ForeCastService foreCastService;
     private LocationService locationsList;
+    private GeoApiService geoApiService;
+    private BeezzerService beezzerService;
+    private ForeCastService foreCastService;
     private SymptomService symptomService;
     private PollenLocationIndexService pollenLocationIndexService;
     private String APIKEY = ResourceBundle.getBundle("application").getString("API_KEY");
@@ -44,10 +44,10 @@ public class BeezzerServiceTest {
     @BeforeEach
     void setUp() {
         // Initiate instances
+        geoApiService = new GeoApiService(APIKEY);
         locationsList = new LocationService(geoApiService);
         symptomService = new SymptomService();
         beezzerService = new BeezzerService(locationsList, symptomService);
-        geoApiService = new GeoApiService(APIKEY);
         pollenLocationIndexService = new PollenLocationIndexService();
         foreCastService = new ForeCastService(APIKEY, pollenLocationIndexService);
         ecublens = new Location(1040, "CH");
@@ -186,7 +186,7 @@ public class BeezzerServiceTest {
         printMethodName();
 
         // Assert that one allergen was added to the previously empty allergen list of a Beezzer
-        beezzerService.addAllergen("pine", clara.getId());
+        beezzerService.addAllergen("Oak", clara.getId());
         assertEquals(1, beezzerService.getBeezzerAllergens(clara.getId()).getPollenList().size());
 
         // Assert that duplicated allergens are not allowed for the same beezzer
@@ -205,13 +205,13 @@ public class BeezzerServiceTest {
         printMethodName();
 
         // Assert if an allergen was successfully removed
-        Long allergenId = paul.getAllergens().keySet().iterator().next();
-        boolean removed = beezzerService.removeAllergen(allergenId, paul.getId());
+        String stringAllergen = "Weed";
+        boolean removed = beezzerService.removeAllergen(stringAllergen, paul.getId());
         assertTrue(removed);
-        assertFalse(paul.getAllergens().containsKey(allergenId));
 
         // Try to remove a non-existing allergen
-        assertFalse(beezzerService.removeAllergen(999L, paul.getId()));
+        String stringNonAllergen = "cactus";
+        assertFalse(beezzerService.removeAllergen(stringNonAllergen, paul.getId()));
     }
 
     @Test

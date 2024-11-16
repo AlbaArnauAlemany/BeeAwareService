@@ -256,20 +256,23 @@ public class BeezzerService {
     /**
      * Adds a specified allergen to a Beezzer's allergy list.
      *
-     * @param stringPollen The name of the pollen to be added as an allergen.
+     * @param stringPollen The Json String of the name of the pollen to be added as an allergen.
      * @param idBeezzer The unique identifier of the Beezzer to whom the allergen is being added.
      */
+
+    // Pollen pollenTry = objectMapper.readValue(stringPollen, Pollen.class);
     public void addAllergen(String stringPollen, Long idBeezzer) {
         logger.log( Level.INFO, "Trying to add allergen {0} for Beezzer id {1}...", new Object[]{stringPollen, String.valueOf(idBeezzer)});
         try {
             Pollen pollen = Pollen.getPollenByName(stringPollen);
-
             Beezzer beezzer = getBeezzerIfExist(idBeezzer);
             if (beezzer.getAllergens().containsKey(pollen.getId())) {
                 logger.log(Level.WARNING, "This allergen is already saved to your list.");
                 return;
             }
             beezzer.getAllergens().put(pollen.getId(), pollen);
+            logger.log( Level.INFO, "Allergen {0} for Beezzer {1} correctly added.", new Object[]{pollen.getPollenNameEN(), beezzer.getUsername()});
+
         } catch (Exception e){
             logger.log(Level.WARNING, "Error adding allergen");
         }
@@ -320,23 +323,27 @@ public class BeezzerService {
     /**
      * Removes an allergen from the specified Beezzer's list of allergens.
      *
-     * @param idAllergen The unique identifier of the allergen to be removed.
+     * @param stringPollen The Json String of the name of the pollen to be removed.
      * @param idBeezzer The unique identifier of the Beezzer from whom the allergen will be removed.
      * @return True if the allergen was successfully removed, false if the allergen does not exist or an error occurs.
      */
-    public boolean removeAllergen(Long idAllergen, Long idBeezzer) {
+    public boolean removeAllergen(String stringPollen, Long idBeezzer) {
         logger.log( Level.INFO, "Removing Allergen...");
         try {
             Beezzer beezzer = getBeezzerIfExist(idBeezzer);
-            var allergen = beezzer.getAllergens().get(idAllergen);
-            var pollenDTO = new PollenDTO(allergen);
-            if (allergen == null) {
-                logger.log(Level.WARNING, "Allergen with ID {0} doesn't exist.", idAllergen);
+            Pollen pollen = Pollen.getPollenByName(stringPollen);
+            if (pollen == null) {
+                logger.log(Level.WARNING, "This allergen doesn't exist.");
                 return false;
             }
-            beezzer.getAllergens().remove(idAllergen);
-            logger.log(Level.INFO, "Allergen deleted: {0}", pollenDTO);
-            return true;
+            if (beezzer.getAllergens().containsKey(pollen.getId())) {
+                beezzer.getAllergens().remove(pollen.getId());
+                var pollenDTO = new PollenDTO(pollen);
+                logger.log(Level.INFO, "Allergen deleted: {0}", pollenDTO);
+                return true;
+            }
+            logger.log(Level.WARNING, "Error remove allergen");
+            return false;
         } catch (Exception e){
             logger.log(Level.WARNING, "Error remove allergen");
             return false;

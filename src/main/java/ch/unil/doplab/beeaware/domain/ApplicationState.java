@@ -20,12 +20,12 @@ public class ApplicationState {
     private Map<Long, PollenLocationInfo> PollenLocationIndexArray;
     private String APIKEY = ResourceBundle.getBundle("application").getString("API_KEY");
     private Map<Long, Long> allergens;
-    private BeezzerService beezzerService;
     private LocationService locationService;
+    private GeoApiService geoApiService;
+    private BeezzerService beezzerService;
     private SymptomService symptomService;
     private PollenLocationIndexService pollenLocationIndexService;
     // private AllergenService allergenService;
-    private GeoApiService geoApiService;
     private ForeCastService foreCastService;
     private IndexPollenForBeezzer indexPollenForBeezzer;
     private TokenService tokenService;
