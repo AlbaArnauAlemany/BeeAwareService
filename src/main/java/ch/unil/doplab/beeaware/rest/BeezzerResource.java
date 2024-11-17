@@ -67,7 +67,6 @@ public class BeezzerResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     @Secured
     @RoleRequired({Role.ADMIN})
     @Path("/location/{id}")
@@ -76,7 +75,6 @@ public class BeezzerResource {
     }
 
     @PUT
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured
     @SameID
@@ -87,7 +85,6 @@ public class BeezzerResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     @Secured
     @SameID
     @Path("/{id}/allergens")
@@ -107,7 +104,6 @@ public class BeezzerResource {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured
     @SameID
@@ -118,12 +114,11 @@ public class BeezzerResource {
     }
 
     @DELETE
-    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Secured
     @SameID
     @Path("/{id}/allergens")
     public boolean removeAllAllergen(@PathParam("id") Long idBeezzer, String stringPollen) {
         return state.getBeezzerService().removeAllergen(stringPollen, idBeezzer);
     }
-    //TODO : VERIFIER LE CONSUME ET PRODUCE DE CHAQUE FONCTION
 }
