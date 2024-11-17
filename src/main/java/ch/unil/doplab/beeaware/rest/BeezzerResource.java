@@ -44,9 +44,8 @@ public class BeezzerResource {
     @Secured
     @RoleRequired({Role.ADMIN})
     @Path("/setBeezzer")
-    public Response setBeezzer(Beezzer beezzer) {
-        state.getBeezzerService().setBeezzer(beezzer);
-        return Response.ok().build();
+    public boolean setBeezzer(Beezzer beezzer) {
+        return state.getBeezzerService().setBeezzer(beezzer);
     }
 
     @POST
@@ -96,9 +95,8 @@ public class BeezzerResource {
     @Secured
     @SameID
     @Path("/{id}/allergens")
-    public Response addAllergen(@PathParam("id") Long idBeezzer, @QueryParam("stringPollen") String stringPollen) {
-        state.getBeezzerService().addAllergen(stringPollen, idBeezzer);
-        return Response.ok().build();
+    public boolean addAllergen(@PathParam("id") Long idBeezzer, @QueryParam("stringPollen") String stringPollen) {
+        return state.getBeezzerService().addAllergen(stringPollen, idBeezzer);
     }
 
     @POST
@@ -106,16 +104,15 @@ public class BeezzerResource {
     @Secured
     @SameID
     @Path("/{id}/allergensset")
-    public Response addAllergenSet(@PathParam("id") Long idBeezzer, String stringPollens) {
-        state.getBeezzerService().addAllergenSet(stringPollens, idBeezzer);
-        return Response.ok().build();
+    public boolean addAllergenSet(@PathParam("id") Long idBeezzer, String stringPollens) {
+        return state.getBeezzerService().addAllergenSet(stringPollens, idBeezzer);
     }
 
     @DELETE
     @Secured
     @SameID
     @Path("/{id}/allergens")
-    public boolean removeAllAllergen(@PathParam("id") Long idBeezzer, @QueryParam("stringPollen") String stringPollen) {
+    public boolean removeAllergen(@PathParam("id") Long idBeezzer, @QueryParam("stringPollen") String stringPollen) {
         return state.getBeezzerService().removeAllergen(stringPollen, idBeezzer);
     }
 }

@@ -1,9 +1,6 @@
-package ch.unil.doplab.beeaware.rest;
+package ch.unil.doplab.beeaware.Utilis;
 
 import ch.unil.doplab.beeaware.Domain.Role;
-import ch.unil.doplab.beeaware.Utilis.RoleRequired;
-import ch.unil.doplab.beeaware.Utilis.SameID;
-import ch.unil.doplab.beeaware.Utilis.Secured;
 import ch.unil.doplab.beeaware.domain.ApplicationState;
 import ch.unil.doplab.beeaware.Domain.Token;
 import jakarta.annotation.Priority;

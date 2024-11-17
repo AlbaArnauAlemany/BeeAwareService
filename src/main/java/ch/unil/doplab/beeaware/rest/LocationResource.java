@@ -22,7 +22,7 @@ public class LocationResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured
     public boolean addLocation(Location location) {
-        Location locationCreated =  state.getLocationService().addOrCreateLocation(location);
+        Location locationCreated = state.getLocationService().addOrCreateLocation(location);
         return locationCreated != null;
     }
 
