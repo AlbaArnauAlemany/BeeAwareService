@@ -48,6 +48,13 @@ To initialize the service project follow these steps:
      - *Mockito*: The Byte Buddy library used internally by Mockito does not support Java 23.
       Byte Buddy's maximum officially supported version in this case is Java 21.
 
+5. **Authentication Endpoint**:
+   - When first opening you are attributed an ADMIN role throughe token so you don't need to authenticate.
+   For each call make sure that in the authorization tab you selected "Inherit auth from parent".
+
+6. **Download Symptoms Excel Endpoint**:
+   - In Postman, in the Excel endpoint you need to "send & download" in order to download correctly the Excel file.
+
 ### Core Service Components
 
 1. **BeezzerService**:
