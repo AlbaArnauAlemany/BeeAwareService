@@ -2,7 +2,7 @@ package ch.unil.doplab.beeaware.rest;
 
 import ch.unil.doplab.beeaware.Domain.Beezzer;
 import ch.unil.doplab.beeaware.domain.ApplicationState;
-import ch.unil.doplab.beeaware.domain.Token;
+import ch.unil.doplab.beeaware.Domain.Token;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;

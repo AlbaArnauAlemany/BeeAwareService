@@ -5,7 +5,7 @@ import ch.unil.doplab.beeaware.Utilis.RoleRequired;
 import ch.unil.doplab.beeaware.Utilis.SameID;
 import ch.unil.doplab.beeaware.Utilis.Secured;
 import ch.unil.doplab.beeaware.domain.ApplicationState;
-import ch.unil.doplab.beeaware.domain.Token;
+import ch.unil.doplab.beeaware.Domain.Token;
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Priorities;

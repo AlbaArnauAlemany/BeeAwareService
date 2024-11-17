@@ -1,6 +1,6 @@
 package ch.unil.doplab.beeaware.service;
 
-import ch.unil.doplab.beeaware.domain.Token;
+import ch.unil.doplab.beeaware.Domain.Token;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
