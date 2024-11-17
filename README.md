@@ -18,7 +18,7 @@ forecasts to retrieve pollen indices based on the user's specified location.
 ### Getting Started
 
 To initialize the service project follow these steps:
-1. **Create an `application.properties` file:
+1. **Create an `application.properties` file**:
     - Place this file in the `/resources` directory.
     - Add your Google API_KEY (for the Google Pollen API) in the file.
 
