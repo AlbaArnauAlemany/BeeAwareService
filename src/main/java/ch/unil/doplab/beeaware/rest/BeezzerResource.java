@@ -56,7 +56,6 @@ public class BeezzerResource {
     }
 
     @DELETE
-    @Produces(MediaType.APPLICATION_JSON)
     @Secured
     @RoleRequired({Role.ADMIN})
     @Path("/{id}")
@@ -92,8 +91,6 @@ public class BeezzerResource {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     @Secured
     @SameID
     @Path("/{id}/allergens")
@@ -111,7 +108,6 @@ public class BeezzerResource {
     }
 
     @DELETE
-    @Consumes(MediaType.APPLICATION_JSON)
     @Secured
     @SameID
     @Path("/{id}/allergens")
