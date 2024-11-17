@@ -41,6 +41,13 @@ To initialize the service project follow these steps:
    - You can find the file at:
       `BeeAwareService/BEEZZER_SERVICE.postman_collection.json`
 
+4. **Maven Dependencies**:
+   This project uses Maven for dependency management. The key dependencies included in
+   the `pom.xml` are:
+     - *Lombok*: Ensure that the Lombok plugin is installed and enabled in your IDE.
+     - *Mockito*: The Byte Buddy library used internally by Mockito does not support Java 23.
+      Byte Buddy's maximum officially supported version in this case is Java 21.
+
 ### Core Service Components
 
 1. **BeezzerService**:
