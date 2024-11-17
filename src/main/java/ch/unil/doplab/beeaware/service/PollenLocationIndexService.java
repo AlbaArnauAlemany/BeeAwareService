@@ -28,7 +28,6 @@ public class PollenLocationIndexService {
                 }
             }
         }
-        // TODO : ADD LOCATION CREATE AND TESTS
         pollenLocationIndex.setId(idPollenLocationIndex++);
         pollenLocationIndexMap.put(idPollenLocationIndex, pollenLocationIndex);
         logger.log(Level.INFO, "New pollenLocationIndex added : {0}", pollenLocationIndex);

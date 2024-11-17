@@ -161,9 +161,10 @@ public class BeezzerService {
      *
      * @param beezzer The Beezzer object to be set (must not be null).
      */
-    public void setBeezzer(@NotNull Beezzer beezzer) {
+    public boolean setBeezzer(@NotNull Beezzer beezzer) {
         logger.log(Level.INFO, "Setting Beezzer {0}...", beezzer.getUsername());
         beezzers.put(beezzer.getId(), beezzer);
+        return true;
     }
 
     /**
@@ -260,20 +261,21 @@ public class BeezzerService {
      * @param idBeezzer The unique identifier of the Beezzer to whom the allergen is being added.
      */
 
-    public void addAllergen(@NotNull String stringPollen, Long idBeezzer) {
+    public boolean addAllergen(@NotNull String stringPollen, Long idBeezzer) {
         logger.log( Level.INFO, "Trying to add allergen {0} for Beezzer id {1}...", new Object[]{stringPollen, String.valueOf(idBeezzer)});
         try {
             Pollen pollen = Pollen.getPollenByName(stringPollen);
             Beezzer beezzer = getBeezzerIfExist(idBeezzer);
             if (beezzer.getAllergens().containsKey(pollen.getId())) {
                 logger.log(Level.WARNING, "This allergen is already saved to your list.");
-                return;
+                return false;
             }
             beezzer.getAllergens().put(pollen.getId(), pollen);
             logger.log( Level.INFO, "Allergen {0} for Beezzer {1} correctly added.", new Object[]{pollen.getPollenNameEN(), beezzer.getUsername()});
-
+            return true;
         } catch (Exception e){
             logger.log(Level.WARNING, "Error adding allergen");
+            return false;
         }
     }
 
