@@ -17,7 +17,7 @@ import static ch.unil.doplab.beeaware.Utilis.Utils.parseDate;
 @Getter
 @Setter
 public class SymptomService {
-    private static final Map<Long, Symptom> symptoms = new HashMap<>();
+    private final Map<Long, Symptom> symptoms = new HashMap<>();
     private Long idSymptom = 0L;
     private Logger logger = Logger.getLogger(SymptomService.class.getName());
 

@@ -38,7 +38,7 @@ public class GeoApiService {
      * @throws InterruptedException If the API request is interrupted.
      * @throws IOException          If an input or output exception occurs.
      */
-    public void getCoordinates(@NotNull Location location) throws ApiException, InterruptedException, IOException {
+    public void getCoordinates(@NotNull Location location) {
         int NPA = location.getNPA();
         String country = location.getCountry();
         try {

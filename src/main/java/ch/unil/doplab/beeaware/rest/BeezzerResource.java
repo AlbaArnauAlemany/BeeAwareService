@@ -39,7 +39,6 @@ public class BeezzerResource {
         return state.getBeezzerService().getBeezzer(id);
     }
 
-    // TODO: Mettre es reponses a 200 pour toutes les ressources de toutes les classes
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured

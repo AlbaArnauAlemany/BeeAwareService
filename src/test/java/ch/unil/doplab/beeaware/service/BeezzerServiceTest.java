@@ -1,9 +1,8 @@
-package ch.unil.doplab.beeaware.domain;
+package ch.unil.doplab.beeaware.service;
 
 import ch.unil.doplab.beeaware.DTO.AllergenDTO;
 import ch.unil.doplab.beeaware.DTO.BeezzerDTO;
 import ch.unil.doplab.beeaware.Domain.*;
-import ch.unil.doplab.beeaware.service.*;
 import ch.unil.doplab.beeaware.DTO.LocationDTO;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
