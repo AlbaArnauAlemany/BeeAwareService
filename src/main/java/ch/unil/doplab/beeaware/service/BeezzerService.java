@@ -260,8 +260,7 @@ public class BeezzerService {
      * @param idBeezzer The unique identifier of the Beezzer to whom the allergen is being added.
      */
 
-    // Pollen pollenTry = objectMapper.readValue(stringPollen, Pollen.class);
-    public void addAllergen(String stringPollen, Long idBeezzer) {
+    public void addAllergen(@NotNull String stringPollen, Long idBeezzer) {
         logger.log( Level.INFO, "Trying to add allergen {0} for Beezzer id {1}...", new Object[]{stringPollen, String.valueOf(idBeezzer)});
         try {
             Pollen pollen = Pollen.getPollenByName(stringPollen);
