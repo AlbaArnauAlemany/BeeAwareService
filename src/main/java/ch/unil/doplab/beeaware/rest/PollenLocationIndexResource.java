@@ -42,7 +42,6 @@ public class PollenLocationIndexResource {
     @DELETE
     @Secured
     @RoleRequired(Role.ADMIN)
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public boolean removePollenLocationIndex(@PathParam("id") Long idPollenLocationIndex) {
         return state.getPollenLocationIndexService().removePollenLocationIndex(idPollenLocationIndex);

@@ -16,7 +16,6 @@ public class IndexPollenForBeezzerResource {
     private ApplicationState state;
 
     @GET
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
     @SameID
@@ -26,7 +25,6 @@ public class IndexPollenForBeezzerResource {
     }
 
     @GET
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
     @SameID

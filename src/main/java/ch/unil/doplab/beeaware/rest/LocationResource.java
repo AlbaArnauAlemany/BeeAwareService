@@ -35,7 +35,6 @@ public class LocationResource {
     }
 
     @DELETE
-    @Produces(MediaType.APPLICATION_JSON)
     @Secured
     @RoleRequired(Role.ADMIN)
     @Path("/{id}")
