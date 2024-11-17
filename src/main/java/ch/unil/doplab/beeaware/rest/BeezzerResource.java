@@ -118,7 +118,7 @@ public class BeezzerResource {
     @Secured
     @SameID
     @Path("/{id}/allergens")
-    public boolean removeAllAllergen(@PathParam("id") Long idBeezzer, String stringPollen) {
+    public boolean removeAllAllergen(@PathParam("id") Long idBeezzer, @QueryParam("stringPollen") String stringPollen) {
         return state.getBeezzerService().removeAllergen(stringPollen, idBeezzer);
     }
 }
