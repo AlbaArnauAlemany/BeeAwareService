@@ -19,8 +19,6 @@ public class SymptomResource {
     private ApplicationState state;
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     @Secured
     @Path("/add/{id}")
     @SameID
@@ -73,7 +71,6 @@ public class SymptomResource {
 
 
     @DELETE
-    @Produces(MediaType.APPLICATION_JSON)
     @Secured
     @RoleRequired(Role.ADMIN)
     @Path("/{id}")
