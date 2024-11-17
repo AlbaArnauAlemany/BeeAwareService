@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 @Priority(Priorities.AUTHENTICATION)
 public class AuthenticationFilter implements ContainerRequestFilter {
 
-    private static final String REALM = "example";
+    private static final String REALM = "beeaware";
     private static final String AUTHENTICATION_SCHEME = "Bearer";
     @Inject
     private ApplicationState state;

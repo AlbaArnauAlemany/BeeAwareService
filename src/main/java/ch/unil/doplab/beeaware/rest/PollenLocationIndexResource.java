@@ -47,6 +47,4 @@ public class PollenLocationIndexResource {
     public boolean removePollenLocationIndex(@PathParam("id") Long idPollenLocationIndex) {
         return state.getPollenLocationIndexService().removePollenLocationIndex(idPollenLocationIndex);
     }
-
-    //TODO : AJOUTER DES VOID BOOLEENS POUR LES REPONSES
 }

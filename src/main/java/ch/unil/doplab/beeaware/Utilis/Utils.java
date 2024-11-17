@@ -70,7 +70,6 @@ public class Utils {
         return pollenLocationIndexList;
     }
 
-    // TODO: for the test part
     public static void printMethodName() {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         var methodName = stackTraceElements[2].getMethodName();
