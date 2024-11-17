@@ -1,9 +1,5 @@
 package ch.unil.doplab.beeaware.service;
 
-import ch.unil.doplab.beeaware.domain.ApplicationState;
-import jakarta.annotation.PostConstruct;
-import jakarta.ejb.Singleton;
-import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,11 +18,11 @@ import java.util.logging.Logger;
 @AllArgsConstructor
 public class DailyTaskService {
 
+    private final Logger logger = Logger.getLogger(DailyTaskService.class.getName());
     private ScheduledExecutorService scheduler;
     private ForeCastService foreCastService;
     private PollenLocationIndexService pollenLocationIndexService;
     private LocationService locationService;
-    private final Logger logger = Logger.getLogger(DailyTaskService.class.getName());
 
 
     public DailyTaskService(ForeCastService foreCastService, PollenLocationIndexService pollenLocationIndexService, LocationService locationService) {
