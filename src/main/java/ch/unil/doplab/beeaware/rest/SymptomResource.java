@@ -22,9 +22,10 @@ public class SymptomResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured
+    @Path("/add/{id}")
     @SameID
-    public void addSymptom(Symptom symptom) {
-        state.getSymptomService().addSymptom(symptom);
+    public boolean addSymptom(@PathParam("id") Long id, Symptom symptom) {
+        return state.getSymptomService().addSymptom(symptom);
     }
 
     @GET

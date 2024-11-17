@@ -21,8 +21,9 @@ public class LocationResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured
-    public void addLocation(Location location) {
-        state.getLocationService().addOrCreateLocation(location);
+    public boolean addLocation(Location location) {
+        Location locationCreated =  state.getLocationService().addOrCreateLocation(location);
+        return locationCreated != null;
     }
 
     @GET

@@ -21,7 +21,7 @@ public class SymptomService {
     private Long idSymptom = 0L;
     private Logger logger = Logger.getLogger(SymptomService.class.getName());
 
-    public void addSymptom(@NotNull Symptom symptom) {
+    public boolean addSymptom(@NotNull Symptom symptom) {
         if (symptom.getDate() == null) {
             symptom.setDate(new Date());
         }
@@ -32,12 +32,13 @@ public class SymptomService {
                 symptom.setId(sym.getValue().getId());
                 symptoms.put(sym.getValue().getId(), symptom);
                 logger.log(Level.INFO, "Symptom replaced : {0}", symptomsDTO);
-                return;
+                return true;
             }
         }
         symptom.setId(idSymptom);
         symptoms.put(idSymptom++, symptom);
         logger.log(Level.INFO, "Symptom added : {0}", symptomsDTO);
+        return true;
     }
 
     public List<SymptomsDTO> getAllSymptoms() {
@@ -70,8 +71,10 @@ public class SymptomService {
                     return new SymptomsDTO(sym.getValue());
                 }
             }
+            logger.log(Level.WARNING, "Beezzer or date not found");
             return null;
         } catch (Exception e){
+            logger.log(Level.WARNING, "Error to get symptoms from this date\n{0}\n{1}...", new Object[]{e.getMessage(), e.getStackTrace()});
             return null;
         }
     }
@@ -89,6 +92,7 @@ public class SymptomService {
             }
             return symptomsDto;
         } catch (Exception e){
+            logger.log(Level.WARNING, "Error to get symptoms from this range\n{0}\n{1}...", new Object[]{e.getMessage(), e.getStackTrace()});
             return null;
         }
     }
