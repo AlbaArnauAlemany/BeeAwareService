@@ -38,7 +38,7 @@ public class GeoApiService {
      * @throws InterruptedException If the API request is interrupted.
      * @throws IOException          If an input or output exception occurs.
      */
-    public void getCoordinates(@NotNull Location location) {
+    public Coordinate getCoordinates(@NotNull Location location) {
         int NPA = location.getNPA();
         String country = location.getCountry();
         try {
@@ -48,8 +48,10 @@ public class GeoApiService {
             logger.log(Level.INFO, "Coordinate : {0}, Country : {1}, Latitude : {2}, Longitude : {3}", new Object[]{String.valueOf(NPA), country, String.valueOf(lat), String.valueOf(lng)});
 
             location.setCoordinate(new Coordinate(lat, lng));
+            return location.getCoordinate();
         } catch (ApiException | InterruptedException | IOException e) {
             logger.log(Level.WARNING, "Error while fetching coordinates for {1}, {2}: {3}", new Object[]{NPA, country, e.getMessage()});
         }
+        return null;
     }
 }
