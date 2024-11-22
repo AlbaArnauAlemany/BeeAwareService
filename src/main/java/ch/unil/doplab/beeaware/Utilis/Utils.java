@@ -14,12 +14,12 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.logging.Logger;
+
 @Singleton
 public class Utils {
     private static final Logger logger = Logger.getLogger(Utils.class.getName());
     @Inject
     private ApplicationState state;
-
 
     private static List<LocalDate> convertDateToLocalDate(@NotNull Date date1, @NotNull Date date2) {
         LocalDate localDate1 = date1.toInstant()

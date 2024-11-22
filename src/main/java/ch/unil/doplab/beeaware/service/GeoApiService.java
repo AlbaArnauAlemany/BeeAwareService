@@ -5,6 +5,8 @@ import ch.unil.doplab.beeaware.Domain.Location;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.errors.ApiException;
+import com.google.maps.model.AddressComponent;
+import com.google.maps.model.AddressComponentType;
 import com.google.maps.model.ComponentFilter;
 import com.google.maps.model.GeocodingResult;
 import org.jetbrains.annotations.NotNull;
@@ -47,7 +49,21 @@ public class GeoApiService {
             double lng = Math.round(result.geometry.location.lng * 100000.0) / 100000.0;
             logger.log(Level.INFO, "Coordinate : {0}, Country : {1}, Latitude : {2}, Longitude : {3}", new Object[]{String.valueOf(NPA), country, String.valueOf(lat), String.valueOf(lng)});
 
+            String cityName = null;
+            for (AddressComponent component : result.addressComponents) {
+                for (AddressComponentType type : component.types) {
+                    if (type == AddressComponentType.LOCALITY) {
+                        cityName = component.longName;
+                        break;
+                    }
+                }
+                if (cityName != null) {
+                    break;
+                }
+            }
+
             location.setCoordinate(new Coordinate(lat, lng));
+            location.setCityName(cityName);
             return location.getCoordinate();
         } catch (ApiException | InterruptedException | IOException e) {
             logger.log(Level.WARNING, "Error while fetching coordinates for {1}, {2}: {3}", new Object[]{NPA, country, e.getMessage()});
