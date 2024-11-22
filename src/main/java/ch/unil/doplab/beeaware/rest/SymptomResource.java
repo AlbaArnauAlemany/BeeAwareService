@@ -24,7 +24,7 @@ public class SymptomResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/create")
     @SameID
-    public Symptom createSymptom(@QueryParam("reaction") int reactionValue, @QueryParam("antihistamine") boolean antihistamine, @QueryParam("beezzerId") Long beezzerId) {
+    public Symptom createSymptom(@QueryParam("reactionValue") int reactionValue, @QueryParam("antihistamine") boolean antihistamine, @QueryParam("beezzerId") Long beezzerId) {
         return state.getSymptomService().createSymptom(reactionValue, antihistamine, beezzerId);
     }
 
