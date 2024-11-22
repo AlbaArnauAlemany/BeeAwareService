@@ -1,16 +1,19 @@
 package ch.unil.doplab.beeaware.service;
 
 import ch.unil.doplab.beeaware.DTO.SymptomsDTO;
+import ch.unil.doplab.beeaware.Domain.Reaction;
 import ch.unil.doplab.beeaware.Domain.Symptom;
 import ch.unil.doplab.beeaware.Utilis.Utils;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.ParseException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static ch.unil.doplab.beeaware.Domain.Reaction.fromValue;
 import static ch.unil.doplab.beeaware.Utilis.Utils.isDateBefore;
 import static ch.unil.doplab.beeaware.Utilis.Utils.parseDate;
 
@@ -20,6 +23,14 @@ public class SymptomService {
     private final Map<Long, Symptom> symptoms = new HashMap<>();
     private Long idSymptom = 0L;
     private Logger logger = Logger.getLogger(SymptomService.class.getName());
+
+    // Without date
+    public Symptom createSymptom(int reactionValue, boolean antihistamine, Long beezzerId) {
+        Reaction reaction = fromValue(reactionValue);
+        Symptom symptom = new Symptom(beezzerId, reaction, antihistamine);
+        addSymptom(symptom);
+        return symptom;
+    }
 
     public boolean addSymptom(@NotNull Symptom symptom) {
         if (symptom.getDate() == null) {

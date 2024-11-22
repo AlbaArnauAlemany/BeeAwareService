@@ -20,6 +20,16 @@ public class SymptomResource {
 
     @POST
     @Secured
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/create")
+    @SameID
+    public Symptom createSymptom(@QueryParam("reaction") int reactionValue, @QueryParam("antihistamine") boolean antihistamine, @QueryParam("beezzerId") Long beezzerId) {
+        return state.getSymptomService().createSymptom(reactionValue, antihistamine, beezzerId);
+    }
+
+    @POST
+    @Secured
     @Path("/add/{id}")
     @SameID
     public boolean addSymptom(@PathParam("id") Long id, Symptom symptom) {
