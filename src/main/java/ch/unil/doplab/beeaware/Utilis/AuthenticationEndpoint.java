@@ -31,7 +31,7 @@ public class AuthenticationEndpoint {
     public Response authenticateUser(@FormParam("username") String username, @FormParam("password") String password) {
         try {
             Long userId = authenticate(username, password);
-            String token = issueToken(userId);
+            Token token = issueToken(userId);
 
             return Response.ok(token).build();
 
@@ -63,7 +63,7 @@ public class AuthenticationEndpoint {
         return true;
     }
 
-    private String issueToken(Long beezzerId) throws Exception {
+    private Token issueToken(Long beezzerId) throws Exception {
         if(isTokenAlreadyExistForSpecificBeezzer(beezzerId)) {
             Random random = new SecureRandom();
             String tokenString = new BigInteger(130, random).toString(32);
@@ -74,7 +74,7 @@ public class AuthenticationEndpoint {
             Date plusOneHour = calendar.getTime();
             Token token = new Token(tokenString, plusOneHour, beezzerId, state.getBeezzerService().getBeezzers().get(beezzerId).getRole());
             state.getTokenService().addToken(token);
-            return tokenString;
+            return token;
         } else {
             throw new Exception("Token already exists");
         }

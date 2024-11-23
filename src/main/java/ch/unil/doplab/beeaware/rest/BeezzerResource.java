@@ -23,7 +23,7 @@ public class BeezzerResource {
     private ApplicationState state;
 
     @GET
-    @Secured
+//    @Secured
     @RoleRequired({Role.ADMIN})
     @Produces(MediaType.APPLICATION_JSON)
     public List<BeezzerDTO> getAllBeezzers() {
