@@ -79,4 +79,26 @@ public class AuthenticationEndpoint {
             throw new Exception("Token already exists");
         }
     }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Secured
+    @SameID
+    @Path("/{id}")
+    public boolean logout(@PathParam("id") Long id) {
+        Long idToken = null;
+        for (Map.Entry<Long, Token> tok : state.getTokenService().getTokens().entrySet()) {
+            if (tok.getValue().getBeezzerId() == id ) {
+                idToken = tok.getKey();
+                logger.log(Level.WARNING, "Token for beezzer {0} already exists", tok.getValue().getBeezzerId());
+                break;
+            }
+        }
+        if (idToken != null){
+            state.getTokenService().getTokens().remove(idToken);
+            return true;
+        }
+        return false;
+    }
 }

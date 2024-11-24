@@ -54,14 +54,14 @@ public class ApplicationState {
             logger.log(Level.SEVERE, "Populating application");
             Location location = new Location(1024, "CH");
             locationService.addOrCreateLocation(location);
-            Beezzer ony = new Beezzer("Ony", "o@unil.ch", "Q.-wDw124", location, Role.BEEZZER);
+            Beezzer ony = new Beezzer("Ony", "o@unil.ch", PasswordUtilis.hashPassword("Q.-wDw124"), location, Role.BEEZZER);
             beezzerService.addBeezzer(ony);
             beezzerService.addAllergen("Grasses", ony.getId());
             beezzerService.addAllergen("Weed", ony.getId());
 
             Location locationAlb = new Location(1020, "CH");
             locationService.addOrCreateLocation(locationAlb);
-            Beezzer alb = new Beezzer("alb", "alb@unil.ch", "Q.-wDw123", location, Role.ADMIN);
+            Beezzer alb = new Beezzer("alb", "alb@unil.ch", PasswordUtilis.hashPassword("Q.-wDw123"), location, Role.ADMIN);
             beezzerService.addBeezzer(alb);
 
             for (Map.Entry<Long, Beezzer> beezzer : beezzerService.getBeezzers().entrySet()) {

@@ -12,7 +12,6 @@ import ch.unil.doplab.beeaware.domain.ApplicationState;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -23,7 +22,7 @@ public class BeezzerResource {
     private ApplicationState state;
 
     @GET
-//    @Secured
+    @Secured
     @RoleRequired({Role.ADMIN})
     @Produces(MediaType.APPLICATION_JSON)
     public List<BeezzerDTO> getAllBeezzers() {
