@@ -53,18 +53,19 @@ public class AuthenticationEndpoint {
         throw new Exception("No match with user or password");
     }
 
-    private boolean isTokenAlreadyExistForSpecificBeezzer(Long beezzerId){
+    private Token isTokenAlreadyExistForSpecificBeezzer(Long beezzerId){
         for (Map.Entry<Long, Token> tok : state.getTokenService().getTokens().entrySet()) {
             if (tok.getValue().getBeezzerId() == beezzerId && state.getTokenService().isDateValide(tok.getValue().getExpiration())) {
                 logger.log(Level.WARNING, "Token for beezzer {0} already exists", tok.getValue().getBeezzerId());
-                return false;
+                return tok.getValue();
             }
         }
-        return true;
+        return null;
     }
 
     private Token issueToken(Long beezzerId) throws Exception {
-        if(isTokenAlreadyExistForSpecificBeezzer(beezzerId)) {
+        Token oldToken = isTokenAlreadyExistForSpecificBeezzer(beezzerId);
+        if(oldToken == null) {
             Random random = new SecureRandom();
             String tokenString = new BigInteger(130, random).toString(32);
             Date now = new Date();
@@ -76,7 +77,7 @@ public class AuthenticationEndpoint {
             state.getTokenService().addToken(token);
             return token;
         } else {
-            throw new Exception("Token already exists");
+            return oldToken;
         }
     }
 

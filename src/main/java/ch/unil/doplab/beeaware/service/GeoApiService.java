@@ -67,7 +67,7 @@ public class GeoApiService {
             return location.getCoordinate();
         } catch (ApiException | InterruptedException | IOException e) {
             logger.log(Level.WARNING, "Error while fetching coordinates for {1}, {2}: {3}", new Object[]{NPA, country, e.getMessage()});
+            return null;
         }
-        return null;
     }
 }

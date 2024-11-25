@@ -215,7 +215,7 @@ public class BeezzerServiceTest {
 
         // Assert if a change in username is correctly set using setBeezzer
         dafne.setUsername("newDafne");
-        beezzerService.setBeezzer(dafne);
+        beezzerService.setBeezzer(4L, dafne);
         BeezzerDTO updatedBeezzer = beezzerService.getBeezzer(dafne.getId());
         assertNotNull(updatedBeezzer);
         assertEquals("newDafne", updatedBeezzer.getUsername());

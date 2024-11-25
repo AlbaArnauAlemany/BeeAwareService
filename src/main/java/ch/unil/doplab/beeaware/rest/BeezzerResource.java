@@ -41,10 +41,10 @@ public class BeezzerResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured
-    @RoleRequired({Role.ADMIN})
-    @Path("/setBeezzer")
-    public boolean setBeezzer(Beezzer beezzer) {
-        return state.getBeezzerService().setBeezzer(beezzer);
+    @SameID
+    @Path("/set/{id}")
+    public boolean setBeezzer(@PathParam("id") Long id, Beezzer beezzer) {
+        return state.getBeezzerService().setBeezzer(id, beezzer);
     }
 
     @POST
@@ -104,6 +104,22 @@ public class BeezzerResource {
     @Path("/{id}/allergensset")
     public boolean addAllergenSet(@PathParam("id") Long idBeezzer, String stringPollens) {
         return state.getBeezzerService().addAllergenSet(stringPollens, idBeezzer);
+    }
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Secured
+    @SameID
+    @Path("/{id}/password")
+    public boolean changePassword(@PathParam("id") Long idBeezzer, @QueryParam("password") String password) {
+        return state.getBeezzerService().changePassword(password, idBeezzer);
+    }
+
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/username")
+    public boolean checkBeezzerUsername(@QueryParam("username") String username) {
+        return state.getBeezzerService().isBeezzerExistByUsername(username);
     }
 
     @POST

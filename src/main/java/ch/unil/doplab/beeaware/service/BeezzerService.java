@@ -20,6 +20,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static ch.unil.doplab.beeaware.Domain.Pollen.getPollenByName;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -161,9 +163,11 @@ public class BeezzerService {
      *
      * @param beezzer The Beezzer object to be set (must not be null).
      */
-    public boolean setBeezzer(@NotNull Beezzer beezzer) {
+    public boolean setBeezzer(Long id,  @NotNull Beezzer beezzer) {
         logger.log(Level.INFO, "Setting Beezzer {0}...", beezzer.getUsername());
-        beezzers.put(beezzer.getId(), beezzer);
+        Beezzer beezzerElement = beezzers.get(id);
+        ObjectUpdater.updateNonNullFields(beezzer, beezzerElement);
+        beezzers.put(beezzer.getId(), beezzerElement);
         return true;
     }
 
@@ -181,6 +185,23 @@ public class BeezzerService {
             throw new Exception("Beezzer doesn't exist");
         }
         return beezzer;
+    }
+
+    /**
+     * Retrieves a Beezzer by its unique username if it exists.
+     *
+     * @param beezzerUsername The unique username of the Beezzer to retrieve.
+     * @return True if beezzer exists.
+     */
+    public boolean isBeezzerExistByUsername(String beezzerUsername) {
+        for (Map.Entry<Long, Beezzer> bee : beezzers.entrySet()) {
+            if (bee.getValue().getUsername() != null &&
+                    beezzerUsername.equals(bee.getValue().getUsername())) {
+                logger.log(Level.WARNING, "Username {0} already used. Please try a new one.", beezzerUsername);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -264,7 +285,7 @@ public class BeezzerService {
     public boolean addAllergen(@NotNull String stringPollen, Long idBeezzer) {
         logger.log( Level.INFO, "Trying to add allergen {0} for Beezzer id {1}...", new Object[]{stringPollen, String.valueOf(idBeezzer)});
         try {
-            Pollen pollen = Pollen.getPollenByName(stringPollen);
+            Pollen pollen = getPollenByName(stringPollen);
             Beezzer beezzer = getBeezzerIfExist(idBeezzer);
             if (beezzer.getAllergens().containsKey(pollen.getId())) {
                 logger.log(Level.WARNING, "This allergen is already saved to your list.");
@@ -303,6 +324,20 @@ public class BeezzerService {
         }
     }
 
+    public boolean changePassword(String password, Long idBeezzer){
+        logger.log(Level.INFO, "New password : {0}...", password);
+        try {
+            Beezzer beezzer = getBeezzerIfExist(idBeezzer);
+            beezzer.setPassword(PasswordUtilis.hashPassword(password));
+            beezzers.put(beezzer.getId(), beezzer);
+            return true;
+        } catch (Exception e){
+            logger.log(Level.WARNING, "Error adding new list of allergens");
+            return false;
+        }
+    }
+
+
     /**
      * Apply a set of allergens to a Beezzer's allergy list.
      *
@@ -317,14 +352,21 @@ public class BeezzerService {
             List<Pollen> pollens = objectMapper.readValue(
                     allergens, new TypeReference<List<Pollen>>() {}
             );
+            for (Pollen pol: pollens) {
+                logger.log(Level.INFO, "Pollen allergens {0}...", pol);
+            }
             Map<Long, Pollen> allergenSet = new HashMap<>();
             for (Pollen pollen : pollens) {
-                allergenSet.put(pollen.getId(), pollen);
+                Pollen currentPollen = getPollenByName(pollen.getPollenNameEN());
+                allergenSet.put(currentPollen.getId(), currentPollen);
             }
             beezzer.setAllergens(allergenSet);
+            beezzers.put(beezzer.getId(), beezzer);
             return true;
         } catch (Exception e){
             logger.log(Level.WARNING, "Error adding new list of allergens");
+            logger.log(Level.WARNING, e.getMessage());
+            logger.log(Level.WARNING, "{0}", e.getStackTrace());
             return false;
         }
     }
@@ -358,7 +400,7 @@ public class BeezzerService {
         logger.log( Level.INFO, "Removing Allergen...");
         try {
             Beezzer beezzer = getBeezzerIfExist(idBeezzer);
-            Pollen pollen = Pollen.getPollenByName(stringPollen);
+            Pollen pollen = getPollenByName(stringPollen);
             if (pollen == null) {
                 logger.log(Level.WARNING, "This allergen doesn't exist.");
                 return false;

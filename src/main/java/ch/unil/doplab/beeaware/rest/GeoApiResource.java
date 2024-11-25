@@ -18,9 +18,8 @@ public class GeoApiResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-//    @Secured
     public Coordinate getCoordinate(@QueryParam("npa") int npa, @QueryParam("country") String country) {
-
+        System.out.println("npa" + npa + ", country : " + country);
         Location locationCreated = new Location(npa, country);
         return state.getLocationService().getGeoApiService().getCoordinates(locationCreated);
     }
