@@ -50,10 +50,12 @@ public class GeoApiService {
             logger.log(Level.INFO, "Coordinate : {0}, Country : {1}, Latitude : {2}, Longitude : {3}", new Object[]{String.valueOf(NPA), country, String.valueOf(lat), String.valueOf(lng)});
 
             String cityName = null;
+            logger.log(Level.INFO, "Retrieving City Name...");
             for (AddressComponent component : result.addressComponents) {
                 for (AddressComponentType type : component.types) {
                     if (type == AddressComponentType.LOCALITY) {
                         cityName = component.longName;
+                        logger.log(Level.INFO, "City Name retrieved : {0}", cityName);
                         break;
                     }
                 }
