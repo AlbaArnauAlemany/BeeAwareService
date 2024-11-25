@@ -1,9 +1,9 @@
 package ch.unil.doplab.beeaware.service;
 
-import ch.unil.doplab.beeaware.DTO.AllergenDTO;
-import ch.unil.doplab.beeaware.DTO.BeezzerDTO;
-import ch.unil.doplab.beeaware.DTO.LocationDTO;
-import ch.unil.doplab.beeaware.DTO.PollenDTO;
+import ch.unil.doplab.beeaware.Domain.DTO.AllergenDTO;
+import ch.unil.doplab.beeaware.Domain.DTO.BeezzerDTO;
+import ch.unil.doplab.beeaware.Domain.DTO.LocationDTO;
+import ch.unil.doplab.beeaware.Domain.DTO.PollenDTO;
 import ch.unil.doplab.beeaware.Domain.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -296,6 +296,32 @@ public class BeezzerService {
             for (Pollen pollen : pollens) {
                 addAllergen(pollen.getPollenNameEN(), beezzer.getId());
             }
+            return true;
+        } catch (Exception e){
+            logger.log(Level.WARNING, "Error adding new list of allergens");
+            return false;
+        }
+    }
+
+    /**
+     * Apply a set of allergens to a Beezzer's allergy list.
+     *
+     * @param allergens A JSON string representing a list of Pollen objects to be added as allergens.
+     * @param idBeezzer The unique identifier of the Beezzer to whom the allergens are being added.
+     * @return true if the allergens were successfully added, false otherwise.
+     */
+    public boolean setAllergenSet(String allergens, Long idBeezzer){
+        logger.log(Level.INFO, "Apply allergens set {0}...", allergens);
+        try {
+            Beezzer beezzer = getBeezzerIfExist(idBeezzer);
+            List<Pollen> pollens = objectMapper.readValue(
+                    allergens, new TypeReference<List<Pollen>>() {}
+            );
+            Map<Long, Pollen> allergenSet = new HashMap<>();
+            for (Pollen pollen : pollens) {
+                allergenSet.put(pollen.getId(), pollen);
+            }
+            beezzer.setAllergens(allergenSet);
             return true;
         } catch (Exception e){
             logger.log(Level.WARNING, "Error adding new list of allergens");

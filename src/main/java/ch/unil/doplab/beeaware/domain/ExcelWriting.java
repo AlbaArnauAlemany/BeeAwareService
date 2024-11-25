@@ -1,7 +1,7 @@
 package ch.unil.doplab.beeaware.domain;
 
 
-import ch.unil.doplab.beeaware.DTO.SymptomsDTO;
+import ch.unil.doplab.beeaware.Domain.DTO.SymptomsDTO;
 import jakarta.inject.Inject;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

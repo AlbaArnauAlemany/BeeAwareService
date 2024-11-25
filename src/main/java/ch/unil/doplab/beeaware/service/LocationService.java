@@ -1,6 +1,6 @@
 package ch.unil.doplab.beeaware.service;
 
-import ch.unil.doplab.beeaware.DTO.LocationDTO;
+import ch.unil.doplab.beeaware.Domain.DTO.LocationDTO;
 import ch.unil.doplab.beeaware.Domain.Location;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

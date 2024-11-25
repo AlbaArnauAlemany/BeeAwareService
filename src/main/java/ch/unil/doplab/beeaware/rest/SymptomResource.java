@@ -1,6 +1,6 @@
 package ch.unil.doplab.beeaware.rest;
 
-import ch.unil.doplab.beeaware.DTO.SymptomsDTO;
+import ch.unil.doplab.beeaware.Domain.DTO.SymptomsDTO;
 import ch.unil.doplab.beeaware.Domain.Role;
 import ch.unil.doplab.beeaware.Domain.Symptom;
 import ch.unil.doplab.beeaware.Utilis.RoleRequired;

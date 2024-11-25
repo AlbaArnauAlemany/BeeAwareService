@@ -1,6 +1,6 @@
 package ch.unil.doplab.beeaware.service;
 
-import ch.unil.doplab.beeaware.DTO.PollenInfoDTO;
+import ch.unil.doplab.beeaware.Domain.DTO.PollenInfoDTO;
 import ch.unil.doplab.beeaware.Domain.Beezzer;
 import ch.unil.doplab.beeaware.Domain.Pollen;
 import ch.unil.doplab.beeaware.Domain.PollenLocationIndex;

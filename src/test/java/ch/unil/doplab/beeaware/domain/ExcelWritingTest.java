@@ -1,6 +1,6 @@
 package ch.unil.doplab.beeaware.domain;
 
-import ch.unil.doplab.beeaware.DTO.SymptomsDTO;
+import ch.unil.doplab.beeaware.Domain.DTO.SymptomsDTO;
 import ch.unil.doplab.beeaware.Domain.Reaction;
 import ch.unil.doplab.beeaware.Utilis.Utils;
 import org.apache.poi.ss.usermodel.*;

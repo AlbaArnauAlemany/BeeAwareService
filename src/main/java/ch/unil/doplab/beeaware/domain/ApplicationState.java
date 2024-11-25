@@ -1,7 +1,7 @@
 package ch.unil.doplab.beeaware.domain;
 
-import ch.unil.doplab.beeaware.DTO.PollenInfoDTO;
-import ch.unil.doplab.beeaware.DTO.SymptomsDTO;
+import ch.unil.doplab.beeaware.Domain.DTO.PollenInfoDTO;
+import ch.unil.doplab.beeaware.Domain.DTO.SymptomsDTO;
 import ch.unil.doplab.beeaware.Domain.*;
 import ch.unil.doplab.beeaware.service.*;
 import jakarta.annotation.PostConstruct;

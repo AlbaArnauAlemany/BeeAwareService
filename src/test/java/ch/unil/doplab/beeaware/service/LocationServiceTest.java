@@ -1,12 +1,7 @@
 package ch.unil.doplab.beeaware.service;
 
-import ch.unil.doplab.beeaware.DTO.LocationDTO;
+import ch.unil.doplab.beeaware.Domain.DTO.LocationDTO;
 import ch.unil.doplab.beeaware.Domain.Location;
-import ch.unil.doplab.beeaware.service.BeezzerService;
-import ch.unil.doplab.beeaware.service.GeoApiService;
-import ch.unil.doplab.beeaware.service.LocationService;
-import ch.unil.doplab.beeaware.service.SymptomService;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

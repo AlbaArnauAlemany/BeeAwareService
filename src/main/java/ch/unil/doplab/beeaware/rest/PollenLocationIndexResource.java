@@ -1,6 +1,6 @@
 package ch.unil.doplab.beeaware.rest;
 
-import ch.unil.doplab.beeaware.DTO.PollenInfoDTO;
+import ch.unil.doplab.beeaware.Domain.DTO.PollenInfoDTO;
 import ch.unil.doplab.beeaware.Domain.PollenLocationIndex;
 import ch.unil.doplab.beeaware.Domain.Role;
 import ch.unil.doplab.beeaware.Utilis.RoleRequired;

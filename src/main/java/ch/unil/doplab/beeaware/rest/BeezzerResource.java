@@ -1,8 +1,8 @@
 package ch.unil.doplab.beeaware.rest;
 
-import ch.unil.doplab.beeaware.DTO.AllergenDTO;
-import ch.unil.doplab.beeaware.DTO.BeezzerDTO;
-import ch.unil.doplab.beeaware.DTO.LocationDTO;
+import ch.unil.doplab.beeaware.Domain.DTO.AllergenDTO;
+import ch.unil.doplab.beeaware.Domain.DTO.BeezzerDTO;
+import ch.unil.doplab.beeaware.Domain.DTO.LocationDTO;
 import ch.unil.doplab.beeaware.Domain.Beezzer;
 import ch.unil.doplab.beeaware.Domain.Role;
 import ch.unil.doplab.beeaware.Utilis.RoleRequired;
@@ -105,6 +105,16 @@ public class BeezzerResource {
     public boolean addAllergenSet(@PathParam("id") Long idBeezzer, String stringPollens) {
         return state.getBeezzerService().addAllergenSet(stringPollens, idBeezzer);
     }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Secured
+    @SameID
+    @Path("/{id}/setallergensset")
+    public boolean setAllergenSet(@PathParam("id") Long idBeezzer, String stringPollens) {
+        return state.getBeezzerService().setAllergenSet(stringPollens, idBeezzer);
+    }
+
 
     @DELETE
     @Secured
