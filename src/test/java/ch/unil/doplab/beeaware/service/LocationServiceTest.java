@@ -24,7 +24,6 @@ class LocationServiceTest {
 
     private String APIKEY = ResourceBundle.getBundle("application").getString("API_KEY");
 
-    @SneakyThrows
     @BeforeEach
     void setUp() {
         // Initiate instances
