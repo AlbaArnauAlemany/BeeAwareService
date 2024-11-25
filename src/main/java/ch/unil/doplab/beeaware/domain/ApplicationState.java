@@ -52,14 +52,14 @@ public class ApplicationState {
     private void populateApplicationState() {
         try {
             logger.log(Level.SEVERE, "Populating application");
-            Location location = new Location(1024, "CH");
+            Location location = new Location(41001, "ES");
             locationService.addOrCreateLocation(location);
             Beezzer ony = new Beezzer("Ony", "o@unil.ch", PasswordUtilis.hashPassword("Q.-wDw124"), location, Role.BEEZZER);
             beezzerService.addBeezzer(ony);
             beezzerService.addAllergen("Grasses", ony.getId());
             beezzerService.addAllergen("Weed", ony.getId());
 
-            Location locationAlb = new Location(1020, "CH");
+            Location locationAlb = new Location(41389, "ES");
             locationService.addOrCreateLocation(locationAlb);
             Beezzer alb = new Beezzer("alb", "alb@unil.ch", PasswordUtilis.hashPassword("Q.-wDw123"), location, Role.ADMIN);
             beezzerService.addBeezzer(alb);
