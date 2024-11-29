@@ -13,10 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -137,9 +134,15 @@ public class BeezzerService {
     public BeezzerDTO getBeezzer(Long idBeezzer) {
         logger.log(Level.INFO, "Searching for Beezzer...");
         try {
-            return new BeezzerDTO(getBeezzerIfExist(idBeezzer));
+            Beezzer beezzer = getBeezzerIfExist(idBeezzer);
+            if (beezzer == null) {
+                logger.log(Level.WARNING, "Beezzer with ID {0} does not exist.", idBeezzer);
+                throw new NoSuchElementException("Beezzer not found with ID: " + idBeezzer);
+            }
+            return new BeezzerDTO(beezzer);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            logger.log(Level.SEVERE, "Error retrieving Beezzer with ID: {0}", idBeezzer);
+            throw new RuntimeException("Failed to retrieve Beezzer", e);
         }
     }
 
@@ -178,11 +181,12 @@ public class BeezzerService {
      * @return The Beezzer object corresponding to the specified ID.
      * @throws Exception If no Beezzer exists with the specified ID.
      */
-    public Beezzer getBeezzerIfExist(Long id) throws Exception {
+    public Beezzer getBeezzerIfExist(Long id) throws NoSuchElementException {
         Beezzer beezzer = beezzers.get(id);
         if (beezzer == null) {
-            logger.log(Level.WARNING, "Beezzer with ID {0} doesn't exist.", id);
-            throw new Exception("Beezzer doesn't exist");
+            String errorMessage = "Beezzer with ID " + id + " doesn't exist.";
+            logger.log(Level.WARNING, errorMessage);
+            throw new NoSuchElementException(errorMessage);
         }
         return beezzer;
     }

@@ -29,7 +29,7 @@ public class IndexPollenForBeezzerResource {
     @Secured
     @SameID
     @Path("/date/beezzer/{id}")
-    public List<PollenInfoDTO> getIndex(@QueryParam("date") String date, @PathParam("id") Long beezzerId) {
-        return state.getIndexPollenForBeezzer().getIndex(date, beezzerId);
+    public List<PollenInfoDTO> getIndexForDate(@QueryParam("date") String date, @PathParam("id") Long beezzerId) {
+        return state.getIndexPollenForBeezzer().getIndexForDate(beezzerId, date);
     }
 }

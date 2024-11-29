@@ -12,6 +12,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -89,8 +92,13 @@ public class Utils {
     }
 
     public static Date parseDate(String dateStr) throws ParseException {
-        SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");
-        formatter.setLenient(false);
-        return formatter.parse(dateStr);
-    }
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+            try {
+                LocalDate localDate = LocalDate.parse(dateStr, formatter);
+                ZonedDateTime zonedDateTime = localDate.atStartOfDay(ZoneId.systemDefault());
+                return Date.from(zonedDateTime.toInstant());
+            } catch (DateTimeParseException e) {
+                throw new ParseException("Invalid date format, expected MM-dd-yyyy. Provided: " + dateStr, 0);
+            }
+        }
 }

@@ -37,4 +37,12 @@ public class ServiceResource {
         return state.getPollenLocationIndexService().getPollenLocationIndexMap();
     }
 
+    @GET
+    @Secured
+    @RoleRequired(Role.ADMIN)
+    @Path("/forceForcast")
+    public boolean runDailyTask() {
+        return state.getDailyTaskService().runDailyTask();
+    }
+
 }

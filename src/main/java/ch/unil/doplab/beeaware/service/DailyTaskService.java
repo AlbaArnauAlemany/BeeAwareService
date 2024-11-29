@@ -47,8 +47,14 @@ public class DailyTaskService {
         scheduler.scheduleAtFixedRate(this::runDailyTask, initialDelay, TimeUnit.DAYS.toMillis(1), TimeUnit.MILLISECONDS);
     }
 
-    private void runDailyTask() {
-        logger.log(Level.INFO, "Start scheduled forecast at {0}", new Date());
-        foreCastService.forecastAllLocation(locationService.getLocations());
+    public boolean runDailyTask() {
+        try {
+            logger.log(Level.INFO, "Start scheduled forecast at {0}", new Date());
+            foreCastService.forecastAllLocation(locationService.getLocations());
+            return true;
+        } catch (Exception e) {
+            logger.log(Level.WARNING, "Error force forecasting all locations : \n{0}", e.getStackTrace());
+            return false;
+        }
     }
 }

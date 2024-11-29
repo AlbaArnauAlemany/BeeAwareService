@@ -34,12 +34,12 @@ public class IndexPollenForBeezzer {
         logger.log(Level.INFO, "Retrieving pollen for a specific Beezzer {0}", beezzerId);
         Beezzer beezzer = beezzerService.getBeezzers().get(beezzerId);
         List<PollenInfoDTO> pollenShortDTOs = new ArrayList<>();
-        for (Map.Entry<Long, PollenLocationIndex> pollenLocationIndex : pollenLocationIndexService.getPollenLocationIndexMap().entrySet()) {
-            if (pollenLocationIndex.getValue().getLocation().equals(beezzer.getLocation())) {
-                if (date == null || Utils.isSameDate(pollenLocationIndex.getValue().getDate(), date)) {
-                    for (Map.Entry<Long, Pollen> pollen : beezzer.getAllergens().entrySet()) {
-                        if (pollenLocationIndex.getValue().getDisplayName().equals(pollen.getValue().getPollenNameEN())) {
-                            pollenShortDTOs.add(new PollenInfoDTO(pollenLocationIndex.getValue()));
+        for (PollenLocationIndex pollenLocationIndex : pollenLocationIndexService.getPollenLocationIndexMap().values()) {
+            if (pollenLocationIndex.getLocation().equals(beezzer.getLocation())) {
+                if (date == null || Utils.isSameDate(pollenLocationIndex.getDate(), date)) {
+                    for (Pollen pollen : beezzer.getAllergens().values()) {
+                        if (pollenLocationIndex.getDisplayName().equals(pollen.getPollenNameEN())) {
+                            pollenShortDTOs.add(new PollenInfoDTO(pollenLocationIndex));
                         }
                     }
                 }
@@ -48,28 +48,21 @@ public class IndexPollenForBeezzer {
         return pollenShortDTOs;
     }
 
-    private List<PollenInfoDTO> pollenInfoDTOList(Long beezzerId){
-        return pollenInfoDTOList(beezzerId, (Date) null);
-    }
-
-    private List<PollenInfoDTO> pollenInfoDTOList(Long beezzerId, String date) {
-        Date dateParsed = null;
-        try{
-            dateParsed = parseDate(date);
-        } catch (Exception e) {
-            logger.log(Level.WARNING, "Unable to parse date");
-        }
-        return pollenInfoDTOList(beezzerId, dateParsed);
-    }
-
     // getIndex for a specific beezzer
     public List<PollenInfoDTO> getIndex(@NotNull Long beezzerId) {
-        return pollenInfoDTOList(beezzerId);
+        return pollenInfoDTOList(beezzerId, null);
     }
 
     // getIndex for a specific beezzer and date
-    public List<PollenInfoDTO> getIndex(String stringDate, @NotNull Long beezzerId) {
+    public List<PollenInfoDTO> getIndexForDate(@NotNull Long beezzerId, String stringDate) {
+        Date dateParsed = null;
+        try{
+            dateParsed = parseDate(stringDate);
+        } catch (Exception e) {
+            logger.log(Level.WARNING, "Unable to parse date");
+            return new ArrayList<>();
+        }
         logger.log(Level.INFO, "Retrieving pollen for a specific date {0}", stringDate);
-        return pollenInfoDTOList(beezzerId, stringDate);
+        return pollenInfoDTOList(beezzerId, dateParsed);
     }
 }

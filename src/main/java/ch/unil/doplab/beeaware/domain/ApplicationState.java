@@ -58,8 +58,9 @@ public class ApplicationState {
             beezzerService.addBeezzer(ony);
             beezzerService.addAllergen("Grasses", ony.getId());
             beezzerService.addAllergen("Weed", ony.getId());
+            beezzerService.addAllergen("Mugwort", ony.getId());
 
-            Location locationAlb = new Location(41389, "ES");
+            Location locationAlb = new Location(41001, "ES");
             locationService.addOrCreateLocation(locationAlb);
             Beezzer alb = new Beezzer("alb", "alb@unil.ch", PasswordUtilis.hashPassword("Q.-wDw123"), location, Role.ADMIN);
             beezzerService.addBeezzer(alb);

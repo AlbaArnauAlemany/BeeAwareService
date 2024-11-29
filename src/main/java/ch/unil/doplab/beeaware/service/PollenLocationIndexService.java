@@ -19,11 +19,11 @@ public class PollenLocationIndexService {
     private Logger logger = Logger.getLogger(PollenLocationIndexService.class.getName());
 
     public boolean addPollenLocationIndex(@NotNull PollenLocationIndex pollenLocationIndex) {
-        for (Map.Entry<Long, PollenLocationIndex> pil : pollenLocationIndexMap.entrySet()) {
-            if (pil.getValue().getLocation() != null && pil.getValue().getLocation().equals(pollenLocationIndex.getLocation()) && pil.getValue().getDisplayName().equals(pollenLocationIndex.getDisplayName())) {
+        for (PollenLocationIndex pil : pollenLocationIndexMap.values()) {
+            if (pil.getLocation() != null && pil.getLocation().equals(pollenLocationIndex.getLocation()) && pil.getDisplayName().equals(pollenLocationIndex.getDisplayName())) {
                 logger.log(Level.WARNING, "pollenLocationIndex already exists: {0}", pollenLocationIndex);
-                if (Utils.isSameDate(pil.getValue().getDate(), pollenLocationIndex.getDate())) {
-                    pollenLocationIndexMap.put(pil.getValue().getId(), pollenLocationIndex);
+                if (Utils.isSameDate(pil.getDate(), pollenLocationIndex.getDate())) {
+                    pollenLocationIndexMap.put(pil.getId(), pollenLocationIndex);
                     return false;
                 }
             }
