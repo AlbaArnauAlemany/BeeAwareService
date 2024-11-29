@@ -48,8 +48,8 @@ public class SymptomResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
     @SameID
-    @Path("/{id}/date/{date}")
-    public SymptomsDTO getSymptomForDate(@PathParam("id") Long id, @PathParam("date") String stringDate) {
+    @Path("/{id}/date")
+    public SymptomsDTO getSymptomForDate(@PathParam("id") Long id, @QueryParam("date") String stringDate) {
         return state.getSymptomService().getSymptomForDate(id, stringDate);
     }
 
