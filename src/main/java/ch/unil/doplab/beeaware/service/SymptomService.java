@@ -24,24 +24,6 @@ public class SymptomService {
     private Long idSymptom = 0L;
     private Logger logger = Logger.getLogger(SymptomService.class.getName());
 
-    // Without date
-    public Symptom createSymptom(int reaction, boolean antihistamine, Long beezzerId, String date) {
-        if (reaction <= 5 && reaction >= 0) {
-            Date dateParsed = null;
-            try {
-                dateParsed = parseDate(date);
-            } catch (ParseException e) {
-                throw new RuntimeException("Unable to parse date. " + e);
-            }
-            Symptom symptom = new Symptom(beezzerId, reaction, antihistamine, dateParsed);
-            addSymptom(symptom);
-            return symptom;
-        } else {
-            logger.log(Level.SEVERE, "The symptom's reaction needs to be between 0 and 5, symptom not created.");
-            return null;
-        }
-    }
-
     public boolean addSymptom(@NotNull Symptom symptom) {
         if (symptom.getDate() == null) {
             symptom.setDate(new Date());
