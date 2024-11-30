@@ -21,7 +21,6 @@ public class SymptomResource {
     @POST
     @Secured
     @Path("/add")
-    @SameID
     public boolean addSymptom(Symptom symptom) {
         return state.getSymptomService().addSymptom(symptom);
     }
