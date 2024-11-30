@@ -695,7 +695,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"antihistamine\": true,\r\n    \"date\": \"2024-11-17T15:49:19.219Z[UTC]\",\r\n    \"reaction\": \"MODERATE_REACTION\",\r\n    \"beezzerId\": 0\r\n}",
+							"raw": "{\r\n    \"antihistamine\": true,\r\n    \"date\": \"2024-11-30T10:00.00.219Z[UTC]\",\r\n    \"reaction\": \"MODERATE_REACTION\",\r\n    \"beezzerId\": 0\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -735,7 +735,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/symptom/add/0",
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/symptom/create/0?reaction=2&antihistamine=true&date=21-11-2024",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -745,8 +745,22 @@
 								"BeeAwareService-1.0-SNAPSHOT",
 								"api",
 								"symptom",
-								"add",
+								"create",
 								"0"
+							],
+							"query": [
+								{
+									"key": "reaction",
+									"value": "2"
+								},
+								{
+									"key": "antihistamine",
+									"value": "true"
+								},
+								{
+									"key": "date",
+									"value": "21-11-2024"
+								}
 							]
 						}
 					},
@@ -758,7 +772,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/symptom/0/date/11-14-2020",
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/symptom/0/date?date=28-11-2024",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -769,8 +783,13 @@
 								"api",
 								"symptom",
 								"0",
-								"date",
-								"11-14-2020"
+								"date"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "28-11-2024"
+								}
 							]
 						}
 					},
@@ -804,7 +823,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/symptoms",
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/symptom",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -813,7 +832,7 @@
 							"path": [
 								"BeeAwareService-1.0-SNAPSHOT",
 								"api",
-								"symptoms"
+								"symptom"
 							]
 						}
 					},
