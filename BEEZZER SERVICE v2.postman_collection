@@ -735,7 +735,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/symptom/create/0?reaction=2&antihistamine=true&date=21-11-2024",
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/symptom/create/0?reaction=2&antihistamine=true&date=11-21-2024",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -759,7 +759,7 @@
 								},
 								{
 									"key": "date",
-									"value": "21-11-2024"
+									"value": "11-21-2024"
 								}
 							]
 						}
@@ -772,7 +772,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/symptom/0/date?date=28-11-2024",
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/symptom/0/date?date=11-28-2024",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -788,7 +788,7 @@
 							"query": [
 								{
 									"key": "date",
-									"value": "28-11-2024"
+									"value": "11-28-2024"
 								}
 							]
 						}
