@@ -69,16 +69,21 @@ public class ApplicationState {
                 logger.log(Level.INFO, beezzer.toString());
             }
 
-            Date d3 = new GregorianCalendar(2024, Calendar.FEBRUARY, 11).getTime();
-            Date d4 = new GregorianCalendar(2024, Calendar.FEBRUARY, 15).getTime();
+            Date d1 = new GregorianCalendar(2024, Calendar.NOVEMBER, 23).getTime();
+            Date d2 = new GregorianCalendar(2024, Calendar.NOVEMBER, 24).getTime();
+            Date d3 = new GregorianCalendar(2024, Calendar.NOVEMBER, 25).getTime();
+            Date d4 = new GregorianCalendar(2024, Calendar.NOVEMBER, 26).getTime();
+            Date d5 = new GregorianCalendar(2024, Calendar.NOVEMBER, 27).getTime();
+            Date d6 = new GregorianCalendar(2024, Calendar.NOVEMBER, 28).getTime();
+            Date d7 = new GregorianCalendar(2024, Calendar.NOVEMBER, 29).getTime();
 
-            Symptom symptom1 = new Symptom(ony.getId(), Reaction.HIGH_REACTION, false);
-            Symptom symptom2 = new Symptom(ony.getId(), Reaction.MODERATE_REACTION, false);
-            Symptom symptom3 = new Symptom(ony.getId(), Reaction.LOW_REACTION, true);
-            Symptom symptom4 = new Symptom(ony.getId(), ch.unil.doplab.beeaware.Domain.Reaction.LOW_REACTION, true);
-
-            symptom3.setDate(d3);
-            symptom4.setDate(d4);
+            Symptom symptom1 = new Symptom(ony.getId(), 4, false, d1);
+            Symptom symptom2 = new Symptom(ony.getId(), 3, false, d2);
+            Symptom symptom3 = new Symptom(ony.getId(), 2, true, d3);
+            Symptom symptom4 = new Symptom(ony.getId(), 2, true, d4);
+            Symptom symptom5 = new Symptom(ony.getId(), 5, false, d5);
+            Symptom symptom6 = new Symptom(ony.getId(), 3, false, d6);
+            Symptom symptom7 = new Symptom(ony.getId(), 1, true, d7);
 
             Date now = new Date();
             Calendar calendar = Calendar.getInstance();
@@ -92,6 +97,9 @@ public class ApplicationState {
             symptomService.addSymptom(symptom2);
             symptomService.addSymptom(symptom3);
             symptomService.addSymptom(symptom4);
+            symptomService.addSymptom(symptom5);
+            symptomService.addSymptom(symptom6);
+            symptomService.addSymptom(symptom7);
 
             for (SymptomsDTO symptom : symptomService.getSymptom(ony.getId())) {
                 System.out.println(symptom);

@@ -25,11 +25,15 @@ public class SymptomService {
     private Logger logger = Logger.getLogger(SymptomService.class.getName());
 
     // Without date
-    public Symptom createSymptom(int reactionValue, boolean antihistamine, Long beezzerId) {
-        Reaction reaction = fromValue(reactionValue);
-        Symptom symptom = new Symptom(beezzerId, reaction, antihistamine);
-        addSymptom(symptom);
-        return symptom;
+    public Symptom createSymptom(int reaction, boolean antihistamine, Long beezzerId) {
+        if (reaction <= 5 && reaction >= 0) {
+            Symptom symptom = new Symptom(beezzerId, reaction, antihistamine);
+            addSymptom(symptom);
+            return symptom;
+        } else {
+            logger.log(Level.SEVERE, "The symptom's reaction needs to be between 0 and 5, symptom not created.");
+            return null;
+        }
     }
 
     public boolean addSymptom(@NotNull Symptom symptom) {
@@ -55,8 +59,8 @@ public class SymptomService {
     public List<SymptomsDTO> getAllSymptoms() {
         logger.log( Level.INFO, "Searching for all registered symptoms...");
         List<SymptomsDTO> symptomsList = new ArrayList<>();
-        for (Map.Entry<Long, Symptom> sym: symptoms.entrySet()) {
-                symptomsList.add(new SymptomsDTO(sym.getValue()));
+        for (Symptom sym: symptoms.values()) {
+                symptomsList.add(new SymptomsDTO(sym));
         }
         return symptomsList;
     }
@@ -64,9 +68,9 @@ public class SymptomService {
     public List<SymptomsDTO> getSymptom(@NotNull Long beezzerId) {
         logger.log(Level.INFO, "Searching for Beezzer {0} symptoms...", beezzerId);
         List<SymptomsDTO> symptomsBeezzer = new ArrayList<>();
-        for (Map.Entry<Long, Symptom> sym : symptoms.entrySet()) {
-            if (sym.getValue().getBeezzerId() == beezzerId) {
-                symptomsBeezzer.add(new SymptomsDTO(sym.getValue()));
+        for (Symptom sym : symptoms.values()) {
+            if (sym.getBeezzerId() == beezzerId) {
+                symptomsBeezzer.add(new SymptomsDTO(sym));
                 logger.log(Level.INFO, "Symptom : {0}", symptomsBeezzer.get(symptomsBeezzer.size() - 1));
             }
         }
@@ -77,9 +81,9 @@ public class SymptomService {
         try {
             Date date = parseDate(stringDate);
             logger.log(Level.INFO, "Searching symptom for Beezzer {0} for the following day: {1}...", new Object[]{String.valueOf(beezzerId), String.valueOf(date)});
-            for (Map.Entry<Long, Symptom> sym : symptoms.entrySet()) {
-                if (beezzerId.equals(sym.getValue().getBeezzerId()) && Utils.isSameDate(sym.getValue().getDate(), date)) {
-                    return new SymptomsDTO(sym.getValue());
+            for (Symptom sym : symptoms.values()) {
+                if (beezzerId.equals(sym.getBeezzerId()) && Utils.isSameDate(sym.getDate(), date)) {
+                    return new SymptomsDTO(sym);
                 }
             }
             logger.log(Level.WARNING, "Beezzer or date not found");
@@ -96,9 +100,9 @@ public class SymptomService {
             Date dateFrom = parseDate(stringDateFrom);
             Date dateTo = parseDate(stringDateTo);
             logger.log(Level.INFO, "Searching symptom for Beezzer {0} between {1} and {2}...", new Object[]{String.valueOf(beezzerId), stringDateFrom, stringDateTo});
-            for (Map.Entry<Long, Symptom> sym : symptoms.entrySet()) {
-                if (beezzerId.equals(sym.getValue().getBeezzerId()) && Utils.isDateAfter(sym.getValue().getDate(), dateFrom) && isDateBefore(sym.getValue().getDate(), dateTo)) {
-                    symptomsDto.add(new SymptomsDTO(sym.getValue()));
+            for (Symptom sym : symptoms.values()) {
+                if (beezzerId.equals(sym.getBeezzerId()) && Utils.isDateAfter(sym.getDate(), dateFrom) && isDateBefore(sym.getDate(), dateTo)) {
+                    symptomsDto.add(new SymptomsDTO(sym));
                 }
             }
             return symptomsDto;
@@ -118,9 +122,9 @@ public class SymptomService {
 
     public void removeSymptomsForBeezzer(@NotNull Long beezzerId) {
         logger.log(Level.INFO, "Removing Symptom for Beezzer {0}...", beezzerId);
-        for (Map.Entry<Long, Symptom> sym : symptoms.entrySet()) {
-            if (sym.getValue().getBeezzerId().equals(beezzerId)) {
-                removeSymptom(sym.getValue().getId());
+        for (Symptom sym : symptoms.values()) {
+            if (sym.getBeezzerId().equals(beezzerId)) {
+                removeSymptom(sym.getId());
                 return;
             }
         }

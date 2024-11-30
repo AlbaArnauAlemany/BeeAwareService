@@ -66,7 +66,7 @@ public class ExcelWriting {
             Cell birthDateCell = row.createCell(0);
             birthDateCell.setCellValue(symptom.getDate());
             birthDateCell.setCellStyle(cellStyleDate);
-            row.createCell(1).setCellValue(symptom.getLevel().toString());
+            row.createCell(1).setCellValue(symptom.getReaction().toString());
             row.createCell(2).setCellValue(symptom.isAntihistamine());
         }
     }
