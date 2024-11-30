@@ -23,9 +23,9 @@ class ExcelWritingTest {
     void setUp() {
         try{
         symptomsDTOList = Arrays.asList(
-                new SymptomsDTO(Reaction.HIGH_REACTION, true, Utils.parseDate("11-15-2024")),
-                new SymptomsDTO(Reaction.MODERATE_REACTION, false, Utils.parseDate("11-16-2024")),
-                new SymptomsDTO(Reaction.LOW_REACTION, true, Utils.parseDate("11-17-2024"))
+                new SymptomsDTO(Reaction.HIGH_REACTION.getValue(), true, Utils.parseDate("11-15-2024")),
+                new SymptomsDTO(Reaction.MODERATE_REACTION.getValue(), false, Utils.parseDate("11-16-2024")),
+                new SymptomsDTO(Reaction.LOW_REACTION.getValue(), true, Utils.parseDate("11-17-2024"))
         );
         } catch (Exception e){
             assertTrue(true);
@@ -60,7 +60,7 @@ class ExcelWritingTest {
 
             assertNotNull(row, "Row " + (i + 1) + " should be created");
             assertEquals(symptom.getDate(), row.getCell(0).getDateCellValue(), "Date value should match");
-            assertEquals(symptom.getLevel().toString(), row.getCell(1).getStringCellValue(), "Reaction value should match");
+            assertEquals(symptom.getReaction(), row.getCell(1).getNumericCellValue(), "Reaction value should match");
             assertEquals(symptom.isAntihistamine(), row.getCell(2).getBooleanCellValue(), "Antihistamine value should match");
         }
     }
