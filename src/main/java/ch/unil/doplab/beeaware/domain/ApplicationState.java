@@ -57,7 +57,6 @@ public class ApplicationState {
             Beezzer ony = new Beezzer("Ony", "o@unil.ch", PasswordUtilis.hashPassword("Q.-wDw124"), location, Role.BEEZZER);
             beezzerService.addBeezzer(ony);
             beezzerService.addAllergen("Grasses", ony.getId());
-            beezzerService.addAllergen("Weed", ony.getId());
             beezzerService.addAllergen("Mugwort", ony.getId());
 
             Location locationAlb = new Location(41001, "ES");
@@ -69,21 +68,18 @@ public class ApplicationState {
                 logger.log(Level.INFO, beezzer.toString());
             }
 
-            Date d1 = new GregorianCalendar(2024, Calendar.NOVEMBER, 23).getTime();
-            Date d2 = new GregorianCalendar(2024, Calendar.NOVEMBER, 24).getTime();
-            Date d3 = new GregorianCalendar(2024, Calendar.NOVEMBER, 25).getTime();
-            Date d4 = new GregorianCalendar(2024, Calendar.NOVEMBER, 26).getTime();
-            Date d5 = new GregorianCalendar(2024, Calendar.NOVEMBER, 27).getTime();
-            Date d6 = new GregorianCalendar(2024, Calendar.NOVEMBER, 28).getTime();
-            Date d7 = new GregorianCalendar(2024, Calendar.NOVEMBER, 29).getTime();
+            Random random = new Random();
 
-            Symptom symptom1 = new Symptom(ony.getId(), 4, false, d1);
-            Symptom symptom2 = new Symptom(ony.getId(), 3, false, d2);
-            Symptom symptom3 = new Symptom(ony.getId(), 2, true, d3);
-            Symptom symptom4 = new Symptom(ony.getId(), 2, true, d4);
-            Symptom symptom5 = new Symptom(ony.getId(), 5, false, d5);
-            Symptom symptom6 = new Symptom(ony.getId(), 3, false, d6);
-            Symptom symptom7 = new Symptom(ony.getId(), 1, true, d7);
+            List<Date> dates = new ArrayList<>();
+
+            for (int i = 0; i < 10; i++){
+                dates.add(new GregorianCalendar(2024, Calendar.NOVEMBER, 20 + i).getTime());
+            }
+
+            List<Symptom> symptoms = new ArrayList<>();
+            for (int i = 0; i < 10; i++){
+                symptoms.add( new Symptom(ony.getId(), random.nextInt(7), i%2 == 0, dates.get(i)));
+            }
 
             Date now = new Date();
             Calendar calendar = Calendar.getInstance();
@@ -93,13 +89,9 @@ public class ApplicationState {
             Token token = new Token("u7u6m0f9rhvvtml0ibssscagoe", plusTwoHour, 1L, Role.ADMIN);
             tokenService.addToken(token);
 
-            symptomService.addSymptom(symptom1);
-            symptomService.addSymptom(symptom2);
-            symptomService.addSymptom(symptom3);
-            symptomService.addSymptom(symptom4);
-            symptomService.addSymptom(symptom5);
-            symptomService.addSymptom(symptom6);
-            symptomService.addSymptom(symptom7);
+            for (int i = 0; i < 10; i++){
+                symptomService.addSymptom(symptoms.get(i));
+            }
 
             for (SymptomsDTO symptom : symptomService.getSymptom(ony.getId())) {
                 System.out.println(symptom);
@@ -108,6 +100,11 @@ public class ApplicationState {
 
             logger.log(Level.INFO, "Forecasting pollen information for all locations...");
             foreCastService.forecastAllLocation(locationService.getLocations());
+
+            for (int i = 0; i < 10; i++){
+                pollenLocationIndexService.addPollenLocationIndex( new PollenLocationIndex("Grasses", random.nextInt(7), dates.get(i), location, List.of("recommendation example"), "crossReaction example", "indexDescription example"));
+                pollenLocationIndexService.addPollenLocationIndex( new PollenLocationIndex("Mugwort", random.nextInt(7), dates.get(i), location, List.of("recommendation example"), "crossReaction example", "indexDescription example"));
+            }
 
             List<PollenInfoDTO> pollenShortDTOs = indexPollenForBeezzer.getIndex(ony.getId());
             for (PollenInfoDTO pollen : pollenShortDTOs) {

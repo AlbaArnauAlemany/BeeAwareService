@@ -28,6 +28,15 @@ public class IndexPollenForBeezzerResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
     @SameID
+    @Path("/{id}/date/{datefrom}/{dateto}")
+    public List<PollenInfoDTO> getIndexForRangeDate(@PathParam("id") Long id, @PathParam("datefrom") String stringDateFrom, @PathParam("dateto") String stringDateTo) {
+        return state.getIndexPollenForBeezzer().getIndexForRangeDate(id, stringDateFrom, stringDateTo);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    @SameID
     @Path("/date/beezzer/{id}")
     public List<PollenInfoDTO> getIndexForDate(@QueryParam("date") String date, @PathParam("id") Long beezzerId) {
         return state.getIndexPollenForBeezzer().getIndexForDate(beezzerId, date);

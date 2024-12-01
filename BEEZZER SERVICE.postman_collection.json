@@ -470,7 +470,7 @@
 					"response": []
 				},
 				{
-					"name": "Get index for a specific Beezzer Copy",
+					"name": "Get index for a specific Beezzer and Date",
 					"request": {
 						"method": "GET",
 						"header": [],

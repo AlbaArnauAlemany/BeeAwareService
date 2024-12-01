@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "3236faf8-0d23-4f18-bcae-0af77d4efc3b",
+		"_postman_id": "d23d98ea-6f86-4d6b-8aed-3a2290093bd1",
 		"name": "BEEZZER SERVICE",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "39488523"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -114,6 +113,35 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/authentication/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"authentication",
+								"2"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -170,7 +198,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "\r\n{\r\n    \"allergens\": {\r\n        \"8\": {\r\n            \"id\": 8,\r\n            \"pollenNameEN\": \"Grasses\"\r\n        },\r\n        \"11\": {\r\n            \"id\": 11,\r\n            \"pollenNameEN\": \"Weed\"\r\n        }\r\n    },\r\n    \"email\": \"ony@unil.ch\",\r\n    \"id\": 0,\r\n    \"location\": {\r\n        \"NPA\": 1024,\r\n        \"coordinate\": {\r\n            \"latitude\": 46.52851,\r\n            \"longitude\": 6.56057\r\n        },\r\n        \"country\": \"CH\",\r\n        \"id\": 0\r\n    },\r\n    \"password\": \"$2a$12$ggO/WmhsrsdUWZoIooFwCOU9GnPh66r8vEmShHYc.nskD4JYR25Eq\",\r\n    \"role\": \"BEEZZER\",\r\n    \"username\": \"Ony\"\r\n}",
+							"raw": "{\r\n    \"username\":\"hay\",\r\n    \"email\": \"hay@unil.ch\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -178,7 +206,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/setBeezzer",
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/set/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -188,7 +216,8 @@
 								"BeeAwareService-1.0-SNAPSHOT",
 								"api",
 								"beezzers",
-								"setBeezzer"
+								"set",
+								"2"
 							]
 						}
 					},
@@ -301,6 +330,35 @@
 					},
 					"response": []
 				},
+								{
+                					"name": "Add Beezzer allergen",
+                					"request": {
+                						"method": "POST",
+                						"header": [],
+                						"url": {
+                							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/0/allergens?stringPollen=Ragweed",
+                							"protocol": "http",
+                							"host": [
+                								"localhost"
+                							],
+                							"port": "8080",
+                							"path": [
+                								"BeeAwareService-1.0-SNAPSHOT",
+                								"api",
+                								"beezzers",
+                								"0",
+                								"allergens"
+                							],
+                							"query": [
+                								{
+                									"key": "stringPollen",
+                									"value": "Ragweed"
+                								}
+                							]
+                						}
+                					},
+                					"response": []
+                				},
 				{
 					"name": "Get allergens for a Beezzer",
 					"request": {
@@ -324,6 +382,38 @@
 					},
 					"response": []
 				},
+								{
+                					"name": "Set Beezzer allergen",
+                					"request": {
+                						"method": "POST",
+                						"header": [],
+                						"body": {
+                							"mode": "raw",
+                							"raw": "[\r\n    {\r\n        \"pollenNameEN\": \"Tree\"\r\n    },\r\n    {\r\n        \"pollenNameEN\": \"Ragweed\"\r\n    }\r\n]",
+                							"options": {
+                								"raw": {
+                									"language": "json"
+                								}
+                							}
+                						},
+                						"url": {
+                							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/0/allergensset",
+                							"protocol": "http",
+                							"host": [
+                								"localhost"
+                							],
+                							"port": "8080",
+                							"path": [
+                								"BeeAwareService-1.0-SNAPSHOT",
+                								"api",
+                								"beezzers",
+                								"0",
+                								"allergensset"
+                							]
+                						}
+                					},
+                					"response": []
+                				},
 				{
 					"name": "Add Beezzer allergen",
 					"request": {
@@ -353,6 +443,29 @@
 					},
 					"response": []
 				},
+								{
+                					"name": "Get allergens for a Beezzer",
+                					"request": {
+                						"method": "GET",
+                						"header": [],
+                						"url": {
+                							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/0/allergens",
+                							"protocol": "http",
+                							"host": [
+                								"localhost"
+                							],
+                							"port": "8080",
+                							"path": [
+                								"BeeAwareService-1.0-SNAPSHOT",
+                								"api",
+                								"beezzers",
+                								"0",
+                								"allergens"
+                							]
+                						}
+                					},
+                					"response": []
+                				},
 				{
 					"name": "Set Beezzer allergen",
 					"request": {
@@ -368,7 +481,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/0/allergensset",
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/0/setallergensset",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -379,7 +492,72 @@
 								"api",
 								"beezzers",
 								"0",
-								"allergensset"
+								"setallergensset"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/0/password?password=.-Qwer1234",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"beezzers",
+								"0",
+								"password"
+							],
+							"query": [
+								{
+									"key": "password",
+									"value": ".-Qwer1234"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check if beezzer username exists",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/beezzers/username?username=ony",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"BeeAwareService-1.0-SNAPSHOT",
+								"api",
+								"beezzers",
+								"username"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "ony"
+								}
 							]
 						}
 					},
@@ -695,7 +873,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"antihistamine\": true,\r\n    \"date\": \"2024-11-30T10:00.00.219Z[UTC]\",\r\n    \"reaction\": \"MODERATE_REACTION\",\r\n    \"beezzerId\": 0\r\n}",
+							"raw": "{\r\n    \"antihistamine\": true,\r\n    \"date\": \"2024-11-17T15:49:19.219Z[UTC]\",\r\n    \"reaction\": \"MODERATE_REACTION\",\r\n    \"beezzerId\": 0\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -735,7 +913,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/symptom/create/0?reaction=2&antihistamine=true&date=11-21-2024",
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/symptom/add/0",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -745,22 +923,8 @@
 								"BeeAwareService-1.0-SNAPSHOT",
 								"api",
 								"symptom",
-								"create",
+								"add",
 								"0"
-							],
-							"query": [
-								{
-									"key": "reaction",
-									"value": "2"
-								},
-								{
-									"key": "antihistamine",
-									"value": "true"
-								},
-								{
-									"key": "date",
-									"value": "11-21-2024"
-								}
 							]
 						}
 					},
@@ -772,7 +936,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/symptom/0/date?date=11-28-2024",
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/symptom/0/date/11-14-2020",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -783,13 +947,8 @@
 								"api",
 								"symptom",
 								"0",
-								"date"
-							],
-							"query": [
-								{
-									"key": "date",
-									"value": "11-28-2024"
-								}
+								"date",
+								"11-14-2020"
 							]
 						}
 					},
@@ -823,7 +982,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/symptom",
+							"raw": "http://localhost:8080/BeeAwareService-1.0-SNAPSHOT/api/symptoms",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -832,7 +991,7 @@
 							"path": [
 								"BeeAwareService-1.0-SNAPSHOT",
 								"api",
-								"symptom"
+								"symptoms"
 							]
 						}
 					},
@@ -860,6 +1019,20 @@
 								"11-20-2024"
 							]
 						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GeoApi",
+			"item": [
+				{
+					"name": "Get coordinates",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": null
 					},
 					"response": []
 				}
