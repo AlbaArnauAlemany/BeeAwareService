@@ -78,7 +78,7 @@ public class ApplicationState {
 
             List<Symptom> symptoms = new ArrayList<>();
             for (int i = 0; i < 10; i++){
-                symptoms.add( new Symptom(ony.getId(), random.nextInt(5), random.nextInt(4)%3 == 0, dates.get(i)));
+                symptoms.add( new Symptom(ony.getId(), random.nextInt(6), random.nextInt(4)%3 == 0, dates.get(i)));
             }
 
             Date now = new Date();
@@ -102,9 +102,9 @@ public class ApplicationState {
 
 
             for (int i = 0; i < 10; i++){
-                pollenLocationIndexService.addPollenLocationIndex( new PollenLocationIndex("Grasses", random.nextInt(5), dates.get(i), location, List.of("recommendation example"), "crossReaction example", "indexDescription example"));
-                pollenLocationIndexService.addPollenLocationIndex( new PollenLocationIndex("Mugwort", random.nextInt(5), dates.get(i), location, List.of("recommendation example"), "crossReaction example", "indexDescription example"));
-                pollenLocationIndexService.addPollenLocationIndex( new PollenLocationIndex("Oak", random.nextInt(5), dates.get(i), location, List.of("recommendation example"), "crossReaction example", "indexDescription example"));
+                pollenLocationIndexService.addPollenLocationIndex( new PollenLocationIndex("Grasses", random.nextInt(6), dates.get(i), location, List.of("recommendation example"), "crossReaction example", "indexDescription example"));
+                pollenLocationIndexService.addPollenLocationIndex( new PollenLocationIndex("Mugwort", random.nextInt(6), dates.get(i), location, List.of("recommendation example"), "crossReaction example", "indexDescription example"));
+                pollenLocationIndexService.addPollenLocationIndex( new PollenLocationIndex("Oak", random.nextInt(6), dates.get(i), location, List.of("recommendation example"), "crossReaction example", "indexDescription example"));
             }
 
             List<PollenInfoDTO> pollenShortDTOs = indexPollenForBeezzer.getIndex(ony.getId());
