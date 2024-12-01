@@ -40,7 +40,7 @@ public class DailyTaskService {
         logger.log(Level.INFO, "Next run {0}", nextRun);
         if (now.compareTo(nextRun) > 0) {
             nextRun = nextRun.plusDays(1);
-            foreCastService.forecastAllLocation(locationService.getLocations());
+//            foreCastService.forecastAllLocation(locationService.getLocations());
         }
 
         long initialDelay = TimeUnit.MILLISECONDS.convert(nextRun.toEpochSecond() - now.toEpochSecond(), TimeUnit.SECONDS);
@@ -50,7 +50,7 @@ public class DailyTaskService {
     public boolean runDailyTask() {
         try {
             logger.log(Level.INFO, "Start scheduled forecast at {0}", new Date());
-            foreCastService.forecastAllLocation(locationService.getLocations());
+//            foreCastService.forecastAllLocation(locationService.getLocations());
             return true;
         } catch (Exception e) {
             logger.log(Level.WARNING, "Error force forecasting all locations : \n{0}", e.getStackTrace());
