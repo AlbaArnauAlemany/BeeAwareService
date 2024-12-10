@@ -1,17 +1,39 @@
-version: '3.3' # specify docker-compose version
-
-# Define the services/containers to be run
+version: '3.9'
 services:
+  mysql:
+    image: mysql:8.0.33
+    container_name: soar-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: beeaware
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: secret
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - soar-network
+
   payara:
     image: payara/server-full
+    container_name: soar-payara
+    environment:
+      PAYARA_PASSWORD: admin
     ports:
       - "8080:8080"
       - "8181:8181" # HTTPS listener
-      - "4848:4848" # HTTPS admin listener
+      - "4848:4848"
       - "9009:9009" # Debug port
-    restart: always
-#    environment:
-#    JVM_ARGS: ""
-#     - "AS_ADMIN_MASTERPASSWORD=admin" #default password is `changeit`
     volumes:
-      - ./deployments:/opt/payara/deployments
+      - ./scripts/pre-boot-commands-final.asadmin:/opt/payara/config/pre-boot-commands-final.asadmin
+      - ./scripts/post-boot-commands-final.asadmin:/opt/payara/config/post-boot-commands-final.asadmin
+      - ./lib/mysql-connector-j-8.0.33.jar:/opt/payara/appserver/glassfish/lib/mysql-connector-j-8.0.33.jar
+    networks:
+      - soar-network
+
+volumes:
+  mysql-data:
+
+networks:
+  soar-network:

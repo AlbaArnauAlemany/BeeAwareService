@@ -1,0 +1,7 @@
+create-jdbc-connection-pool --datasourceclassname com.mysql.cj.jdbc.MysqlDataSource --restype javax.sql.DataSource --property user=admin:password=secret:DatabaseName=beeaware:serverName=soar-mysql:portNumber=3306:allowPublicKeyRetrieval=true:useSSL=false BeeAwarePool
+ping-connection-pool BeeAwarePool
+create-jdbc-resource --connectionpoolid BeeAwarePool jdbc/BeeAwareDS
+
+
+
+
