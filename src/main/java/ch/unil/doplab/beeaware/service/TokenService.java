@@ -1,8 +1,8 @@
 package ch.unil.doplab.beeaware.service;
 
 import ch.unil.doplab.beeaware.Domain.Token;
-import lombok.Getter;
-import lombok.Setter;
+import ch.unil.doplab.beeaware.repository.TokenRepository;
+import lombok.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
@@ -11,29 +11,12 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class TokenService {
-    private Long tokenId = 0L;
-    private Map<Long, Token> tokens = new HashMap<>();
+    private TokenRepository tokenRepository;
     private Logger logger = Logger.getLogger(LocationService.class.getName());
-
-    public void addToken(@NotNull Token token) {
-        logger.log(Level.INFO, "Adding token...");
-        for (Map.Entry<Long, Token> tok : tokens.entrySet()) {
-            if (tok.getValue().getBeezzerId() == token.getBeezzerId()) {
-                if(isDateValide(token)) {
-                    logger.log(Level.WARNING, "Token for beezzer {0} already exists and still valid", tok.getValue().getBeezzerId());
-                    return;
-                } else {
-                    tokens.remove(tok.getKey());
-                }
-            }
-        }
-        tokens.put(tokenId++, token);
-        logger.log(Level.INFO, "New token added : {0}", token);
-        logger.log(Level.INFO, "Token size : {0}", tokens.entrySet().size());
-    }
 
     public boolean isDateValide(Token token) {
         return token.getExpiration().after(new Date());
@@ -43,13 +26,15 @@ public class TokenService {
         return date.after(new Date());
     }
 
+    public TokenService(TokenRepository tokenRepository) {
+        this.tokenRepository = tokenRepository;
+    }
+
     public boolean isAuthorizedToAccess(String token) {
-        for (Map.Entry<Long, Token> tok : tokens.entrySet()) {
-            if (tok.getValue().getKey().equals(token)) {
-                logger.log(Level.INFO, "Valid until : {0}", tok.getValue().getExpiration());
-                if (isDateValide(tok.getValue())) {
-                    return true;
-                }
+        Token tok = tokenRepository.findSpecificKey(token);
+        if(tokenRepository.findSpecificKey(token) != null){
+            if (isDateValide(tok.getExpiration())) {
+                return true;
             }
         }
         logger.log(Level.WARNING, "No valid token for given token");

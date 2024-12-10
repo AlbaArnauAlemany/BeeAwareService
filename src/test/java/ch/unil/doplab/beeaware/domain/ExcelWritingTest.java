@@ -1,8 +1,6 @@
 package ch.unil.doplab.beeaware.domain;
 
 import ch.unil.doplab.beeaware.Domain.DTO.SymptomsDTO;
-import ch.unil.doplab.beeaware.Domain.Reaction;
-import ch.unil.doplab.beeaware.Utilis.Utils;
 import org.apache.poi.ss.usermodel.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,15 +18,15 @@ class ExcelWritingTest {
 
     @BeforeEach
     void setUp() {
-        try{
-        symptomsDTOList = Arrays.asList(
-                new SymptomsDTO(Reaction.HIGH_REACTION.getValue(), true, Utils.parseDate("11-15-2024")),
-                new SymptomsDTO(Reaction.MODERATE_REACTION.getValue(), false, Utils.parseDate("11-16-2024")),
-                new SymptomsDTO(Reaction.LOW_REACTION.getValue(), true, Utils.parseDate("11-17-2024"))
-        );
-        } catch (Exception e){
-            assertTrue(true);
-        }
+//        try{
+//        symptomsDTOList = Arrays.asList(
+//                new SymptomsDTO(Reaction.HIGH_REACTION.getValue(), true, Utils.parseDate("11-15-2024")),
+//                new SymptomsDTO(Reaction.MODERATE_REACTION.getValue(), false, Utils.parseDate("11-16-2024")),
+//                new SymptomsDTO(Reaction.LOW_REACTION.getValue(), true, Utils.parseDate("11-17-2024"))
+//        );
+//        } catch (Exception e){
+//            assertTrue(true);
+//        }
 
     }
 

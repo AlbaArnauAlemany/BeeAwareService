@@ -1,7 +1,9 @@
 package ch.unil.doplab.beeaware.service;
 
+import ch.unil.doplab.beeaware.Domain.Coordinate;
 import ch.unil.doplab.beeaware.Domain.DTO.LocationDTO;
 import ch.unil.doplab.beeaware.Domain.Location;
+import ch.unil.doplab.beeaware.repository.LocationRepository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,13 +22,13 @@ import java.util.logging.Logger;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LocationService {
-    private final Map<Long, Location> locations = new HashMap<>();
-    private Long idLocation = 0L;
     private Logger logger = Logger.getLogger(LocationService.class.getName());
     private GeoApiService geoApiService;
+    private LocationRepository locationRepository;
 
-    public LocationService(GeoApiService geoApiService){
+    public LocationService(LocationRepository locationRepository, GeoApiService geoApiService){
         this();
+        this.locationRepository = locationRepository;
         this.geoApiService = geoApiService;
     }
 
@@ -34,23 +36,21 @@ public class LocationService {
         LocationDTO locationDTO = new LocationDTO(location);
         logger.log(Level.INFO, "Adding location {0}...", locationDTO);
 
-        for (Map.Entry<Long, Location> loc : locations.entrySet()) {
-            if (loc.getValue().equals(location)) {
-                logger.log(Level.WARNING, "Location already exists: {0}", location);
-                return loc.getValue();
-            }
+        if (locationRepository.checkLocation(location.getNPA()) != null) {
+            logger.log(Level.WARNING, "Location already exists: {0}", location);
+            return location;
         }
-
+        Coordinate coordinate;
         try {
-            geoApiService.getCoordinates(location);
+            coordinate = geoApiService.getCoordinates(location);
         } catch (Exception e) {
             logger.log(Level.WARNING, "Error getting coordinates for location: {0}, the location might not exist!", location);
             logger.log(Level.SEVERE, "{0}", e.getStackTrace());
             return null;
         }
 
-        location.setId(idLocation);
-        locations.put(idLocation++, location);
+        location.setCoordinate(coordinate);
+        locationRepository.addLocation(location);
         logger.log(Level.INFO, "New location added : {0}", location);
         return location;
     }
@@ -58,23 +58,25 @@ public class LocationService {
     public List<LocationDTO> getAllRegisteredLocations() {
         logger.log(Level.INFO, "Searching for all registered locations (returns LocationDTO objects)...");
         List<LocationDTO> allLocations = new ArrayList<>();
-        for (Map.Entry<Long, Location> loc : locations.entrySet()) {
-            allLocations.add(new LocationDTO(loc.getValue()));
+        List<Location> locations = locationRepository.findAll();
+        for (Location loc : locations) {
+            allLocations.add(new LocationDTO(loc));
         }
         return allLocations;
     }
 
     public boolean removeLocation(Long idLocation) {
-        var location = locations.get(idLocation);
-        logger.log(Level.INFO, "Removing Location...");
-        if (location == null) {
-            logger.log(Level.WARNING, "Location with ID {0} doesn't exist.", idLocation);
-            return false;
-
-        }
-        var locationDTO = new LocationDTO(location);
-        locations.remove(idLocation);
-        logger.log(Level.INFO, "Location deleted : {0}", locationDTO);
+//        TODO : CORRECT LOCATIONS
+//        var location = locations.get(idLocation);
+//        logger.log(Level.INFO, "Removing Location...");
+//        if (location == null) {
+//            logger.log(Level.WARNING, "Location with ID {0} doesn't exist.", idLocation);
+//            return false;
+//
+//        }
+//        var locationDTO = new LocationDTO(location);
+//        locations.remove(idLocation);
+//        logger.log(Level.INFO, "Location deleted : {0}", locationDTO);
         return true;
     }
 }

@@ -5,8 +5,10 @@ import ch.unil.doplab.beeaware.Domain.DTO.BeezzerDTO;
 import ch.unil.doplab.beeaware.Domain.DTO.LocationDTO;
 import ch.unil.doplab.beeaware.Domain.DTO.PollenDTO;
 import ch.unil.doplab.beeaware.Domain.*;
+import ch.unil.doplab.beeaware.repository.BeezzerRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,48 +26,25 @@ import static ch.unil.doplab.beeaware.Domain.Pollen.getPollenByName;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BeezzerService {
-    private final Map<Long, Beezzer> beezzers = new HashMap<>();
-    private Long idBeezzer = 0L;
+//    private final Map<Long, Beezzer> beezzers = new HashMap<>();
+//    private Long idBeezzer = 0L;
     private Logger logger = Logger.getLogger(BeezzerService.class.getName());
     private ObjectMapper objectMapper = new ObjectMapper();
     private LocationService locationService;
     private SymptomService symptomService;
+    private BeezzerRepository beezzerRepository;
 
     /**
      * Constructs a new instance of BeezzerService with the provided LocationService.
      *
      * @param locationService The LocationService to be used for location-related operations.
      */
-    public BeezzerService(LocationService locationService, SymptomService symptomService){
+    public BeezzerService(BeezzerRepository beezzerRepository, LocationService locationService, SymptomService symptomService){
         this();
         this.locationService = locationService;
         this.symptomService = symptomService;
+        this.beezzerRepository = beezzerRepository;
 
-    }
-
-    /**
-     * Adds a new Beezzer to the system if the username is unique.
-     *
-     * @param beezzer The Beezzer object to be added. Must not be null.
-     */
-    public void addBeezzer(@NotNull Beezzer beezzer) {
-        logger.log(Level.INFO, "Adding Beezzer {0}...", beezzer.getUsername());
-        for (Map.Entry<Long, Beezzer> bee : beezzers.entrySet()) {
-            if (beezzer.getUsername() != null &&
-                    bee.getValue().getUsername() != null &&
-                    beezzer.getUsername().equals(bee.getValue().getUsername())) {
-                logger.log(Level.WARNING, "Username {0} already used. Please try a new one.", beezzer.getUsername());
-                return;
-            }
-        }
-        if (beezzer.getId() == null) {
-            Long newId = idBeezzer++;
-            beezzers.put(newId, beezzer);
-            beezzer.setId(newId);
-        } else {
-            beezzers.put(beezzer.getId(), beezzer);
-        }
-        logger.log(Level.INFO, "New Beezzer added : {0}", beezzer.getUsername());
     }
 
     /**
@@ -77,17 +56,12 @@ public class BeezzerService {
      * @return The found or newly created location.
      */
     public Location searchForLocationAndAddIt(Location location){
-        Location foundLocation = null;
-        for (Map.Entry<Long, Location> loc: locationService.getLocations().entrySet()) {
-            if(loc.getValue().getNPA() == location.getNPA() && loc.getValue().getCountry().equals(location.getCountry())){
-                logger.log(Level.INFO, "Location {0} already exist", location);
-                foundLocation = loc.getValue();
-                break;
-            }
-        }
+        Location foundLocation = locationService.getLocationRepository().checkLocation(location.getNPA());
+
         if (foundLocation == null) {
             logger.log(Level.INFO, "Create new location : {0}", location);
-            foundLocation = locationService.addOrCreateLocation(location);
+            locationService.getLocationRepository().addLocation(location);
+            foundLocation = locationService.getLocationRepository().checkLocation(location.getNPA());
         }
         return foundLocation;
     }
@@ -109,12 +83,12 @@ public class BeezzerService {
 
             beezzer.setLocation(searchForLocationAndAddIt(beezzer.getLocation()));
             beezzer.setRole(Role.BEEZZER);
-
-            for (Map.Entry<Long, Pollen> pollen: beezzer.getAllergens().entrySet()) {
-                addAllergen(pollen.getValue().getPollenNameEN(), idBeezzer);
-            }
+// TODO : TO MODIFY TO ADD ALLERGENS
+//            for (Map.Entry<Long, Pollen> pollen: beezzer.getAllergens().entrySet()) {
+//                addAllergen(pollen.getValue().getPollenNameEN(), idBeezzer);
+//            }
             beezzer.setId(null);
-            addBeezzer(beezzer);
+            beezzerRepository.addBeezzer(beezzer);
 
             return beezzer;
         } catch (Exception e){
@@ -155,8 +129,8 @@ public class BeezzerService {
     public List<BeezzerDTO> getAllBeezzers() {
         logger.log(Level.INFO, "Searching for all registered Beezzers...");
         List<BeezzerDTO> allBeezzers = new ArrayList<>();
-        for (Map.Entry<Long, Beezzer> beezzer : beezzers.entrySet()) {
-            allBeezzers.add(new BeezzerDTO(beezzer.getValue()));
+        for (Beezzer beezzer : beezzerRepository.findAll()) {
+            allBeezzers.add(new BeezzerDTO(beezzer));
         }
         return allBeezzers;
     }
@@ -168,9 +142,9 @@ public class BeezzerService {
      */
     public boolean setBeezzer(Long id,  @NotNull Beezzer beezzer) {
         logger.log(Level.INFO, "Setting Beezzer {0}...", beezzer.getUsername());
-        Beezzer beezzerElement = beezzers.get(id);
+        Beezzer beezzerElement = beezzerRepository.findById(id);
         ObjectUpdater.updateNonNullFields(beezzer, beezzerElement);
-        beezzers.put(beezzer.getId(), beezzerElement);
+        beezzerRepository.updateBeezzer(beezzer);
         return true;
     }
 
@@ -182,7 +156,7 @@ public class BeezzerService {
      * @throws Exception If no Beezzer exists with the specified ID.
      */
     public Beezzer getBeezzerIfExist(Long id) throws NoSuchElementException {
-        Beezzer beezzer = beezzers.get(id);
+        Beezzer beezzer = beezzerRepository.findById(id);
         if (beezzer == null) {
             String errorMessage = "Beezzer with ID " + id + " doesn't exist.";
             logger.log(Level.WARNING, errorMessage);
@@ -198,14 +172,7 @@ public class BeezzerService {
      * @return True if beezzer exists.
      */
     public boolean isBeezzerExistByUsername(String beezzerUsername) {
-        for (Map.Entry<Long, Beezzer> bee : beezzers.entrySet()) {
-            if (bee.getValue().getUsername() != null &&
-                    beezzerUsername.equals(bee.getValue().getUsername())) {
-                logger.log(Level.WARNING, "Username {0} already used. Please try a new one.", beezzerUsername);
-                return true;
-            }
-        }
-        return false;
+        return beezzerRepository.findByUsername(beezzerUsername) != null;
     }
 
     /**
@@ -215,12 +182,7 @@ public class BeezzerService {
      * @return True if the Beezzer exists, false otherwise.
      */
     public boolean beezzerExist(Long id){
-        Beezzer beezzer = beezzers.get(id);
-        if (beezzer == null) {
-            logger.log(Level.WARNING, "Beezzer with ID {0} doesn't exist.", id);
-            return false;
-        }
-        return true;
+        return beezzerRepository.findById(id) != null;
     }
 
 
@@ -237,7 +199,9 @@ public class BeezzerService {
             return false;
         }
         symptomService.removeSymptomsForBeezzer(id);
-        beezzers.remove(id);
+        // TODO : REMOVE BEEZZER
+//        beezzerRepository.findByUsername()
+//        beezzers.remove(id);
         logger.log(Level.INFO, "Beezzer deleted : {0}", id);
         return true;
     }
@@ -271,7 +235,7 @@ public class BeezzerService {
             Beezzer beezzer = getBeezzerIfExist(beezzerId);
             Location location = objectMapper.readValue(jsonLocation, Location.class);
             beezzer.setLocation(searchForLocationAndAddIt(location));
-            beezzers.put(beezzer.getId(), beezzer);
+            beezzerRepository.updateBeezzer(beezzer);
             return true;
         } catch (Exception e){
             logger.log(Level.INFO, "Error set location for beezzer : \n{0}", e.getStackTrace());
@@ -333,7 +297,7 @@ public class BeezzerService {
         try {
             Beezzer beezzer = getBeezzerIfExist(idBeezzer);
             beezzer.setPassword(PasswordUtilis.hashPassword(password));
-            beezzers.put(beezzer.getId(), beezzer);
+            beezzerRepository.updateBeezzer(beezzer);
             return true;
         } catch (Exception e){
             logger.log(Level.WARNING, "Error adding new list of allergens");
@@ -365,7 +329,7 @@ public class BeezzerService {
                 allergenSet.put(currentPollen.getId(), currentPollen);
             }
             beezzer.setAllergens(allergenSet);
-            beezzers.put(beezzer.getId(), beezzer);
+            beezzerRepository.updateBeezzer(beezzer);
             return true;
         } catch (Exception e){
             logger.log(Level.WARNING, "Error adding new list of allergens");

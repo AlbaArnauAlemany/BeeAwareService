@@ -3,15 +3,13 @@ package ch.unil.doplab.beeaware.service;
 import ch.unil.doplab.beeaware.Domain.Location;
 import ch.unil.doplab.beeaware.Domain.PollenLocationIndex;
 import ch.unil.doplab.beeaware.Domain.PollenLocationInfo;
+import ch.unil.doplab.beeaware.repository.PollenLocationIndexRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,21 +19,27 @@ import java.util.logging.Logger;
 
 import static ch.unil.doplab.beeaware.Utilis.Utils.transformPollenInfoInPollenIndex;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ForeCastService {
     private String APIKEY;
     private PollenLocationIndexService pollenLocationIndexService;
+    private PollenLocationIndexRepository pollenLocationIndexRepository;
     private final Logger logger = Logger.getLogger(ForeCastService.class.getName());
 
-    public void forecastAllLocation(Map<Long, Location> locations) {
+    public void forecastAllLocation(List<Location> locations) {
         logger.log(Level.INFO, "Retrieving pollen per locations....");
-        for (Map.Entry<Long, Location> loc : locations.entrySet()) {
+        for (Location loc : locations) {
             logger.log(Level.INFO, "Location : {0}", loc);
-            pollenForecast(loc.getValue(), 1);
+            pollenForecast(loc, 1);
         }
+    }
+
+    public ForeCastService(String APIKEY, PollenLocationIndexRepository pollenLocationIndexRepository, PollenLocationIndexService pollenLocationIndexService){
+        this.APIKEY = APIKEY;
+        this.pollenLocationIndexService = pollenLocationIndexService;
+        this.pollenLocationIndexRepository = pollenLocationIndexRepository;
     }
 
     public void pollenForecast(Location location, int days) {

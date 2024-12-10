@@ -5,6 +5,7 @@ import ch.unil.doplab.beeaware.Domain.Beezzer;
 import ch.unil.doplab.beeaware.Domain.Pollen;
 import ch.unil.doplab.beeaware.Domain.PollenLocationIndex;
 import ch.unil.doplab.beeaware.Utilis.Utils;
+import ch.unil.doplab.beeaware.repository.PollenLocationIndexRepository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,11 +29,20 @@ public class IndexPollenForBeezzer {
     private BeezzerService beezzerService;
     private ForeCastService foreCastService;
     private PollenLocationIndexService pollenLocationIndexService;
+    private PollenLocationIndexRepository pollenLocationIndexRepository;
     private final Logger logger = Logger.getLogger(IndexPollenForBeezzer.class.getName());
+
+    public IndexPollenForBeezzer(PollenLocationIndexRepository pollenLocationIndexRepository,BeezzerService beezzerService,ForeCastService foreCastService, PollenLocationIndexService pollenLocationIndexService){
+
+        this.pollenLocationIndexRepository = pollenLocationIndexRepository;
+        this.beezzerService = beezzerService;
+        this.foreCastService = foreCastService;
+        this.pollenLocationIndexService = pollenLocationIndexService;
+    }
 
     private List<PollenInfoDTO> pollenInfoDTOList(Long beezzerId, Date dateFrom, Date dateTo) {
         logger.log(Level.INFO, "Retrieving pollen for a specific Beezzer {0}", beezzerId);
-        Beezzer beezzer = beezzerService.getBeezzers().get(beezzerId);
+        Beezzer beezzer = beezzerService.getBeezzerRepository().findById(beezzerId);
         List<PollenInfoDTO> pollenShortDTOs = new ArrayList<>();
 
         for (PollenLocationIndex pollenLocationIndex : pollenLocationIndexService.getPollenLocationIndexMap().values()) {

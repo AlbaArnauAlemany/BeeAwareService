@@ -80,7 +80,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                     Long requestedBeezzerId = extractBeezzerIdFromRequest(requestContext);
                     logger.log(Level.INFO, "BeezzerID user: {0}", requestedBeezzerId);
 
-                    if (requestedBeezzerId == null || !requestedBeezzerId.equals(currentUserToken.getBeezzerId())) {
+                    if (requestedBeezzerId == null || !requestedBeezzerId.equals(currentUserToken.getBeezzer().getId())) {
                         requestContext.abortWith(Response.status(Response.Status.FORBIDDEN)
                                 .entity("Access denied: Beezzer ID inccorect")
                                 .build());
@@ -129,14 +129,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     }
 
     private Token getTokenIfExist(String token) {
-        for (Map.Entry<Long, Token> tok : state.getTokenService().getTokens().entrySet()) {
-            if (tok.getValue().getKey().equals(token)) {
-                logger.log(Level.INFO, "Valid token : {0}", tok.getValue().getKey());
-                return tok.getValue();
-            }
-        }
-        logger.log(Level.WARNING, "No valid token for given token");
-        return null;
+        return state.getTokenRepository().findSpecificKey(token);
     }
 
     private void validateToken(String token) throws Exception {

@@ -1,19 +1,16 @@
 package ch.unil.doplab.beeaware.service;
 
 import ch.unil.doplab.beeaware.Domain.DTO.SymptomsDTO;
-import ch.unil.doplab.beeaware.Domain.Reaction;
 import ch.unil.doplab.beeaware.Domain.Symptom;
 import ch.unil.doplab.beeaware.Utilis.Utils;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.ParseException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static ch.unil.doplab.beeaware.Domain.Reaction.fromValue;
 import static ch.unil.doplab.beeaware.Utilis.Utils.isDateBefore;
 import static ch.unil.doplab.beeaware.Utilis.Utils.parseDate;
 
@@ -31,7 +28,7 @@ public class SymptomService {
         SymptomsDTO symptomsDTO = new SymptomsDTO(symptom);
         logger.log(Level.INFO, "Adding symptom {0}....", symptomsDTO);
         for (Map.Entry<Long, Symptom> sym : symptoms.entrySet()) {
-            if (Utils.isSameDate(sym.getValue().getDate(), symptom.getDate()) && sym.getValue().getBeezzerId().equals(symptom.getBeezzerId())) {
+            if (Utils.isSameDate(sym.getValue().getDate(), symptom.getDate()) && sym.getValue().getBeezzer().getId().equals(symptom.getBeezzer().getId())) {
                 symptom.setId(sym.getValue().getId());
                 symptoms.put(sym.getValue().getId(), symptom);
                 logger.log(Level.INFO, "Symptom replaced : {0}", symptomsDTO);
@@ -57,7 +54,7 @@ public class SymptomService {
         logger.log(Level.INFO, "Searching for Beezzer {0} symptoms...", beezzerId);
         List<SymptomsDTO> symptomsBeezzer = new ArrayList<>();
         for (Symptom sym : symptoms.values()) {
-            if (sym.getBeezzerId() == beezzerId) {
+            if (sym.getBeezzer().getId() == beezzerId) {
                 symptomsBeezzer.add(new SymptomsDTO(sym));
                 logger.log(Level.INFO, "Symptom : {0}", symptomsBeezzer.get(symptomsBeezzer.size() - 1));
             }
@@ -70,7 +67,7 @@ public class SymptomService {
             Date date = parseDate(stringDate);
             logger.log(Level.INFO, "Searching symptom for Beezzer {0} for the following day: {1}...", new Object[]{String.valueOf(beezzerId), String.valueOf(date)});
             for (Symptom sym : symptoms.values()) {
-                if (beezzerId.equals(sym.getBeezzerId()) && Utils.isSameDate(sym.getDate(), date)) {
+                if (beezzerId.equals(sym.getBeezzer().getId()) && Utils.isSameDate(sym.getDate(), date)) {
                     return new SymptomsDTO(sym);
                 }
             }
@@ -89,7 +86,7 @@ public class SymptomService {
             Date dateTo = parseDate(stringDateTo);
             logger.log(Level.INFO, "Searching symptom for Beezzer {0} between {1} and {2}...", new Object[]{String.valueOf(beezzerId), stringDateFrom, stringDateTo});
             for (Symptom sym : symptoms.values()) {
-                if (beezzerId.equals(sym.getBeezzerId()) && Utils.isDateAfter(sym.getDate(), dateFrom) && isDateBefore(sym.getDate(), dateTo)) {
+                if (beezzerId.equals(sym.getBeezzer().getId()) && Utils.isDateAfter(sym.getDate(), dateFrom) && isDateBefore(sym.getDate(), dateTo)) {
                     symptomsDto.add(new SymptomsDTO(sym));
                 }
             }
@@ -102,7 +99,7 @@ public class SymptomService {
 
     public SymptomsDTO getSymptom(@NotNull Long beezzerId, Long idSymptom){
         logger.log( Level.INFO, "Searching symptom for Beezzer {0} symptom: {1}...", new Object[]{String.valueOf(beezzerId), idSymptom});
-        if (beezzerId.equals(symptoms.get(idSymptom).getBeezzerId())) {
+        if (beezzerId.equals(symptoms.get(idSymptom).getBeezzer().getId())) {
             return new SymptomsDTO(symptoms.get(idSymptom));
         }
         return new SymptomsDTO();
@@ -111,7 +108,7 @@ public class SymptomService {
     public void removeSymptomsForBeezzer(@NotNull Long beezzerId) {
         logger.log(Level.INFO, "Removing Symptom for Beezzer {0}...", beezzerId);
         for (Symptom sym : symptoms.values()) {
-            if (sym.getBeezzerId().equals(beezzerId)) {
+            if (sym.getBeezzer().getId().equals(beezzerId)) {
                 removeSymptom(sym.getId());
                 return;
             }
