@@ -1,10 +1,8 @@
 package ch.unil.doplab.beeaware.Utilis;
 
 import ch.unil.doplab.beeaware.Domain.Beezzer;
-import ch.unil.doplab.beeaware.Domain.Symptom;
 import ch.unil.doplab.beeaware.domain.ApplicationState;
 import ch.unil.doplab.beeaware.Domain.Token;
-import ch.unil.doplab.beeaware.repository.TokenRepository;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -14,7 +12,6 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,7 +57,7 @@ public class AuthenticationEndpoint {
         return state.getTokenRepository().findSpecificBeezzer(beezzerId);
     }
 
-    private Token issueToken(Long beezzerId) throws Exception {
+    private Token issueToken(Long beezzerId) {
         Token oldToken = isTokenAlreadyExistForSpecificBeezzer(beezzerId);
         if(oldToken == null) {
             Random random = new SecureRandom();
@@ -71,8 +68,7 @@ public class AuthenticationEndpoint {
             calendar.add(Calendar.HOUR, 2);
             Date plusOneHour = calendar.getTime();
             Beezzer beezzer = state.getBeezzerRepository().findById(beezzerId);
-            Token token = new Token(tokenString, plusOneHour, beezzer, state.getBeezzerRepository().findById(beezzerId).getRole());
-            System.out.println(token);
+            Token token = new Token(tokenString, plusOneHour, beezzer.getId(), beezzer.getRole());
             state.getTokenRepository().addToken(token);
             return token;
         } else {

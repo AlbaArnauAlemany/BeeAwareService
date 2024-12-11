@@ -29,8 +29,8 @@ public class TokenRepository{
             return null;
         }
 
-        TypedQuery<Token> query = entityManager.createQuery("SELECT t FROM Token t WHERE t.beezzer = :beezzer", Token.class);
-        query.setParameter("beezzer", beezzer);
+        TypedQuery<Token> query = entityManager.createQuery("SELECT t FROM Token t WHERE t.beezzerId = :beezzer", Token.class);
+        query.setParameter("beezzer", beezzerId);
         List<Token> tokens = query.getResultList();
         return tokens.isEmpty() ? null : tokens.get(0);
     }

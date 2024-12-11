@@ -29,7 +29,9 @@ import static ch.unil.doplab.beeaware.Domain.Pollen.getPollenByName;
 public class BeezzerService {
     private Logger logger = Logger.getLogger(BeezzerService.class.getName());
     private ObjectMapper objectMapper = new ObjectMapper();
+    @Inject
     private LocationService locationService;
+    @Inject
     private SymptomService symptomService;
     @Inject
     private BeezzerRepository beezzerRepository;
@@ -185,7 +187,7 @@ public class BeezzerService {
         return beezzerRepository.findById(id) != null;
     }
 
-//TODO REMOVE
+//TODO REMOVE operation
 //    /**
 //     * Removes a Beezzer from the system based on the provided beezzer's unique identifier.
 //     * Removing a Beezzer also removes all its registered symptoms.

@@ -1,16 +1,12 @@
 package ch.unil.doplab.beeaware.domain;
 
-import ch.unil.doplab.beeaware.Domain.DTO.PollenInfoDTO;
 import ch.unil.doplab.beeaware.Domain.DTO.SymptomsDTO;
 import ch.unil.doplab.beeaware.Domain.*;
 import ch.unil.doplab.beeaware.repository.*;
 import ch.unil.doplab.beeaware.service.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.Initialized;
 import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -108,7 +104,7 @@ public class ApplicationState {
             calendar.setTime(now);
             calendar.add(Calendar.HOUR, 2);
             Date plusTwoHour = calendar.getTime();
-            Token token = new Token("u7u6m0f9rhvvtml0ibssscagoe", plusTwoHour, beezzerRepository.findById(0L), Role.ADMIN);
+            Token token = new Token("u7u6m0f9rhvvtml0ibssscagoe", plusTwoHour, 1L, Role.ADMIN);
             tokenService.addToken(token);
 
 

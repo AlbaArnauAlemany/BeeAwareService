@@ -4,7 +4,6 @@ import ch.unil.doplab.beeaware.Domain.DTO.SymptomsDTO;
 import ch.unil.doplab.beeaware.Domain.Symptom;
 import ch.unil.doplab.beeaware.Utilis.Utils;
 import ch.unil.doplab.beeaware.repository.SymptomRepository;
-import ch.unil.doplab.beeaware.repository.TokenRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.Getter;
@@ -45,10 +44,12 @@ public class SymptomService {
     public List<SymptomsDTO> getSymptom(@NotNull Long beezzerId) {
         List<Symptom> symptoms = symptomRepository.findAllForSpecificBeezzer(beezzerId);
         List<SymptomsDTO> symptomsList = new ArrayList<>();
-        for (Symptom sym: symptoms) {
-            symptomsList.add(new SymptomsDTO(sym));
-        }
-        return symptomsList;
+        if(symptoms != null && !symptoms.isEmpty()){
+            for (Symptom sym: symptoms) {
+                symptomsList.add(new SymptomsDTO(sym));
+            }
+            return symptomsList;
+        } return null;
     }
 
     public SymptomsDTO getSymptomForDate(@NotNull Long beezzerId, String stringDate) {

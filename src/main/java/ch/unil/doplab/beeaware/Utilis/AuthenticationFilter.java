@@ -14,9 +14,7 @@ import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,7 +32,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     private final Logger logger = Logger.getLogger(AuthenticationFilter.class.getName());
 
     @Override
-    public void filter(ContainerRequestContext requestContext) throws IOException {
+    public void filter(ContainerRequestContext requestContext) {
         // Get the Authorization header from the request
         String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
 
@@ -80,7 +78,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                     Long requestedBeezzerId = extractBeezzerIdFromRequest(requestContext);
                     logger.log(Level.INFO, "BeezzerID user: {0}", requestedBeezzerId);
 
-                    if (requestedBeezzerId == null || !requestedBeezzerId.equals(currentUserToken.getBeezzer().getId())) {
+                    if (requestedBeezzerId == null || !requestedBeezzerId.equals(currentUserToken.getBeezzerId())) {
                         requestContext.abortWith(Response.status(Response.Status.FORBIDDEN)
                                 .entity("Access denied: Beezzer ID inccorect")
                                 .build());

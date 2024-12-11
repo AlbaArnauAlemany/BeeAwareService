@@ -25,7 +25,9 @@ import java.util.logging.Logger;
 @NoArgsConstructor
 public class LocationService {
     private Logger logger = Logger.getLogger(LocationService.class.getName());
+    @Inject
     private GeoApiService geoApiService;
+    @Inject
     private LocationRepository locationRepository;
 
     @Inject

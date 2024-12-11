@@ -48,16 +48,7 @@ public class PollenLocationIndexRepository{
 
     @Transactional
     public void updatePollenLocationIndex(PollenLocationIndex pollenLocationIndex) {
-        EntityTransaction transaction = entityManager.getTransaction();
-        try {
-            transaction.begin();
-            entityManager.merge(pollenLocationIndex);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw e;
-        }
+        entityManager.merge(pollenLocationIndex);
     }
+
 }

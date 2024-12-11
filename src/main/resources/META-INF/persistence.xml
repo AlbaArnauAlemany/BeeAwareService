@@ -16,7 +16,6 @@
 
         <properties>
             <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>
-<!--            <property name="eclipselink.logging.level" value="FINEST"/>-->
         </properties>
     </persistence-unit>
 </persistence>

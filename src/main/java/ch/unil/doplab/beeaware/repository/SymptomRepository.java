@@ -29,14 +29,16 @@ public class SymptomRepository{
     }
 
     public List<Symptom> findAllForSpecificBeezzer(Long id) {
-        TypedQuery<Symptom> query = entityManager.createQuery("SELECT l FROM Symptom l WHERE l.beezzer=:id", Symptom.class);
+        TypedQuery<Symptom> query = entityManager.createQuery(
+                "SELECT l FROM Symptom l WHERE l.beezzer.id = :id", Symptom.class
+        );
         query.setParameter("id", id);
-        List<Symptom> symptoms = query.getResultList();
-        return symptoms.isEmpty() ? symptoms : null;
+        return query.getResultList(); // Retourne une liste vide si aucun résultat
     }
 
+
     public Symptom findAllForSpecificBeezzerAndId(Long idBeezzer, Long idSymptom) {
-        TypedQuery<Symptom> query = entityManager.createQuery("SELECT l FROM Symptom l WHERE l.id =:idSymptom AND l.beezzer=:idBeezzer", Symptom.class);
+        TypedQuery<Symptom> query = entityManager.createQuery("SELECT l FROM Symptom l WHERE l.id =:idSymptom AND l.beezzer.id=:idBeezzer", Symptom.class);
         query.setParameter("idBeezzer", idBeezzer);
         query.setParameter("idSymptom", idSymptom);
         List<Symptom> symptoms = query.getResultList();
