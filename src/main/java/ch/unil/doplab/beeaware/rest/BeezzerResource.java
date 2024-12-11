@@ -54,13 +54,13 @@ public class BeezzerResource {
         return new BeezzerDTO(state.getBeezzerService().createBeezzerFromJSON(beezzerJson));
     }
 
-    @DELETE
-    @Secured
-    @RoleRequired({Role.ADMIN})
-    @Path("/{id}")
-    public boolean removeBeezzer(@PathParam("id") Long id) {
-        return state.getBeezzerService().removeBeezzer(id);
-    }
+//    @DELETE
+//    @Secured
+//    @RoleRequired({Role.ADMIN})
+//    @Path("/{id}")
+//    public boolean removeBeezzer(@PathParam("id") Long id) {
+//        return state.getBeezzerService().removeBeezzer(id);
+//    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

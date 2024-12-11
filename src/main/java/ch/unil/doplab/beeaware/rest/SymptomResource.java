@@ -21,8 +21,8 @@ public class SymptomResource {
     @POST
     @Secured
     @Path("/add")
-    public boolean addSymptom(Symptom symptom) {
-        return state.getSymptomService().addSymptom(symptom);
+    public void addSymptom(Symptom symptom) {
+        state.getSymptomService().addSymptom(symptom);
     }
 
     @GET
@@ -69,11 +69,11 @@ public class SymptomResource {
     }
 
 
-    @DELETE
-    @Secured
-    @RoleRequired(Role.ADMIN)
-    @Path("/{id}")
-    public boolean removeSymptom(@PathParam("id") Long idSymptom) {
-        return state.getSymptomService().removeSymptom(idSymptom);
-    }
+//    @DELETE
+//    @Secured
+//    @RoleRequired(Role.ADMIN)
+//    @Path("/{id}")
+//    public boolean removeSymptom(@PathParam("id") Long idSymptom) {
+//        return state.getSymptomService().removeSymptom(idSymptom);
+//    }
 }

@@ -24,19 +24,15 @@ public class PollenLocationIndexResource {
     @RoleRequired(Role.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public List<PollenInfoDTO> getAllPollenLocationIndex() {
-        List<PollenInfoDTO> pollenInfoDTOs = new ArrayList<>();
-        for (Map.Entry<Long, PollenLocationIndex> pollenLocationIndex : state.getPollenLocationIndexService().getPollenLocationIndexMap().entrySet()) {
-            pollenInfoDTOs.add(new PollenInfoDTO(pollenLocationIndex.getValue()));
-        }
-        return pollenInfoDTOs;
+        return state.getPollenLocationIndexService().findAllPollenIndexLocation();
     }
 
     @POST
     @Secured
     @RoleRequired(Role.ADMIN)
     @Consumes(MediaType.APPLICATION_JSON)
-    public boolean addPollenLocationIndex(PollenLocationIndex pollenLocationIndex) {
-        return state.getPollenLocationIndexService().addPollenLocationIndex(pollenLocationIndex);
+    public void addPollenLocationIndex(PollenLocationIndex pollenLocationIndex) {
+        state.getPollenLocationIndexService().addPollenLocationIndex(pollenLocationIndex);
     }
 
     @DELETE

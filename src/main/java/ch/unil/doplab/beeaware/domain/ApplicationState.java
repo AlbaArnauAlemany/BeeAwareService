@@ -80,14 +80,14 @@ public class ApplicationState {
             Location location = new Location(41001, "ES");
             locationService.addOrCreateLocation(location);
             Beezzer ony = new Beezzer("Ony", "o@unil.ch", PasswordUtilis.hashPassword("Q.-wDw124"), location, Role.BEEZZER);
-            beezzerRepository.addBeezzer(ony);
+            beezzerService.addBeezzer(ony);
             beezzerService.addAllergen("Grasses", ony.getId());
             beezzerService.addAllergen("Mugwort", ony.getId());
 
             Location locationAlb = new Location(41001, "ES");
             locationService.addOrCreateLocation(locationAlb);
             Beezzer alb = new Beezzer("alb", "alb@unil.ch", PasswordUtilis.hashPassword("Q.-wDw123"), location, Role.ADMIN);
-            beezzerRepository.addBeezzer(alb);
+            beezzerService.addBeezzer(alb);
 
 
             Random random = new Random();
@@ -98,9 +98,9 @@ public class ApplicationState {
                 dates.add(new GregorianCalendar(2024, Calendar.NOVEMBER, 20 + i).getTime());
             }
 
-            List<Symptom> symptoms = new ArrayList<>();
+
             for (int i = 0; i < 10; i++){
-                symptoms.add( new Symptom(ony, random.nextInt(6), random.nextInt(4)%3 == 0, dates.get(i)));
+                symptomService.addSymptom(new Symptom(ony, random.nextInt(6), random.nextInt(4)%3 == 0, dates.get(i)));
             }
 
             Date now = new Date();
@@ -109,11 +109,8 @@ public class ApplicationState {
             calendar.add(Calendar.HOUR, 2);
             Date plusTwoHour = calendar.getTime();
             Token token = new Token("u7u6m0f9rhvvtml0ibssscagoe", plusTwoHour, beezzerRepository.findById(0L), Role.ADMIN);
-            tokenRepository.addToken(token);
+            tokenService.addToken(token);
 
-            for (int i = 0; i < 10; i++){
-                symptomService.addSymptom(symptoms.get(i));
-            }
 
             for (SymptomsDTO symptom : symptomService.getSymptom(ony.getId())) {
                 System.out.println(symptom);
@@ -129,14 +126,6 @@ public class ApplicationState {
                 pollenLocationIndexService.addPollenLocationIndex( new PollenLocationIndex("Oak", random.nextInt(6), dates.get(i), location, "recommendation example", "crossReaction example", "indexDescription example"));
             }
 
-            List<PollenInfoDTO> pollenShortDTOs = indexPollenForBeezzer.getIndex(ony.getId());
-            for (PollenInfoDTO pollen : pollenShortDTOs) {
-                logger.log(Level.INFO, pollen.toString());
-            }
-
-            for (Map.Entry<Long, PollenLocationIndex> pollenLocationIndex : pollenLocationIndexService.getPollenLocationIndexMap().entrySet()) {
-                logger.log(Level.INFO, pollenLocationIndex.toString());
-            }
 
             foreCastService.forecastAllLocation(locationRepository.findAll());
         } catch (Exception e) {

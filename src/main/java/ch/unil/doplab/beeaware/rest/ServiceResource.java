@@ -1,5 +1,6 @@
 package ch.unil.doplab.beeaware.rest;
 
+import ch.unil.doplab.beeaware.Domain.DTO.PollenInfoDTO;
 import ch.unil.doplab.beeaware.Domain.PollenLocationIndex;
 import ch.unil.doplab.beeaware.Domain.Role;
 import ch.unil.doplab.beeaware.Utilis.RoleRequired;
@@ -13,6 +14,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Path("/service")
@@ -33,8 +35,8 @@ public class ServiceResource {
     @Secured
     @RoleRequired(Role.ADMIN)
     @Path("/pollenlocationsindex")
-    public Map<Long, PollenLocationIndex> getPollenLocationIndex() {
-        return state.getPollenLocationIndexService().getPollenLocationIndexMap();
+    public List<PollenInfoDTO> getPollenLocationIndex() {
+        return state.getPollenLocationIndexService().findAllPollenIndexLocation();
     }
 
     @GET

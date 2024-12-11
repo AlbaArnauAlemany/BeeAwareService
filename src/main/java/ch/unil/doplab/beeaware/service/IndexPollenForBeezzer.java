@@ -48,11 +48,11 @@ public class IndexPollenForBeezzer {
 
     private List<PollenInfoDTO> pollenInfoDTOList(Long beezzerId, Date dateFrom, Date dateTo) {
         logger.log(Level.INFO, "Retrieving pollen for a specific Beezzer {0}", beezzerId);
-        Beezzer beezzer = beezzerService.getBeezzerRepository().findById(beezzerId);
+        Beezzer beezzer = beezzerService.getBeezzerIfExist(beezzerId);
         List<PollenInfoDTO> pollenShortDTOs = new ArrayList<>();
 
-        for (PollenLocationIndex pollenLocationIndex : pollenLocationIndexService.getPollenLocationIndexMap().values()) {
-            if (pollenLocationIndex.getLocation().equals(beezzer.getLocation())) {
+        for (PollenInfoDTO pollenLocationIndex : pollenLocationIndexService.findAllPollenIndexLocation()) {
+            if (pollenLocationIndex.getNPA() == beezzer.getLocation().getNPA()) {
                 boolean dateCondition = false;
 
                 if (dateFrom == null && dateTo == null) {
@@ -72,7 +72,7 @@ public class IndexPollenForBeezzer {
                 if (dateCondition) {
                     for (Pollen pollen : beezzer.getAllergens().values()) {
                         if (pollenLocationIndex.getDisplayName().equals(pollen.getPollenNameEN())) {
-                            pollenShortDTOs.add(new PollenInfoDTO(pollenLocationIndex));
+                            pollenShortDTOs.add(pollenLocationIndex);
                         }
                     }
                 }

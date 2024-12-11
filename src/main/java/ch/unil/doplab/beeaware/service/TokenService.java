@@ -34,6 +34,9 @@ public class TokenService {
         this.tokenRepository = tokenRepository;
     }
 
+    public void addToken(Token token){
+        tokenRepository.addToken(token);
+    }
     public boolean isAuthorizedToAccess(String token) {
         Token tok = tokenRepository.findSpecificKey(token);
         if(tokenRepository.findSpecificKey(token) != null){

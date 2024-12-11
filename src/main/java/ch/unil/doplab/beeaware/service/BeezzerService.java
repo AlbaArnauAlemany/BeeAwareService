@@ -27,12 +27,11 @@ import static ch.unil.doplab.beeaware.Domain.Pollen.getPollenByName;
 @NoArgsConstructor
 @ApplicationScoped
 public class BeezzerService {
-//    private final Map<Long, Beezzer> beezzers = new HashMap<>();
-//    private Long idBeezzer = 0L;
     private Logger logger = Logger.getLogger(BeezzerService.class.getName());
     private ObjectMapper objectMapper = new ObjectMapper();
     private LocationService locationService;
     private SymptomService symptomService;
+    @Inject
     private BeezzerRepository beezzerRepository;
 
     /**
@@ -186,26 +185,26 @@ public class BeezzerService {
         return beezzerRepository.findById(id) != null;
     }
 
-
-    /**
-     * Removes a Beezzer from the system based on the provided beezzer's unique identifier.
-     * Removing a Beezzer also removes all its registered symptoms.
-     *
-     * @param id The unique identifier of the Beezzer to be removed.
-     * @return true if the Beezzer was successfully removed, false otherwise.
-     */
-    public boolean removeBeezzer(Long id) {
-        logger.log(Level.INFO, "Removing Beezzer...");
-        if(!beezzerExist(id)){
-            return false;
-        }
-        symptomService.removeSymptomsForBeezzer(id);
-        // TODO : REMOVE BEEZZER
-//        beezzerRepository.findByUsername()
-//        beezzers.remove(id);
-        logger.log(Level.INFO, "Beezzer deleted : {0}", id);
-        return true;
-    }
+//TODO REMOVE
+//    /**
+//     * Removes a Beezzer from the system based on the provided beezzer's unique identifier.
+//     * Removing a Beezzer also removes all its registered symptoms.
+//     *
+//     * @param id The unique identifier of the Beezzer to be removed.
+//     * @return true if the Beezzer was successfully removed, false otherwise.
+//     */
+//    public boolean removeBeezzer(Long id) {
+//        logger.log(Level.INFO, "Removing Beezzer...");
+//        if(!beezzerExist(id)){
+//            return false;
+//        }
+//        symptomService.removeSymptomsForBeezzer(id);
+//        // TODO : REMOVE BEEZZER
+////        beezzerRepository.findByUsername()
+////        beezzers.remove(id);
+//        logger.log(Level.INFO, "Beezzer deleted : {0}", id);
+//        return true;
+//    }
 
     /**
      * Retrieves the location information of a Beezzer given its unique identifier.
@@ -338,6 +337,10 @@ public class BeezzerService {
             logger.log(Level.WARNING, "{0}", e.getStackTrace());
             return false;
         }
+    }
+
+    public void addBeezzer(Beezzer beezzer){
+        beezzerRepository.addBeezzer(beezzer);
     }
 
     /**

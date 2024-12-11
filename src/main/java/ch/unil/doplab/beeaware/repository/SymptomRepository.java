@@ -28,6 +28,21 @@ public class SymptomRepository{
         return query.getResultList();
     }
 
+    public List<Symptom> findAllForSpecificBeezzer(Long id) {
+        TypedQuery<Symptom> query = entityManager.createQuery("SELECT l FROM Symptom l WHERE l.beezzer=:id", Symptom.class);
+        query.setParameter("id", id);
+        List<Symptom> symptoms = query.getResultList();
+        return symptoms.isEmpty() ? symptoms : null;
+    }
+
+    public Symptom findAllForSpecificBeezzerAndId(Long idBeezzer, Long idSymptom) {
+        TypedQuery<Symptom> query = entityManager.createQuery("SELECT l FROM Symptom l WHERE l.id =:idSymptom AND l.beezzer=:idBeezzer", Symptom.class);
+        query.setParameter("idBeezzer", idBeezzer);
+        query.setParameter("idSymptom", idSymptom);
+        List<Symptom> symptoms = query.getResultList();
+        return symptoms.isEmpty() ? symptoms.get(0) : null;
+    }
+
     @Transactional
     public void deleteById(Long id) {
         EntityTransaction transaction = entityManager.getTransaction();
