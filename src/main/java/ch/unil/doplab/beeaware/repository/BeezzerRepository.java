@@ -15,25 +15,12 @@ import java.util.List;
 @Stateless
 public class BeezzerRepository{
     @PersistenceContext(unitName = "BeeAwarePU")
-    private final EntityManager entityManager;
-    public BeezzerRepository(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
+    private EntityManager entityManager;
 
 
     @Transactional
     public void addBeezzer(Beezzer beezzer) {
-        EntityTransaction transaction = entityManager.getTransaction();
-        try {
-            transaction.begin();
-            entityManager.persist(beezzer);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw e; // Repropager l'exception pour gestion
-        }
+        entityManager.persist(beezzer);
     }
     public Beezzer findById(Long id) {
         return entityManager.find(Beezzer.class, id);
@@ -41,7 +28,12 @@ public class BeezzerRepository{
 
     public Beezzer findByUsername(String username) {
         TypedQuery<Beezzer> query = entityManager.createQuery("SELECT b FROM Beezzer b WHERE b.username=:username", Beezzer.class);
-        return query.getResultList().get(0);
+        query.setParameter("username", username);
+        List<Beezzer> bee = query.getResultList();
+        if(bee != null && bee.size() > 0){
+            return bee.get(0);
+        }
+        return null;
     }
 
     public List<Beezzer> findAll() {

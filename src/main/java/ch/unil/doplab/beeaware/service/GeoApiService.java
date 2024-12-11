@@ -9,24 +9,30 @@ import com.google.maps.model.AddressComponent;
 import com.google.maps.model.AddressComponentType;
 import com.google.maps.model.ComponentFilter;
 import com.google.maps.model.GeocodingResult;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@ApplicationScoped
 public class GeoApiService {
-    /**
-     * Creates and configures a GeoApiContext object to use the Google Geocoding API.
-     *
-     * @return A configured GeoApiContext instance with the API key.
-     */
-    private final String APIKEY;
-    private final Logger logger = Logger.getLogger(GeoApiService.class.getName());
 
-    public GeoApiService(String apiKey) {
-        this.APIKEY = apiKey;
+    private String APIKEY = ResourceBundle.getBundle("application").getString("API_KEY");
+    @PostConstruct
+    public void init() {
+        if (APIKEY == null || APIKEY.isEmpty()) {
+            logger.log(Level.SEVERE, "API key is not configured!");
+        }
     }
+
+
+    private final Logger logger = Logger.getLogger(GeoApiService.class.getName());
 
     private GeoApiContext getGeoApiContext() {
         return new GeoApiContext.Builder().apiKey(APIKEY).build();

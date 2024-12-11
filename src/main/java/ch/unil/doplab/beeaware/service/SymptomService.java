@@ -3,7 +3,9 @@ package ch.unil.doplab.beeaware.service;
 import ch.unil.doplab.beeaware.Domain.DTO.SymptomsDTO;
 import ch.unil.doplab.beeaware.Domain.Symptom;
 import ch.unil.doplab.beeaware.Utilis.Utils;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,6 +18,8 @@ import static ch.unil.doplab.beeaware.Utilis.Utils.parseDate;
 
 @Getter
 @Setter
+@ApplicationScoped
+@NoArgsConstructor
 public class SymptomService {
     private final Map<Long, Symptom> symptoms = new HashMap<>();
     private Long idSymptom = 0L;

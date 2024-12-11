@@ -1,5 +1,6 @@
 package ch.unil.doplab.beeaware.repository;
 
+import ch.unil.doplab.beeaware.Domain.Beezzer;
 import ch.unil.doplab.beeaware.Domain.Token;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
@@ -13,32 +14,27 @@ import java.util.List;
 @Stateless
 public class TokenRepository{
     @PersistenceContext(unitName = "BeeAwarePU")
-    private final EntityManager entityManager;
-    public TokenRepository(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
+    private EntityManager entityManager;
     @Transactional
     public void addToken(Token token) {
-        EntityTransaction transaction = entityManager.getTransaction();
-        try {
-            transaction.begin();
-            entityManager.persist(token);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw e;
-        }
+        entityManager.persist(token);
     }
     public Token findById(Long id) {
         return entityManager.find(Token.class, id);
     }
 
-    public Token findSpecificBeezzer(Long id) {
-        TypedQuery<Token> query = entityManager.createQuery("SELECT t FROM Token t WHERE t.beezzer=:id", Token.class);
-        return query.getResultList().get(0);
+    public Token findSpecificBeezzer(Long beezzerId) {
+        Beezzer beezzer = entityManager.find(Beezzer.class, beezzerId);
+        if (beezzer == null) {
+            return null;
+        }
+
+        TypedQuery<Token> query = entityManager.createQuery("SELECT t FROM Token t WHERE t.beezzer = :beezzer", Token.class);
+        query.setParameter("beezzer", beezzer);
+        List<Token> tokens = query.getResultList();
+        return tokens.isEmpty() ? null : tokens.get(0);
     }
+
 
     @Transactional
     public boolean removeToken(Long id) {
@@ -53,6 +49,7 @@ public class TokenRepository{
 
     public Token findSpecificKey(String key) {
         TypedQuery<Token> query = entityManager.createQuery("SELECT t FROM Token t WHERE t.key=:key", Token.class);
+        query.setParameter("key", key);
         return query.getResultList().get(0);
     }
 

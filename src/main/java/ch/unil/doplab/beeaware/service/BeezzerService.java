@@ -8,6 +8,7 @@ import ch.unil.doplab.beeaware.Domain.*;
 import ch.unil.doplab.beeaware.repository.BeezzerRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,8 +24,8 @@ import static ch.unil.doplab.beeaware.Domain.Pollen.getPollenByName;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@ApplicationScoped
 public class BeezzerService {
 //    private final Map<Long, Beezzer> beezzers = new HashMap<>();
 //    private Long idBeezzer = 0L;

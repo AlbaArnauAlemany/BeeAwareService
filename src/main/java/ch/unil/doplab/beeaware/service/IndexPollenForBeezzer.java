@@ -6,6 +6,8 @@ import ch.unil.doplab.beeaware.Domain.Pollen;
 import ch.unil.doplab.beeaware.Domain.PollenLocationIndex;
 import ch.unil.doplab.beeaware.Utilis.Utils;
 import ch.unil.doplab.beeaware.repository.PollenLocationIndexRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,12 +25,16 @@ import static ch.unil.doplab.beeaware.Utilis.Utils.parseDate;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@ApplicationScoped
 public class IndexPollenForBeezzer {
+    @Inject
     private BeezzerService beezzerService;
+    @Inject
     private ForeCastService foreCastService;
+    @Inject
     private PollenLocationIndexService pollenLocationIndexService;
+    @Inject
     private PollenLocationIndexRepository pollenLocationIndexRepository;
     private final Logger logger = Logger.getLogger(IndexPollenForBeezzer.class.getName());
 

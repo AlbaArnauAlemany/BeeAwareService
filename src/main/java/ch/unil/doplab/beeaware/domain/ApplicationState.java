@@ -22,49 +22,56 @@ import java.util.logging.Logger;
 @Getter
 @Setter
 public class ApplicationState {
-    private Map<Long, PollenLocationInfo> PollenLocationIndexArray;
-    private String APIKEY = ResourceBundle.getBundle("application").getString("API_KEY");
-    private Map<Long, Long> allergens;
+    private static final Logger logger = Logger.getLogger(ApplicationState.class.getName());
+
+    @Inject
     private LocationService locationService;
-    private GeoApiService geoApiService;
+
+    @Inject
     private BeezzerService beezzerService;
+
+    @Inject
     private SymptomService symptomService;
+
+    @Inject
     private PollenLocationIndexService pollenLocationIndexService;
+
+    @Inject
     private ForeCastService foreCastService;
+
+    @Inject
     private IndexPollenForBeezzer indexPollenForBeezzer;
+
+    @Inject
     private TokenService tokenService;
+
+    @Inject
     private DailyTaskService dailyTaskService;
 
+    @Inject
     private BeezzerRepository beezzerRepository;
+
+    @Inject
     private LocationRepository locationRepository;
+
+    @Inject
     private PollenLocationIndexRepository pollenLocationIndexRepository;
+
+    @Inject
     private PollenRepository pollenRepository;
+
+    @Inject
     private TokenRepository tokenRepository;
-
-    private Logger logger = Logger.getLogger(ApplicationState.class.getName());
-
-    @PersistenceContext(unitName = "BeeAwarePU")
-    private EntityManager em;
 
     @PostConstruct
     public void init() {
-        beezzerRepository = new BeezzerRepository(em);
-        locationRepository = new LocationRepository(em);
-        pollenLocationIndexRepository = new PollenLocationIndexRepository(em);
-        pollenRepository = new PollenRepository(em);
-        tokenRepository = new TokenRepository(em);
-        geoApiService = new GeoApiService(APIKEY);
-        locationService = new LocationService(locationRepository, geoApiService);
-        symptomService = new SymptomService();
-        beezzerService = new BeezzerService(beezzerRepository, locationService, symptomService);
-        pollenLocationIndexService = new PollenLocationIndexService();
-        foreCastService = new ForeCastService(APIKEY, pollenLocationIndexRepository, pollenLocationIndexService);
-        indexPollenForBeezzer = new IndexPollenForBeezzer(pollenLocationIndexRepository, beezzerService, foreCastService, pollenLocationIndexService);
-        tokenService = new TokenService(tokenRepository);
-        dailyTaskService = new DailyTaskService(foreCastService, pollenLocationIndexService, locationService);
-
-
-        populateApplicationState();
+        try {
+            logger.log(Level.INFO, "Initializing application state...");
+            populateApplicationState();
+            logger.log(Level.INFO, "Application state initialized successfully.");
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error during application state initialization", e);
+        }
     }
 
     private void populateApplicationState() {

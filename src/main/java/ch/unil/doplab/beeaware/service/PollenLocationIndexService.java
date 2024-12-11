@@ -2,6 +2,7 @@ package ch.unil.doplab.beeaware.service;
 
 import ch.unil.doplab.beeaware.Domain.PollenLocationIndex;
 import ch.unil.doplab.beeaware.Utilis.Utils;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +14,7 @@ import java.util.logging.Logger;
 
 @Getter
 @Setter
+@ApplicationScoped
 public class PollenLocationIndexService {
     private Long idPollenLocationIndex = 0L;
     private Map<Long, PollenLocationIndex> pollenLocationIndexMap = new HashMap<>();

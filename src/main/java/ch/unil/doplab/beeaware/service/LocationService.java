@@ -4,6 +4,8 @@ import ch.unil.doplab.beeaware.Domain.Coordinate;
 import ch.unil.doplab.beeaware.Domain.DTO.LocationDTO;
 import ch.unil.doplab.beeaware.Domain.Location;
 import ch.unil.doplab.beeaware.repository.LocationRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,15 +21,15 @@ import java.util.logging.Logger;
 
 @Getter
 @Setter
-@AllArgsConstructor
+@ApplicationScoped
 @NoArgsConstructor
 public class LocationService {
     private Logger logger = Logger.getLogger(LocationService.class.getName());
     private GeoApiService geoApiService;
     private LocationRepository locationRepository;
 
-    public LocationService(LocationRepository locationRepository, GeoApiService geoApiService){
-        this();
+    @Inject
+    public LocationService(LocationRepository locationRepository, GeoApiService geoApiService) {
         this.locationRepository = locationRepository;
         this.geoApiService = geoApiService;
     }

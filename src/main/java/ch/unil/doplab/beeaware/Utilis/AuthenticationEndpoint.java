@@ -1,6 +1,7 @@
 package ch.unil.doplab.beeaware.Utilis;
 
 import ch.unil.doplab.beeaware.Domain.Beezzer;
+import ch.unil.doplab.beeaware.Domain.Symptom;
 import ch.unil.doplab.beeaware.domain.ApplicationState;
 import ch.unil.doplab.beeaware.Domain.Token;
 import ch.unil.doplab.beeaware.repository.TokenRepository;
@@ -71,6 +72,7 @@ public class AuthenticationEndpoint {
             Date plusOneHour = calendar.getTime();
             Beezzer beezzer = state.getBeezzerRepository().findById(beezzerId);
             Token token = new Token(tokenString, plusOneHour, beezzer, state.getBeezzerRepository().findById(beezzerId).getRole());
+            System.out.println(token);
             state.getTokenRepository().addToken(token);
             return token;
         } else {

@@ -13,23 +13,11 @@ import java.util.List;
 @Stateless
 public class PollenLocationIndexRepository{
     @PersistenceContext(unitName = "BeeAwarePU")
-    private final EntityManager entityManager;
-    public PollenLocationIndexRepository(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
+    private EntityManager entityManager;
+
     @Transactional
     public void addPollenLocationIndex(PollenLocationIndex pollenLocationIndex) {
-        EntityTransaction transaction = entityManager.getTransaction();
-        try {
-            transaction.begin();
-            entityManager.persist(pollenLocationIndex);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw e;
-        }
+        entityManager.persist(pollenLocationIndex);
     }
     public PollenLocationIndex findById(Long id) {
         return entityManager.find(PollenLocationIndex.class, id);

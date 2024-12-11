@@ -9,6 +9,8 @@ import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import lombok.*;
 
 import java.io.IOException;
@@ -20,11 +22,13 @@ import java.util.logging.Logger;
 import static ch.unil.doplab.beeaware.Utilis.Utils.transformPollenInfoInPollenIndex;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@ApplicationScoped
 public class ForeCastService {
     private String APIKEY;
+    @Inject
     private PollenLocationIndexService pollenLocationIndexService;
+    @Inject
     private PollenLocationIndexRepository pollenLocationIndexRepository;
     private final Logger logger = Logger.getLogger(ForeCastService.class.getName());
 

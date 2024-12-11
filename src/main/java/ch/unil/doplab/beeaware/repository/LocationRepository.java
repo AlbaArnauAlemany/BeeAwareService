@@ -13,23 +13,11 @@ import java.util.List;
 @Stateless
 public class LocationRepository{
     @PersistenceContext(unitName = "BeeAwarePU")
-    private final EntityManager entityManager;
-    public LocationRepository(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
+    private EntityManager entityManager;
+
     @Transactional
     public void addLocation(Location location) {
-        EntityTransaction transaction = entityManager.getTransaction();
-        try {
-            transaction.begin();
-            entityManager.persist(location);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw e;
-        }
+        entityManager.persist(location);
     }
     public Location findById(Long id) {
         return entityManager.find(Location.class, id);
@@ -39,10 +27,14 @@ public class LocationRepository{
         TypedQuery<Location> query = entityManager.createQuery("SELECT l FROM Location l", Location.class);
         return query.getResultList();
     }
-
     public Location checkLocation(int NPA) {
         TypedQuery<Location> query = entityManager.createQuery("SELECT l FROM Location l WHERE l.NPA=:NPA", Location.class);
-        return query.getResultList().get(0);
+        query.setParameter("NPA", NPA);
+        List<Location> loc = query.getResultList();
+        if (loc != null && loc.size() > 0) {
+            return loc.get(0);
+        }
+        return null;
     }
     @Transactional
     public void deleteById(Long id) {

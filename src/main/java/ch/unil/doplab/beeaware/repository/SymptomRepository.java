@@ -7,29 +7,17 @@ import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Stateless
 public class SymptomRepository{
     @PersistenceContext(unitName = "BeeAwarePU")
-    private final EntityManager entityManager;
-    public SymptomRepository(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
+    private EntityManager entityManager;
     @Transactional
     public void addSymptom(Symptom symptom) {
-        EntityTransaction transaction = entityManager.getTransaction();
-        try {
-            transaction.begin();
-            entityManager.persist(symptom);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw e;
-        }
+        entityManager.persist(symptom);
     }
     public Symptom findById(Long id) {
         return entityManager.find(Symptom.class, id);
