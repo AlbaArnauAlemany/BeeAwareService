@@ -16,6 +16,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Singleton
@@ -61,16 +62,40 @@ public class Utils {
     }
 
     public static List<PollenLocationIndex> transformPollenInfoInPollenIndex(PollenLocationInfo pollenLocationInfo, Location location){
-        List<PollenLocationIndex> pollenLocationIndexList = new ArrayList<>();
-        for (PollenLocationInfo.DailyInfo dailyInfo : pollenLocationInfo.getDailyInfo()) {
-            for (PollenLocationInfo.PollenTypeInfo pollenTypeDailyInfo : dailyInfo.getPollenTypeInfo()) {
-                pollenLocationIndexList.add(new PollenLocationIndex(pollenTypeDailyInfo, formatDate(dailyInfo.getDate()), location));
+        try {
+            List<PollenLocationIndex> pollenLocationIndexList = new ArrayList<>();
+            if (pollenLocationInfo.getDailyInfo() == null || pollenLocationInfo.getDailyInfo().isEmpty()) {
+                logger.log(Level.WARNING, "DailyInfo is null or empty for location: {0}", location);
+                return pollenLocationIndexList;
             }
-            for (PollenLocationInfo.PlantInfo pollenDailyInfo : dailyInfo.getPlantInfo()) {
-                pollenLocationIndexList.add(new PollenLocationIndex(pollenDailyInfo, formatDate(dailyInfo.getDate()), location));
+            System.out.println("pollenLocationInfo");
+            for (PollenLocationInfo.DailyInfo dailyInfo : pollenLocationInfo.getDailyInfo()) {
+                if (dailyInfo.getPollenTypeInfo() != null && !dailyInfo.getPollenTypeInfo().isEmpty()) {
+                    for (PollenLocationInfo.PollenTypeInfo pollenTypeDailyInfo : dailyInfo.getPollenTypeInfo()) {
+                        System.out.println("BEFORE");
+                        System.out.println(pollenTypeDailyInfo);
+                        System.out.println(formatDate(dailyInfo.getDate()));
+                        System.out.println(location);
+                        PollenLocationIndex pol = new PollenLocationIndex(pollenTypeDailyInfo, formatDate(dailyInfo.getDate()), location);
+                        System.out.println(pol);
+                        System.out.println("AFTER");
+                        pollenLocationIndexList.add(new PollenLocationIndex(pollenTypeDailyInfo, formatDate(dailyInfo.getDate()), location));
+                    }
+                }
+                if (dailyInfo.getPlantInfo() != null && !dailyInfo.getPlantInfo().isEmpty()) {
+                    for (PollenLocationInfo.PlantInfo pollenDailyInfo : dailyInfo.getPlantInfo()) {
+                        pollenLocationIndexList.add(new PollenLocationIndex(pollenDailyInfo, formatDate(dailyInfo.getDate()), location));
+                    }
+                }
             }
+            System.out.println("pollenLocationIndexList");
+            System.out.println(pollenLocationIndexList.size());
+            return pollenLocationIndexList;
+        } catch (Exception e){
+            logger.log(Level.INFO, e.getMessage());
+            logger.log(Level.INFO, "{0}", e.getStackTrace()[0]);
+            return null;
         }
-        return pollenLocationIndexList;
     }
 
     public static void printMethodName() {

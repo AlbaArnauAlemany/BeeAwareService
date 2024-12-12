@@ -23,11 +23,20 @@ import java.util.logging.Logger;
 @ApplicationScoped
 public class GeoApiService {
 
-    private String APIKEY = ResourceBundle.getBundle("application").getString("API_KEY");
+    private String APIKEY;
+
     @PostConstruct
     public void init() {
-        if (APIKEY == null || APIKEY.isEmpty()) {
-            logger.log(Level.SEVERE, "API key is not configured!");
+        try {
+            APIKEY = ResourceBundle.getBundle("application").getString("API_KEY");
+
+            if (APIKEY == null || APIKEY.isEmpty()) {
+                logger.log(Level.SEVERE, "API key is not configured!");
+                throw new IllegalStateException("API key is missing. Please configure it in application.properties.");
+            }
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Failed to load API key: {0}", e.getMessage());
+            throw new IllegalStateException("API key configuration failed.", e);
         }
     }
 

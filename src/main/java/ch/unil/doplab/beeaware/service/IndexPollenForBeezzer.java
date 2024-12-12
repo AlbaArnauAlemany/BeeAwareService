@@ -70,7 +70,7 @@ public class IndexPollenForBeezzer {
                 logger.log(Level.INFO, "Condition : {0}", dateCondition);
 
                 if (dateCondition) {
-                    for (Pollen pollen : beezzer.getAllergens().values()) {
+                    for (Pollen pollen : beezzer.getAllergens()) {
                         if (pollenLocationIndex.getDisplayName().equals(pollen.getPollenNameEN())) {
                             pollenShortDTOs.add(pollenLocationIndex);
                         }

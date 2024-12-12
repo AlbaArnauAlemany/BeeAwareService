@@ -58,7 +58,7 @@ public class SymptomService {
             Date date = parseDate(stringDate);
             logger.log(Level.INFO, "Searching symptom for Beezzer {0} for the following day: {1}...", new Object[]{String.valueOf(beezzerId), String.valueOf(date)});
             for (Symptom sym : symptoms) {
-                if (beezzerId.equals(sym.getBeezzer().getId()) && Utils.isSameDate(sym.getDate(), date)) {
+                if (beezzerId.equals(sym.getBeezzerId()) && Utils.isSameDate(sym.getDate(), date)) {
                     return new SymptomsDTO(sym);
                 }
             }
@@ -78,7 +78,7 @@ public class SymptomService {
             Date dateTo = parseDate(stringDateTo);
             logger.log(Level.INFO, "Searching symptom for Beezzer {0} between {1} and {2}...", new Object[]{String.valueOf(beezzerId), stringDateFrom, stringDateTo});
             for (Symptom sym : symptoms) {
-                if (beezzerId.equals(sym.getBeezzer().getId()) && Utils.isDateAfter(sym.getDate(), dateFrom) && isDateBefore(sym.getDate(), dateTo)) {
+                if (beezzerId.equals(sym.getBeezzerId()) && Utils.isDateAfter(sym.getDate(), dateFrom) && isDateBefore(sym.getDate(), dateTo)) {
                     symptomsDto.add(new SymptomsDTO(sym));
                 }
             }

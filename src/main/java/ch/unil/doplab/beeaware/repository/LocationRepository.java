@@ -38,34 +38,14 @@ public class LocationRepository{
     }
     @Transactional
     public void deleteById(Long id) {
-        EntityTransaction transaction = entityManager.getTransaction();
-        try {
-            transaction.begin();
-            Location location = findById(id);
-            if (location != null) {
-                entityManager.remove(location);
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw e;
+        Location location = findById(id);
+        if (location != null) {
+            entityManager.remove(location);
         }
     }
 
     @Transactional
     public void updateLocation(Location location) {
-        EntityTransaction transaction = entityManager.getTransaction();
-        try {
-            transaction.begin();
-            entityManager.merge(location);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw e;
-        }
+        entityManager.merge(location);
     }
 }

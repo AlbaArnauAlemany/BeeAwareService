@@ -83,6 +83,7 @@ public class AuthenticationEndpoint {
     @SameID
     @Path("/{id}")
     public boolean logout(@PathParam("id") Long id) {
-        return state.getTokenRepository().removeToken(id);
+        logger.log(Level.INFO, "Logout process");
+        return state.getTokenService().removeToken(id);
     }
 }

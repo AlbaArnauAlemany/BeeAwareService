@@ -1,5 +1,6 @@
 package ch.unil.doplab.beeaware.service;
 
+import ch.unil.doplab.beeaware.Domain.Beezzer;
 import ch.unil.doplab.beeaware.Domain.Token;
 import ch.unil.doplab.beeaware.repository.TokenRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,6 +19,9 @@ import java.util.logging.Logger;
 public class TokenService {
     @Inject
     private TokenRepository tokenRepository;
+    @Inject
+    private BeezzerService beezzerService;
+
 
     public TokenService() {}
     private Logger logger = Logger.getLogger(LocationService.class.getName());
@@ -34,6 +38,26 @@ public class TokenService {
         this.tokenRepository = tokenRepository;
     }
 
+    public boolean removeToken(Long id){
+        if (id == 0) {
+            System.out.println("No id");
+            return false;
+        }
+        System.out.println("id : " + id);
+        Beezzer beezzer = beezzerService.getBeezzerIfExist(id);
+        if(beezzer == null){
+            System.out.println("No beezzer");
+            return false;
+        }
+        System.out.println("id : " + id);
+        Token token = tokenRepository.findTokenForABeezzer(id);
+        if (token == null) {
+            System.out.println("No token");
+            return false;
+        }
+        System.out.println("token : " + token);
+        return tokenRepository.removeToken(token);
+    }
     public void addToken(Token token){
         tokenRepository.addToken(token);
     }

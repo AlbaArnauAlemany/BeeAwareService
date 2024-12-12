@@ -31,7 +31,6 @@ public class PollenLocationIndexService {
         List<PollenLocationIndex> pollenLocationIndexList = pollenLocationIndexRepository.findAll();
         for (PollenLocationIndex pil : pollenLocationIndexList) {
             if (pil.getLocation() != null && pil.getLocation().equals(pollenLocationIndex.getLocation()) && pil.getDisplayName().equals(pollenLocationIndex.getDisplayName())) {
-                logger.log(Level.WARNING, "pollenLocationIndex already exists: {0}", pollenLocationIndex);
                 if (Utils.isSameDate(pil.getDate(), pollenLocationIndex.getDate())) {
                     pollenLocationIndexRepository.updatePollenLocationIndex(pollenLocationIndex);
                     return;

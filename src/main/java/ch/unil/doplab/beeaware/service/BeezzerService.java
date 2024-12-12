@@ -6,6 +6,7 @@ import ch.unil.doplab.beeaware.Domain.DTO.LocationDTO;
 import ch.unil.doplab.beeaware.Domain.DTO.PollenDTO;
 import ch.unil.doplab.beeaware.Domain.*;
 import ch.unil.doplab.beeaware.repository.BeezzerRepository;
+import ch.unil.doplab.beeaware.repository.PollenRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -35,6 +36,8 @@ public class BeezzerService {
     private SymptomService symptomService;
     @Inject
     private BeezzerRepository beezzerRepository;
+    @Inject
+    private PollenRepository pollenRepository;
 
     /**
      * Constructs a new instance of BeezzerService with the provided LocationService.
@@ -167,6 +170,10 @@ public class BeezzerService {
         return beezzer;
     }
 
+    public Beezzer getBeezzerByUsername(String username) throws NoSuchElementException {
+        return beezzerRepository.findByUsername(username);
+    }
+
     /**
      * Retrieves a Beezzer by its unique username if it exists.
      *
@@ -253,19 +260,36 @@ public class BeezzerService {
      */
 
     public boolean addAllergen(@NotNull String stringPollen, Long idBeezzer) {
-        logger.log( Level.INFO, "Trying to add allergen {0} for Beezzer id {1}...", new Object[]{stringPollen, String.valueOf(idBeezzer)});
         try {
-            Pollen pollen = getPollenByName(stringPollen);
+            logger.log(Level.INFO, "Trying to add allergen {0} for Beezzer id {1}...", new Object[]{stringPollen, idBeezzer});
+
+            Pollen pollen = pollenRepository.findPollenByName(stringPollen);
+            if (pollen == null) {
+                logger.log(Level.WARNING, "Pollen {0} not found in database.", stringPollen);
+                return false;
+            }
+
             Beezzer beezzer = getBeezzerIfExist(idBeezzer);
-            if (beezzer.getAllergens().containsKey(pollen.getId())) {
+            List<Pollen> allergens = beezzer.getAllergens();
+
+            // Vérifie si l'allergène existe déjà
+            if (allergens.stream().anyMatch(a -> a.getId().equals(pollen.getId()))) {
                 logger.log(Level.WARNING, "This allergen is already saved to your list.");
                 return false;
             }
-            beezzer.getAllergens().put(pollen.getId(), pollen);
-            logger.log( Level.INFO, "Allergen {0} for Beezzer {1} correctly added.", new Object[]{pollen.getPollenNameEN(), beezzer.getUsername()});
+
+            // Ajoute l'allergène et met à jour
+            allergens.add(pollen);
+            beezzer.setAllergens(allergens);
+
+            beezzerRepository.updateBeezzer(beezzer);
+
+            logger.log(Level.INFO, "Allergen {0} for Beezzer {1} correctly added.", new Object[]{pollen.getPollenNameEN(), beezzer.getUsername()});
             return true;
-        } catch (Exception e){
+
+        } catch (Exception e) {
             logger.log(Level.WARNING, "Error adding allergen");
+            logger.log(Level.WARNING, e.getMessage());
             return false;
         }
     }
@@ -325,10 +349,10 @@ public class BeezzerService {
             for (Pollen pol: pollens) {
                 logger.log(Level.INFO, "Pollen allergens {0}...", pol);
             }
-            Map<Long, Pollen> allergenSet = new HashMap<>();
+            List<Pollen> allergenSet = new ArrayList<>();
             for (Pollen pollen : pollens) {
-                Pollen currentPollen = getPollenByName(pollen.getPollenNameEN());
-                allergenSet.put(currentPollen.getId(), currentPollen);
+                Pollen currentPollen = pollenRepository.findPollenByName(pollen.getPollenNameEN());
+                allergenSet.add(currentPollen);
             }
             beezzer.setAllergens(allergenSet);
             beezzerRepository.updateBeezzer(beezzer);
@@ -371,25 +395,27 @@ public class BeezzerService {
      * @return True if the allergen was successfully removed, false if the allergen does not exist or an error occurs.
      */
     public boolean removeAllergen(String stringPollen, Long idBeezzer) {
-        logger.log( Level.INFO, "Removing Allergen...");
-        try {
-            Beezzer beezzer = getBeezzerIfExist(idBeezzer);
-            Pollen pollen = getPollenByName(stringPollen);
-            if (pollen == null) {
-                logger.log(Level.WARNING, "This allergen doesn't exist.");
-                return false;
-            }
-            if (beezzer.getAllergens().containsKey(pollen.getId())) {
-                beezzer.getAllergens().remove(pollen.getId());
-                var pollenDTO = new PollenDTO(pollen);
-                logger.log(Level.INFO, "Allergen deleted: {0}", pollenDTO);
-                return true;
-            }
-            logger.log(Level.WARNING, "Error remove allergen");
-            return false;
-        } catch (Exception e){
-            logger.log( Level.INFO, "Error remove allergen {0}\n{1}\n", new Object[]{e.getMessage(), e.getStackTrace()});
-            return false;
-        }
+        // TODO : IMPLEMENT REMOVE
+//        logger.log( Level.INFO, "Removing Allergen...");
+//        try {
+//            Beezzer beezzer = getBeezzerIfExist(idBeezzer);
+//            Pollen pollen = pollenRepository.findPollenByName(stringPollen);
+//            if (pollen == null) {
+//                logger.log(Level.WARNING, "This allergen doesn't exist.");
+//                return false;
+//            }
+//            if (beezzer.getAllergens().containsKey(pollen.getId())) {
+//                beezzer.getAllergens().remove(pollen.getId());
+//                var pollenDTO = new PollenDTO(pollen);
+//                logger.log(Level.INFO, "Allergen deleted: {0}", pollenDTO);
+//                return true;
+//            }
+//            logger.log(Level.WARNING, "Error remove allergen");
+//            return false;
+//        } catch (Exception e){
+//            logger.log( Level.INFO, "Error remove allergen {0}\n{1}\n", new Object[]{e.getMessage(), e.getStackTrace()});
+//            return false;
+//        }
+        return false;
     }
 }

@@ -1,6 +1,7 @@
 package ch.unil.doplab.beeaware.repository;
 
 import ch.unil.doplab.beeaware.Domain.Beezzer;
+import ch.unil.doplab.beeaware.Domain.Pollen;
 import jakarta.ejb.Stateless;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -36,6 +37,17 @@ public class BeezzerRepository{
         return null;
     }
 
+
+    public List<Pollen> findPollensForBeezzer(Long beezzerId) {
+        TypedQuery<Pollen> query = entityManager.createQuery(
+                "SELECT p FROM Beezzer b JOIN b.allergens p WHERE b.id = :beezzerId",
+                Pollen.class
+        );
+        query.setParameter("beezzerId", beezzerId);
+        return query.getResultList();
+    }
+
+
     public List<Beezzer> findAll() {
         TypedQuery<Beezzer> query = entityManager.createQuery("SELECT b FROM Beezzer b", Beezzer.class);
         return query.getResultList();
@@ -43,34 +55,14 @@ public class BeezzerRepository{
 
     @Transactional
     public void deleteById(Long id) {
-        EntityTransaction transaction = entityManager.getTransaction();
-        try {
-            transaction.begin();
-            Beezzer beezzer = findById(id);
-            if (beezzer != null) {
-                entityManager.remove(beezzer);
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw e;
+        Beezzer beezzer = findById(id);
+        if (beezzer != null) {
+            entityManager.remove(beezzer);
         }
     }
 
     @Transactional
     public void updateBeezzer(Beezzer beezzer) {
-        EntityTransaction transaction = entityManager.getTransaction();
-        try {
-            transaction.begin();
             entityManager.merge(beezzer);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw e;
-        }
     }
 }

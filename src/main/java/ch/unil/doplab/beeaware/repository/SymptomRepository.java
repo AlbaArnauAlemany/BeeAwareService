@@ -1,5 +1,6 @@
 package ch.unil.doplab.beeaware.repository;
 
+import ch.unil.doplab.beeaware.Domain.Pollen;
 import ch.unil.doplab.beeaware.Domain.Symptom;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
@@ -30,7 +31,7 @@ public class SymptomRepository{
 
     public List<Symptom> findAllForSpecificBeezzer(Long id) {
         TypedQuery<Symptom> query = entityManager.createQuery(
-                "SELECT l FROM Symptom l WHERE l.beezzer.id = :id", Symptom.class
+                "SELECT l FROM Symptom l WHERE l.beezzerId = :id", Symptom.class
         );
         query.setParameter("id", id);
         return query.getResultList(); // Retourne une liste vide si aucun résultat
@@ -38,43 +39,23 @@ public class SymptomRepository{
 
 
     public Symptom findAllForSpecificBeezzerAndId(Long idBeezzer, Long idSymptom) {
-        TypedQuery<Symptom> query = entityManager.createQuery("SELECT l FROM Symptom l WHERE l.id =:idSymptom AND l.beezzer.id=:idBeezzer", Symptom.class);
+        TypedQuery<Symptom> query = entityManager.createQuery("SELECT l FROM Symptom l WHERE l.id =:idSymptom AND l.beezzerId=:idBeezzer", Symptom.class);
         query.setParameter("idBeezzer", idBeezzer);
         query.setParameter("idSymptom", idSymptom);
         List<Symptom> symptoms = query.getResultList();
-        return symptoms.isEmpty() ? symptoms.get(0) : null;
+        return !symptoms.isEmpty() ? symptoms.get(0) : null;
     }
 
     @Transactional
     public void deleteById(Long id) {
-        EntityTransaction transaction = entityManager.getTransaction();
-        try {
-            transaction.begin();
-            Symptom symptom = findById(id);
-            if (symptom != null) {
-                entityManager.remove(symptom);
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw e;
+        Symptom symptom = findById(id);
+        if (symptom != null) {
+            entityManager.remove(symptom);
         }
     }
 
     @Transactional
     public void updateSymptom(Symptom symptom) {
-        EntityTransaction transaction = entityManager.getTransaction();
-        try {
-            transaction.begin();
-            entityManager.merge(symptom);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw e;
-        }
+        entityManager.merge(symptom);
     }
 }

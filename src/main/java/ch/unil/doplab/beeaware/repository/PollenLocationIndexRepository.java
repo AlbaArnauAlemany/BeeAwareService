@@ -30,19 +30,9 @@ public class PollenLocationIndexRepository{
 
     @Transactional
     public void deleteById(Long id) {
-        EntityTransaction transaction = entityManager.getTransaction();
-        try {
-            transaction.begin();
-            PollenLocationIndex pollenLocationIndex = findById(id);
-            if (pollenLocationIndex != null) {
-                entityManager.remove(pollenLocationIndex);
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw e;
+        PollenLocationIndex pollenLocationIndex = findById(id);
+        if (pollenLocationIndex != null) {
+            entityManager.remove(pollenLocationIndex);
         }
     }
 

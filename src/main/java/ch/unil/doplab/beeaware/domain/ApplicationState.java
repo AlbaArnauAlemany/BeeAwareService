@@ -14,6 +14,8 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static ch.unil.doplab.beeaware.Domain.Pollen.getPredefinedPollens;
+
 @ApplicationScoped
 @Getter
 @Setter
@@ -72,11 +74,16 @@ public class ApplicationState {
 
     private void populateApplicationState() {
         try {
+            for(Pollen pollen : getPredefinedPollens()){
+                pollenRepository.addPollen(pollen);
+            }
             logger.log(Level.SEVERE, "Populating application");
             Location location = new Location(41001, "ES");
             locationService.addOrCreateLocation(location);
             Beezzer ony = new Beezzer("Ony", "o@unil.ch", PasswordUtilis.hashPassword("Q.-wDw124"), location, Role.BEEZZER);
             beezzerService.addBeezzer(ony);
+            ony = beezzerService.getBeezzerByUsername(ony.getUsername());
+            System.out.println(ony);
             beezzerService.addAllergen("Grasses", ony.getId());
             beezzerService.addAllergen("Mugwort", ony.getId());
 
@@ -96,7 +103,7 @@ public class ApplicationState {
 
 
             for (int i = 0; i < 10; i++){
-                symptomService.addSymptom(new Symptom(ony, random.nextInt(6), random.nextInt(4)%3 == 0, dates.get(i)));
+                symptomService.addSymptom(new Symptom(ony.getId(), random.nextInt(6), random.nextInt(4)%3 == 0, dates.get(i)));
             }
 
             Date now = new Date();
@@ -117,13 +124,17 @@ public class ApplicationState {
 
 
             for (int i = 0; i < 10; i++){
-                pollenLocationIndexService.addPollenLocationIndex( new PollenLocationIndex("Grasses", random.nextInt(6), dates.get(i), location, "recommendation example", "crossReaction example", "indexDescription example"));
-                pollenLocationIndexService.addPollenLocationIndex( new PollenLocationIndex("Mugwort", random.nextInt(6), dates.get(i), location, "recommendation example", "crossReaction example", "indexDescription example"));
-                pollenLocationIndexService.addPollenLocationIndex( new PollenLocationIndex("Oak", random.nextInt(6), dates.get(i), location, "recommendation example", "crossReaction example", "indexDescription example"));
+                pollenLocationIndexService.addPollenLocationIndex( new PollenLocationIndex("Grasses", random.nextInt(6), dates.get(i), location, List.of("recommendation example"), "crossReaction example", "indexDescription example"));
+                pollenLocationIndexService.addPollenLocationIndex( new PollenLocationIndex("Mugwort", random.nextInt(6), dates.get(i), location, List.of("recommendation example"), "crossReaction example", "indexDescription example"));
+                pollenLocationIndexService.addPollenLocationIndex( new PollenLocationIndex("Oak", random.nextInt(6), dates.get(i), location, List.of("recommendation example"), "crossReaction example", "indexDescription example"));
             }
 
-
-            foreCastService.forecastAllLocation(locationRepository.findAll());
+            List<Location> locations = locationRepository.findAll();
+            if(locations != null && ! locations.isEmpty()) {
+                foreCastService.forecastAllLocation(locations);
+            } else {
+                logger.log(Level.WARNING, "Locations array is empty...");
+            }
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error during populate users");
             logger.log(Level.SEVERE, "{0}", e.getStackTrace()[0]);

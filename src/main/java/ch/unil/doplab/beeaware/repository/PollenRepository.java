@@ -1,6 +1,7 @@
 package ch.unil.doplab.beeaware.repository;
 
 import ch.unil.doplab.beeaware.Domain.Pollen;
+import ch.unil.doplab.beeaware.Domain.Symptom;
 import jakarta.ejb.Stateless;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -34,34 +35,22 @@ public class PollenRepository{
 
     @Transactional
     public void deleteById(Long id) {
-        EntityTransaction transaction = entityManager.getTransaction();
-        try {
-            transaction.begin();
-            Pollen pollen = findById(id);
-            if (pollen != null) {
-                entityManager.remove(pollen);
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw e;
+        Pollen pollen = findById(id);
+        if (pollen != null) {
+            entityManager.remove(pollen);
         }
     }
 
+    public Pollen findPollenByName(String name) {
+        TypedQuery<Pollen> query = entityManager.createQuery("SELECT p FROM Pollen p WHERE p.pollenNameEN LIKE :name", Pollen.class);
+        query.setParameter("name", name);
+        List<Pollen> pollens = query.getResultList();
+        return !pollens.isEmpty() ? pollens.get(0) : null;
+    }
+
+
     @Transactional
     public void updatePollen(Pollen pollen) {
-        EntityTransaction transaction = entityManager.getTransaction();
-        try {
-            transaction.begin();
-            entityManager.merge(pollen);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw e;
-        }
+        entityManager.merge(pollen);
     }
 }

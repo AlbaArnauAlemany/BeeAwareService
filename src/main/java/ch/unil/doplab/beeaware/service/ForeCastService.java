@@ -16,6 +16,7 @@ import lombok.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,6 +34,18 @@ public class ForeCastService {
     private final Logger logger = Logger.getLogger(ForeCastService.class.getName());
 
     public void forecastAllLocation(List<Location> locations) {
+        try {
+            APIKEY = ResourceBundle.getBundle("application").getString("API_KEY");
+
+            if (APIKEY == null || APIKEY.isEmpty()) {
+                logger.log(Level.SEVERE, "API key is not configured!");
+                throw new IllegalStateException("API key is missing. Please configure it in application.properties.");
+            }
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Failed to load API key: {0}", e.getMessage());
+            throw new IllegalStateException("API key configuration failed.", e);
+        }
+
         logger.log(Level.INFO, "Retrieving pollen per locations....");
         for (Location loc : locations) {
             logger.log(Level.INFO, "Location : {0}", loc);
@@ -60,17 +73,21 @@ public class ForeCastService {
                 String jsonResponse = response.parseAsString();
                 ObjectMapper objectMapper = new ObjectMapper();
                 PollenLocationInfo pollenInfo = objectMapper.readValue(jsonResponse, PollenLocationInfo.class);
-                logger.log(Level.INFO, "{0}", pollenInfo);
                 List<PollenLocationIndex> newPollenLocationInfo = transformPollenInfoInPollenIndex(pollenInfo, location);
-                for (PollenLocationIndex polLocIndex: newPollenLocationInfo) {
-                    pollenLocationIndexService.addPollenLocationIndex(polLocIndex);
+                if(newPollenLocationInfo != null) {
+                    for (PollenLocationIndex polLocIndex : newPollenLocationInfo) {
+                        if (polLocIndex != null) {
+                            pollenLocationIndexService.addPollenLocationIndex(polLocIndex);
+                        }
+                    }
                 }
             } else {
                 logger.log(Level.SEVERE, "Error, coordinate null");
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error pollen Forecasting");
+            logger.log(Level.SEVERE,  e.getMessage());
         }
     }
 }
