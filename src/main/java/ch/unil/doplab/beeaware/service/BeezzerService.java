@@ -393,7 +393,6 @@ public class BeezzerService {
      * @return True if the allergen was successfully removed, false if the allergen does not exist or an error occurs.
      */
     public boolean removeAllergen(String stringPollen, Long idBeezzer) {
-        // TODO : IMPLEMENT REMOVE
         logger.log( Level.INFO, "Removing Allergen...");
         try {
             Beezzer beezzer = getBeezzerIfExist(idBeezzer);
@@ -402,7 +401,7 @@ public class BeezzerService {
                 logger.log(Level.WARNING, "This allergen doesn't exist.");
                 return false;
             }
-            if (beezzer.getAllergens().containsKey(pollen.getId())) {
+            if (beezzer.getAllergens().contains(pollen.getId())) {
                 beezzer.getAllergens().remove(pollen.getId());
                 var pollenDTO = new PollenDTO(pollen);
                 logger.log(Level.INFO, "Allergen deleted: {0}", pollenDTO);
@@ -414,6 +413,5 @@ public class BeezzerService {
             logger.log( Level.INFO, "Error remove allergen {0}\n{1}\n", new Object[]{e.getMessage(), e.getStackTrace()});
             return false;
         }
-        return false;
     }
 }
