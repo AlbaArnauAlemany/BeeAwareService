@@ -56,7 +56,7 @@ public class LocationService {
         location.setCoordinate(coordinate);
         locationRepository.addLocation(location);
         logger.log(Level.INFO, "New location added : {0}", location);
-        return location;
+        return locationRepository.checkLocation(location.getNPA());
     }
 
     public List<LocationDTO> getAllRegisteredLocations() {

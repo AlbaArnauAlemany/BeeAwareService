@@ -88,10 +88,6 @@ public class BeezzerService {
 
             beezzer.setLocation(searchForLocationAndAddIt(beezzer.getLocation()));
             beezzer.setRole(Role.BEEZZER);
-// TODO : TO MODIFY TO ADD ALLERGENS
-//            for (Map.Entry<Long, Pollen> pollen: beezzer.getAllergens().entrySet()) {
-//                addAllergen(pollen.getValue().getPollenNameEN(), idBeezzer);
-//            }
             beezzer.setId(null);
             beezzerRepository.addBeezzer(beezzer);
 
