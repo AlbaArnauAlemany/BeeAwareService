@@ -1,0 +1,35 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Payara 6.20.0" type="PayaraServerConfiguration" factoryName="Remote" APPLICATION_SERVER_NAME="Payara 6.20.0" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
+    <option name="LOCAL" value="false" />
+    <option name="UPDATING_POLICY" value="redeploy-artifacts" />
+    <deployment>
+      <artifact name="BeeAwareService:war">
+        <settings />
+      </artifact>
+    </deployment>
+    <server-settings>
+      <data>
+        <option name="adminServerHost" value="" />
+        <option name="clusterName" value="" />
+        <option name="credentialAlias" value="5682f7d2-b672-4d1b-a389-f5f4f3f9ef78" />
+        <option name="secured" value="true" />
+        <option name="transportHostId" />
+        <credential-alias>5682f7d2-b672-4d1b-a389-f5f4f3f9ef78</credential-alias>
+        <secured>true</secured>
+        <admin-server-host />
+        <cluster-name />
+      </data>
+    </server-settings>
+    <predefined_log_file enabled="true" id="GlassFish" />
+    <RunnerSettings RunnerId="Debug">
+      <option name="DEBUG_PORT" value="50319" />
+      <option name="LOCAL" value="false" />
+    </RunnerSettings>
+    <method v="2">
+      <option name="Make" enabled="true" />
+      <option name="BuildArtifacts" enabled="true">
+        <artifact name="BeeAwareService:war" />
+      </option>
+    </method>
+  </configuration>
+</component>

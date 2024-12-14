@@ -10,7 +10,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.Getter;
 import lombok.Setter;
-import net.datafaker.Faker;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -63,8 +62,7 @@ public class ApplicationState {
     @Inject
     private TokenRepository tokenRepository;
 
-    @Inject
-    private FakeGenerator fakeGenerator;
+    private FakeGenerator fakeGenerator = new FakeGenerator();
 
     @PostConstruct
     public void init() {
@@ -80,16 +78,15 @@ public class ApplicationState {
     private void populateApplicationState() {
         try {
             logger.log(Level.SEVERE, "Populating application");
-            int populate = 1000;
+            int populate = 15;
             Random random = new Random();
-            Faker faker = new Faker();
 
             for(Pollen pollen : getPredefinedPollens()){
                 pollenRepository.addPollen(pollen);
             }
 
             // Populating Locations
-            for (int i = 0; i < 10; i++){
+            for (int i = 0; i < 6; i++){
                 Location location = new Location(41000 + new Random().nextInt(900), "ES");
                 locationService.addOrCreateLocation(location);
             }
@@ -118,11 +115,28 @@ public class ApplicationState {
             Beezzer alb = new Beezzer("alb", "alb@unil.ch", PasswordUtilis.hashPassword("Q.-wDw123"), allLocations.get(random.nextInt(allLocations.size())), Role.ADMIN);
             beezzerService.addBeezzer(alb);
 
-            Calendar calendarSymptom = Calendar.getInstance();
-            calendarSymptom.setTime(new java.util.Date());
+            // Pollen names to go through
+            List<String> pollenNames = Arrays.asList(
+                    "Hazel",
+                    "Alder",
+                    "Ash",
+                    "Birch",
+                    "Cottonwood",
+                    "Oak",
+                    "Olive",
+                    "Pine",
+                    "Grasses",
+                    "Ragweed",
+                    "Mugwort",
+                    "Weed"
+            );
+
+
 
             // Creating 1000 Beezzers
             for (int i = 0; i < populate; i++) {
+                Calendar calendarSymptom = Calendar.getInstance();
+                calendarSymptom.setTime(new java.util.Date());
                 String username = fakeGenerator.generateUsername();
                 Beezzer randomBeezzer = new Beezzer(
                         username,
@@ -131,18 +145,21 @@ public class ApplicationState {
                         allLocations.get(random.nextInt(allLocations.size())),
                         Role.BEEZZER);
                 beezzerService.addBeezzer(randomBeezzer);
-                Beezzer currentBeezzer = beezzerService.getBeezzerByUsername(username);
+//                Beezzer currentBeezzer = beezzerService.getBeezzerByUsername(username);
                 for (int b = 0; b < 3; b++){
                     for (int dayOffset = 1; dayOffset <= 3; dayOffset++) {
-                        calendarSymptom.add(Calendar.DATE, 1);
+                        calendarSymptom.add(Calendar.DATE, -1);
                         java.util.Date targetDate = calendarSymptom.getTime();
                         Symptom randomSymptom = new Symptom(
-                                currentBeezzer.getId(),
+                                i+3L,
                                 random.nextInt(6),
                                 random.nextInt(4)%3 == 0,
                                 targetDate);
                         symptomService.addSymptom(randomSymptom);
                     }
+                }
+                for (int k = 0; k < 2; k++) {
+                    beezzerService.addAllergen(pollenNames.get(random.nextInt(pollenNames.size())), i + 3L);
                 }
             }
 
@@ -162,31 +179,16 @@ public class ApplicationState {
 
             logger.log(Level.INFO, "Forecasting pollen information for all locations...");
 
-            // Pollen names to go through
-            List<String> pollenNames = Arrays.asList(
-                    "Hazel",
-                    "Alder",
-                    "Ash",
-                    "Birch",
-                    "Cottonwood",
-                    "Oak",
-                    "Olive",
-                    "Pine",
-                    "Grasses",
-                    "Ragweed",
-                    "Mugwort",
-                    "Weed"
-            );
 
-            // Today's date
-            calendar.setTime(new java.util.Date());
 
             // Populate the PollenLocationIndex
             for (Location location : allLocations) {
                 for (String pollenName: pollenNames) {
-                    for (int dayOffset = 1; dayOffset <= 3; dayOffset++) {
-                        calendar.add(Calendar.DATE, 1);
-                        java.util.Date targetDate = calendar.getTime();
+                    Calendar calendarNow = Calendar.getInstance();
+                    calendarNow.setTime(new java.util.Date());
+                    for (int dayOffset = 1; dayOffset <= 17; dayOffset++) {
+                        calendarNow.add(Calendar.DATE, -11);
+                        java.util.Date targetDate = calendarNow.getTime();
 
                         PollenLocationIndex randomPollenIndex = new PollenLocationIndex(
                                 pollenName,

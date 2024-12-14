@@ -19,7 +19,8 @@ services:
     image: payara/server-full
     container_name: soar-payara
     environment:
-      PAYARA_PASSWORD: admin
+      # USERNAME : admin
+      PAYARA_PASSWORD: secret
     ports:
       - "8080:8080"
       - "8181:8181" # HTTPS listener

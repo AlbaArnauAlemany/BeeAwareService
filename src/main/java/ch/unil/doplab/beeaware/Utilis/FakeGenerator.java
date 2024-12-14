@@ -1,5 +1,8 @@
 package ch.unil.doplab.beeaware.Utilis;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import net.datafaker.Faker;
 
 import java.util.Arrays;
@@ -8,6 +11,9 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.regex.Pattern;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class FakeGenerator {
 
     private static final List<String> emailDomains = List.of(
@@ -16,7 +22,7 @@ public class FakeGenerator {
     );
 
     // Constants for password generation
-    public static final int MAX_PASSWORD_LENGTH = 128;
+    public static final int MAX_PASSWORD_LENGTH = 32;
     public static final int MIN_PASSWORD_LENGTH = 8;
     public static final int MIN_CATEGORIES_FOR_VALID_PASSWORD = 3;
 
