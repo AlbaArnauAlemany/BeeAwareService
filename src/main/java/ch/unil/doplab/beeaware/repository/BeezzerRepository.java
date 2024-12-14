@@ -71,6 +71,14 @@ public class BeezzerRepository{
     }
 
     @Transactional
+    public void deleteByUsername(String username) {
+        Beezzer beezzer = findByUsername(username);
+        if (beezzer != null) {
+            entityManager.remove(beezzer);
+        }
+    }
+
+    @Transactional
     public void updateBeezzer(Beezzer beezzer) {
             entityManager.merge(beezzer);
     }

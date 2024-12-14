@@ -195,25 +195,23 @@ public class BeezzerService {
     }
 
 //TODO REMOVE operation
-//    /**
-//     * Removes a Beezzer from the system based on the provided beezzer's unique identifier.
-//     * Removing a Beezzer also removes all its registered symptoms.
-//     *
-//     * @param id The unique identifier of the Beezzer to be removed.
-//     * @return true if the Beezzer was successfully removed, false otherwise.
-//     */
-//    public boolean removeBeezzer(Long id) {
-//        logger.log(Level.INFO, "Removing Beezzer...");
-//        if(!beezzerExist(id)){
-//            return false;
-//        }
-//        symptomService.removeSymptomsForBeezzer(id);
-//        // TODO : REMOVE BEEZZER
-////        beezzerRepository.findByUsername()
-////        beezzers.remove(id);
-//        logger.log(Level.INFO, "Beezzer deleted : {0}", id);
-//        return true;
-//    }
+    /**
+     * Removes a Beezzer from the system based on the provided beezzer's unique identifier.
+     * Removing a Beezzer also removes all its registered symptoms.
+     *
+     * @param id The unique identifier of the Beezzer to be removed.
+     * @return true if the Beezzer was successfully removed, false otherwise.
+     */
+    public boolean removeBeezzer(Long id) {
+        logger.log(Level.INFO, "Removing Beezzer...");
+        if(!beezzerExist(id)){
+            return false;
+        }
+        symptomService.removeSymptomsForBeezzer(id);
+        beezzerRepository.deleteById(id);
+        logger.log(Level.INFO, "Beezzer deleted : {0}", id);
+        return true;
+    }
 
     /**
      * Retrieves the location information of a Beezzer given its unique identifier.
@@ -396,26 +394,26 @@ public class BeezzerService {
      */
     public boolean removeAllergen(String stringPollen, Long idBeezzer) {
         // TODO : IMPLEMENT REMOVE
-//        logger.log( Level.INFO, "Removing Allergen...");
-//        try {
-//            Beezzer beezzer = getBeezzerIfExist(idBeezzer);
-//            Pollen pollen = pollenRepository.findPollenByName(stringPollen);
-//            if (pollen == null) {
-//                logger.log(Level.WARNING, "This allergen doesn't exist.");
-//                return false;
-//            }
-//            if (beezzer.getAllergens().containsKey(pollen.getId())) {
-//                beezzer.getAllergens().remove(pollen.getId());
-//                var pollenDTO = new PollenDTO(pollen);
-//                logger.log(Level.INFO, "Allergen deleted: {0}", pollenDTO);
-//                return true;
-//            }
-//            logger.log(Level.WARNING, "Error remove allergen");
-//            return false;
-//        } catch (Exception e){
-//            logger.log( Level.INFO, "Error remove allergen {0}\n{1}\n", new Object[]{e.getMessage(), e.getStackTrace()});
-//            return false;
-//        }
+        logger.log( Level.INFO, "Removing Allergen...");
+        try {
+            Beezzer beezzer = getBeezzerIfExist(idBeezzer);
+            Pollen pollen = pollenRepository.findPollenByName(stringPollen);
+            if (pollen == null) {
+                logger.log(Level.WARNING, "This allergen doesn't exist.");
+                return false;
+            }
+            if (beezzer.getAllergens().containsKey(pollen.getId())) {
+                beezzer.getAllergens().remove(pollen.getId());
+                var pollenDTO = new PollenDTO(pollen);
+                logger.log(Level.INFO, "Allergen deleted: {0}", pollenDTO);
+                return true;
+            }
+            logger.log(Level.WARNING, "Error remove allergen");
+            return false;
+        } catch (Exception e){
+            logger.log( Level.INFO, "Error remove allergen {0}\n{1}\n", new Object[]{e.getMessage(), e.getStackTrace()});
+            return false;
+        }
         return false;
     }
 }

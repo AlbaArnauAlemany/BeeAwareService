@@ -27,7 +27,6 @@ public class PollenLocationIndexService {
     private Logger logger = Logger.getLogger(PollenLocationIndexService.class.getName());
 
     public void addPollenLocationIndex(@NotNull PollenLocationIndex pollenLocationIndex) {
-        //TODO : Peut être amélioré en cherchant que dans la date, pareil pour les autres classes qui regardes les dates comme les symptoms
         List<PollenLocationIndex> pollenLocationIndexList = pollenLocationIndexRepository.findAll();
         for (PollenLocationIndex pil : pollenLocationIndexList) {
             if (pil.getLocation() != null && pil.getLocation().equals(pollenLocationIndex.getLocation()) && pil.getDisplayName().equals(pollenLocationIndex.getDisplayName())) {

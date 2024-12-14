@@ -41,31 +41,4 @@ public class PollenService {
         }
         return pollensList;
     }
-
-
-
-    //TODO REMOVE Pollen
-//    public void removePollensForBeezzer(@NotNull Long beezzerId) {
-//        logger.log(Level.INFO, "Removing Pollen for Beezzer {0}...", beezzerId);
-//        for (Pollen sym : pollens.values()) {
-//            if (sym.getBeezzer().getId().equals(beezzerId)) {
-//                removePollen(sym.getId());
-//                return;
-//            }
-//        }
-//    }
-
-//    public boolean removePollen(Long idPollen) {
-//        var pollen = pollens.get(idPollen);
-//        logger.log(Level.INFO, "Removing Pollen...");
-//        if (pollen == null) {
-//            logger.log(Level.WARNING, "Pollen with ID {0} doesn't exist.", idPollen);
-//            return false;
-//
-//        }
-//        var pollenDTO = new PollenDTO(pollen);
-//        pollens.remove(idPollen);
-//        logger.log(Level.INFO, "Pollen deleted : {0}", pollenDTO);
-//        return true;
-//    }
 }

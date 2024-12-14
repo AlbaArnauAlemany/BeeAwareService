@@ -85,11 +85,13 @@ public class ApplicationState {
                 pollenRepository.addPollen(pollen);
             }
 
-            // Populating Locations
-            for (int i = 0; i < 6; i++){
-                Location location = new Location(41000 + new Random().nextInt(900), "ES");
-                locationService.addOrCreateLocation(location);
-            }
+            // Creating Locations
+            locationService.addOrCreateLocation(new Location(41001, "ES"));
+            locationService.addOrCreateLocation(new Location(11005, "ES"));
+            locationService.addOrCreateLocation(new Location(18010, "ES"));
+            locationService.addOrCreateLocation(new Location(29015, "ES"));
+            locationService.addOrCreateLocation(new Location(14002, "ES"));
+            locationService.addOrCreateLocation(new Location(21002, "ES"));
 
             // Creating manually our admin beezzers
             List<Location> allLocations = locationService.getAllRegisteredLocationsL();

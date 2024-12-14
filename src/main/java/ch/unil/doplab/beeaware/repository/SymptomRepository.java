@@ -1,14 +1,11 @@
 package ch.unil.doplab.beeaware.repository;
 
-import ch.unil.doplab.beeaware.Domain.Pollen;
 import ch.unil.doplab.beeaware.Domain.Symptom;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 

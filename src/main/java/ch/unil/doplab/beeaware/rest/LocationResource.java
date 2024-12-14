@@ -33,12 +33,4 @@ public class LocationResource {
     public List<LocationDTO> getAllLocations() {
         return new LinkedList<>(state.getLocationService().getAllRegisteredLocations());
     }
-
-    @DELETE
-    @Secured
-    @RoleRequired(Role.ADMIN)
-    @Path("/{id}")
-    public boolean removeLocation(@PathParam("id") Long idLocation) {
-        return state.getLocationService().removeLocation(idLocation);
-    }
 }

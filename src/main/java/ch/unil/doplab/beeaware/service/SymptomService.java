@@ -95,28 +95,29 @@ public class SymptomService {
 
     }
 
-    //TODO REMOVE SYMPTOM
-//    public void removeSymptomsForBeezzer(@NotNull Long beezzerId) {
-//        logger.log(Level.INFO, "Removing Symptom for Beezzer {0}...", beezzerId);
-//        for (Symptom sym : symptoms.values()) {
-//            if (sym.getBeezzer().getId().equals(beezzerId)) {
-//                removeSymptom(sym.getId());
-//                return;
-//            }
-//        }
-//    }
+    public void removeSymptomsForBeezzer(@NotNull Long beezzerId) {
+        logger.log(Level.INFO, "Removing Symptom for Beezzer {0}...", beezzerId);
+        List<Symptom> symptoms = symptomRepository.findAllForSpecificBeezzer(beezzerId);
+        if (symptoms != null && !symptoms.isEmpty()) {
+            for (Symptom symptom : symptoms) {
+                if (symptom.getBeezzerId().equals(beezzerId)) {
+                    removeSymptom(symptom.getId());
+                }
+            }
+        }
+    }
 
-//    public boolean removeSymptom(Long idSymptom) {
-//        var symptom = symptoms.get(idSymptom);
-//        logger.log(Level.INFO, "Removing Symptom...");
-//        if (symptom == null) {
-//            logger.log(Level.WARNING, "Symptom with ID {0} doesn't exist.", idSymptom);
-//            return false;
-//
-//        }
-//        var symptomDTO = new SymptomsDTO(symptom);
-//        symptoms.remove(idSymptom);
-//        logger.log(Level.INFO, "Symptom deleted : {0}", symptomDTO);
-//        return true;
-//    }
+    public boolean removeSymptom(Long idSymptom) {
+        var symptom = symptomRepository.findById(idSymptom);
+        logger.log(Level.INFO, "Removing Symptom...");
+        if (symptom == null) {
+            logger.log(Level.WARNING, "Symptom with ID {0} doesn't exist.", idSymptom);
+            return false;
+
+        }
+        symptomRepository.deleteById(idSymptom);
+        var symptomDTO = new SymptomsDTO(symptom);
+        logger.log(Level.INFO, "Symptom deleted : {0}", symptomDTO);
+        return true;
+    }
 }

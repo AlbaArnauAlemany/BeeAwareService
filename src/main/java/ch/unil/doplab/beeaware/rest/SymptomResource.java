@@ -69,11 +69,11 @@ public class SymptomResource {
     }
 
 
-//    @DELETE
-//    @Secured
-//    @RoleRequired(Role.ADMIN)
-//    @Path("/{id}")
-//    public boolean removeSymptom(@PathParam("id") Long idSymptom) {
-//        return state.getSymptomService().removeSymptom(idSymptom);
-//    }
+    @DELETE
+    @Secured
+    @RoleRequired(Role.ADMIN)
+    @Path("/{id}")
+    public boolean removeSymptom(@PathParam("id") Long idSymptom) {
+        return state.getSymptomService().removeSymptom(idSymptom);
+    }
 }

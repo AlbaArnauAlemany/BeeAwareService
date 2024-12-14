@@ -65,3 +65,26 @@ To initialize the service project follow these steps:
 
 3. **ForeCastService**:
     - Handles the retrieval and processing of pollen forecasts with the Google Pollen API.
+
+## Docker Initialization
+
+**Important!**: Check that your MySQL port is not running the port: 3306 before proceeding with the bellow instructions:  
+1) Open your Docker Environment  
+2) Open the following file [`docker/docker-compose.yaml`](./docker/docker-compose.yaml)
+3) Run the services (line 2 of the above file)  
+4) When you first try to access the Payara Admin Console (http://localhost:4848/)  
+   username : admin  
+   password : secret
+![Image](./ReadmeResources/payara_admin_console.png)  
+5) Run the Payara 6.20.0 server  
+   username : admin  
+   password secret
+   Check -> Use SSL Connection  
+![Image](./ReadmeResources/connecting_payara_server.jpg)
+6) Connect the Data source MySQL  
+   Database: beeaware
+   username : admin
+   password secret
+   ![Image](./ReadmeResources/connecting_database.jpg)
+7) You can find the username, passwords, port, etc... information bellow  
+   ![Image](./ReadmeResources/yaml_info.jpg)
