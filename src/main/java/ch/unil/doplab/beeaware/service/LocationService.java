@@ -69,6 +69,14 @@ public class LocationService {
         return allLocations;
     }
 
+    public List<Location> getAllRegisteredLocationsL() {
+        logger.log(Level.INFO, "Searching for all registered locations (returns Location objects)...");
+        List<Location> allLocations = new ArrayList<>();
+        List<Location> locations = locationRepository.findAll();
+        allLocations.addAll(locations);
+        return allLocations;
+    }
+
     public boolean removeLocation(Long idLocation) {
 //        TODO : CORRECT LOCATIONS
 //        var location = locations.get(idLocation);

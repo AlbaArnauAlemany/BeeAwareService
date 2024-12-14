@@ -120,7 +120,7 @@ public class Utils {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
             try {
                 LocalDate localDate = LocalDate.parse(dateStr, formatter);
-                ZonedDateTime zonedDateTime = localDate.atStartOfDay(ZoneId.systemDefault());
+                ZonedDateTime zonedDateTime = localDate.atStartOfDay(ZoneId.of("Europe/Zurich"));
                 return Date.from(zonedDateTime.toInstant());
             } catch (DateTimeParseException e) {
                 throw new ParseException("Invalid date format, expected MM-dd-yyyy. Provided: " + dateStr, 0);

@@ -1,6 +1,7 @@
 package ch.unil.doplab.beeaware.domain;
 
 import ch.unil.doplab.beeaware.Domain.DTO.SymptomsDTO;
+import ch.unil.doplab.beeaware.Utilis.FakeGenerator;
 import ch.unil.doplab.beeaware.Domain.*;
 import ch.unil.doplab.beeaware.repository.*;
 import ch.unil.doplab.beeaware.service.*;
@@ -9,6 +10,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.Getter;
 import lombok.Setter;
+import net.datafaker.Faker;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -61,6 +63,9 @@ public class ApplicationState {
     @Inject
     private TokenRepository tokenRepository;
 
+    @Inject
+    private FakeGenerator fakeGenerator;
+
     @PostConstruct
     public void init() {
         try {
@@ -74,26 +79,28 @@ public class ApplicationState {
 
     private void populateApplicationState() {
         try {
+            logger.log(Level.SEVERE, "Populating application");
+            int populate = 1000;
+            Random random = new Random();
+            Faker faker = new Faker();
+
             for(Pollen pollen : getPredefinedPollens()){
                 pollenRepository.addPollen(pollen);
             }
-            logger.log(Level.SEVERE, "Populating application");
-            Location location = new Location(41001, "ES");
-            locationService.addOrCreateLocation(location);
-            Beezzer ony = new Beezzer("Ony", "o@unil.ch", PasswordUtilis.hashPassword("Q.-wDw124"), location, Role.BEEZZER);
+
+            // Populating Locations
+            for (int i = 0; i < 10; i++){
+                Location location = new Location(41000 + new Random().nextInt(900), "ES");
+                locationService.addOrCreateLocation(location);
+            }
+
+            // Creating manually our admin beezzers
+            List<Location> allLocations = locationService.getAllRegisteredLocationsL();
+
+            Beezzer ony = new Beezzer("Ony", "o@unil.ch", PasswordUtilis.hashPassword("Q.-wDw124"), allLocations.get(random.nextInt(allLocations.size())), Role.BEEZZER);
             beezzerService.addBeezzer(ony);
             ony = beezzerService.getBeezzerByUsername(ony.getUsername());
             System.out.println(ony);
-            beezzerService.addAllergen("Grasses", ony.getId());
-            beezzerService.addAllergen("Mugwort", ony.getId());
-
-            Location locationAlb = new Location(41001, "ES");
-            locationService.addOrCreateLocation(locationAlb);
-            Beezzer alb = new Beezzer("alb", "alb@unil.ch", PasswordUtilis.hashPassword("Q.-wDw123"), location, Role.ADMIN);
-            beezzerService.addBeezzer(alb);
-
-
-            Random random = new Random();
 
             List<Date> dates = new ArrayList<>();
 
@@ -101,9 +108,42 @@ public class ApplicationState {
                 dates.add(new GregorianCalendar(2024, Calendar.NOVEMBER, 20 + i).getTime());
             }
 
-
             for (int i = 0; i < 10; i++){
                 symptomService.addSymptom(new Symptom(ony.getId(), random.nextInt(6), random.nextInt(4)%3 == 0, dates.get(i)));
+            }
+
+            beezzerService.addAllergen("Grasses", ony.getId());
+            beezzerService.addAllergen("Mugwort", ony.getId());
+
+            Beezzer alb = new Beezzer("alb", "alb@unil.ch", PasswordUtilis.hashPassword("Q.-wDw123"), allLocations.get(random.nextInt(allLocations.size())), Role.ADMIN);
+            beezzerService.addBeezzer(alb);
+
+            Calendar calendarSymptom = Calendar.getInstance();
+            calendarSymptom.setTime(new java.util.Date());
+
+            // Creating 1000 Beezzers
+            for (int i = 0; i < populate; i++) {
+                String username = fakeGenerator.generateUsername();
+                Beezzer randomBeezzer = new Beezzer(
+                        username,
+                        fakeGenerator.generateEmail(username),
+                        PasswordUtilis.hashPassword(fakeGenerator.generateValidPassword()),
+                        allLocations.get(random.nextInt(allLocations.size())),
+                        Role.BEEZZER);
+                beezzerService.addBeezzer(randomBeezzer);
+                Beezzer currentBeezzer = beezzerService.getBeezzerByUsername(username);
+                for (int b = 0; b < 3; b++){
+                    for (int dayOffset = 1; dayOffset <= 3; dayOffset++) {
+                        calendarSymptom.add(Calendar.DATE, 1);
+                        java.util.Date targetDate = calendarSymptom.getTime();
+                        Symptom randomSymptom = new Symptom(
+                                currentBeezzer.getId(),
+                                random.nextInt(6),
+                                random.nextInt(4)%3 == 0,
+                                targetDate);
+                        symptomService.addSymptom(randomSymptom);
+                    }
+                }
             }
 
             Date now = new Date();
@@ -122,16 +162,50 @@ public class ApplicationState {
 
             logger.log(Level.INFO, "Forecasting pollen information for all locations...");
 
+            // Pollen names to go through
+            List<String> pollenNames = Arrays.asList(
+                    "Hazel",
+                    "Alder",
+                    "Ash",
+                    "Birch",
+                    "Cottonwood",
+                    "Oak",
+                    "Olive",
+                    "Pine",
+                    "Grasses",
+                    "Ragweed",
+                    "Mugwort",
+                    "Weed"
+            );
 
-            for (int i = 0; i < 10; i++){
-                pollenLocationIndexService.addPollenLocationIndex( new PollenLocationIndex("Grasses", random.nextInt(6), dates.get(i), location, List.of("recommendation example"), "crossReaction example", "indexDescription example"));
-                pollenLocationIndexService.addPollenLocationIndex( new PollenLocationIndex("Mugwort", random.nextInt(6), dates.get(i), location, List.of("recommendation example"), "crossReaction example", "indexDescription example"));
-                pollenLocationIndexService.addPollenLocationIndex( new PollenLocationIndex("Oak", random.nextInt(6), dates.get(i), location, List.of("recommendation example"), "crossReaction example", "indexDescription example"));
+            // Today's date
+            calendar.setTime(new java.util.Date());
+
+            // Populate the PollenLocationIndex
+            for (Location location : allLocations) {
+                for (String pollenName: pollenNames) {
+                    for (int dayOffset = 1; dayOffset <= 3; dayOffset++) {
+                        calendar.add(Calendar.DATE, 1);
+                        java.util.Date targetDate = calendar.getTime();
+
+                        PollenLocationIndex randomPollenIndex = new PollenLocationIndex(
+                                pollenName,
+                                random.nextInt(6),
+                                targetDate,
+                                location,
+                                List.of(fakeGenerator.generateRecommendations()),
+                                fakeGenerator.generateRecommendations(),
+                                fakeGenerator.generateRecommendations());
+
+                        pollenLocationIndexService.addPollenLocationIndex(randomPollenIndex);
+
+                    }
+                }
             }
 
-            List<Location> locations = locationRepository.findAll();
-            if(locations != null && ! locations.isEmpty()) {
-                foreCastService.forecastAllLocation(locations);
+            // Forecast All Locations
+            if(allLocations != null && ! allLocations.isEmpty()) {
+                foreCastService.forecastAllLocation(allLocations);
             } else {
                 logger.log(Level.WARNING, "Locations array is empty...");
             }
