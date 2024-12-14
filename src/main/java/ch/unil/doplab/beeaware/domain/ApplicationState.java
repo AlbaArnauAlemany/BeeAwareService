@@ -78,7 +78,7 @@ public class ApplicationState {
     private void populateApplicationState() {
         try {
             logger.log(Level.SEVERE, "Populating application");
-            int populate = 15;
+            int populate = 1200;
             Random random = new Random();
 
             for(Pollen pollen : getPredefinedPollens()){
