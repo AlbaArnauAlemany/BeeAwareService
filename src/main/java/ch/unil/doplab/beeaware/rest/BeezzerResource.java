@@ -38,8 +38,15 @@ public class BeezzerResource {
         return state.getBeezzerService().getBeezzer(id);
     }
 
+    @GET
+    @Secured
+    @RoleRequired({Role.ADMIN})
+    @Path("/set/{id}")
+    public Long countBeezzerRole() {
+        return state.getBeezzerService().countBeezzerRole();
+    }
+
     @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
     @Secured
     @SameID
     @Path("/set/{id}")

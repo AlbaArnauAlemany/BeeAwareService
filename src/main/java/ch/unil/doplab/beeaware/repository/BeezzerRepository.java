@@ -2,6 +2,7 @@ package ch.unil.doplab.beeaware.repository;
 
 import ch.unil.doplab.beeaware.Domain.Beezzer;
 import ch.unil.doplab.beeaware.Domain.Pollen;
+import ch.unil.doplab.beeaware.Domain.Role;
 import jakarta.ejb.Stateless;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -35,6 +36,14 @@ public class BeezzerRepository{
             return bee.get(0);
         }
         return null;
+    }
+
+    public Long countBeezzerRole() {
+        TypedQuery<Long> query = entityManager.createQuery(
+                "SELECT COUNT(b) FROM Beezzer b WHERE b.role = :role", Long.class);
+        query.setParameter("role", Role.BEEZZER);
+        Long count = query.getSingleResult();
+        return count != null ? count.longValue() : 0L;
     }
 
 

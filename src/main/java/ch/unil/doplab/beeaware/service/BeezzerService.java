@@ -71,6 +71,10 @@ public class BeezzerService {
         return foundLocation;
     }
 
+    public Long countBeezzerRole(){
+        return beezzerRepository.countBeezzerRole();
+    }
+
     /**
      * Creates a new Beezzer from a JSON string. This method processes the provided JSON,
      * sets the username and email, hashes the password, sets the location and role,
