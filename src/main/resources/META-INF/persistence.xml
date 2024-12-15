@@ -15,7 +15,7 @@
         <class>ch.unil.doplab.beeaware.Domain.Token</class>
 
         <properties>
-            <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>
+            <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
         </properties>
     </persistence-unit>
 </persistence>
