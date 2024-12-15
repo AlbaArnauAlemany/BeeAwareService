@@ -117,13 +117,15 @@ public class Utils {
     }
 
     public static Date parseDate(String dateStr) throws ParseException {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-            try {
-                LocalDate localDate = LocalDate.parse(dateStr, formatter);
-                ZonedDateTime zonedDateTime = localDate.atStartOfDay(ZoneId.of("Europe/Zurich"));
-                return Date.from(zonedDateTime.toInstant());
-            } catch (DateTimeParseException e) {
-                throw new ParseException("Invalid date format, expected MM-dd-yyyy. Provided: " + dateStr, 0);
-            }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+        try {
+            LocalDate localDate = LocalDate.parse(dateStr, formatter);
+            // Utiliser l'UTC pour éviter les ambiguïtés
+            ZonedDateTime zonedDateTime = localDate.atStartOfDay(ZoneId.systemDefault());
+            return Date.from(zonedDateTime.toInstant());
+        } catch (DateTimeParseException e) {
+            throw new ParseException("Invalid date format, expected MM-dd-yyyy. Provided: " + dateStr, 0);
         }
+    }
+
 }

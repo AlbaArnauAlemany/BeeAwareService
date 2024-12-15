@@ -1,6 +1,7 @@
 package ch.unil.doplab.beeaware.service;
 
 import ch.unil.doplab.beeaware.Domain.DTO.PollenInfoDTO;
+import ch.unil.doplab.beeaware.Domain.Location;
 import ch.unil.doplab.beeaware.Domain.PollenLocationIndex;
 import ch.unil.doplab.beeaware.Domain.PollenLocationInfo;
 import ch.unil.doplab.beeaware.Utilis.Utils;
@@ -11,10 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,7 +37,9 @@ public class PollenLocationIndexService {
         pollenLocationIndexRepository.addPollenLocationIndex(pollenLocationIndex);
         logger.log(Level.INFO, "New pollenLocationIndex added : {0}", pollenLocationIndex);
     }
-
+    public boolean existsByPollenNameAndLocationAndDate(String pollenName, Location location, Date date) {
+        return pollenLocationIndexRepository.existsByPollenNameAndLocationAndDate(pollenName, location, date);
+    }
     public List<PollenInfoDTO> findAllPollenIndexLocation(){
         List<PollenLocationIndex> pollenInfo = pollenLocationIndexRepository.findAll();;
         List<PollenInfoDTO> pollenInfoDTOs = new ArrayList<>();
@@ -47,6 +47,10 @@ public class PollenLocationIndexService {
             pollenInfoDTOs.add(new PollenInfoDTO(pollenLocationIndex));
         }
         return pollenInfoDTOs;
+    }
+
+    public long countPollenToday() {
+        return pollenLocationIndexRepository.countPollenToday();
     }
 
     public boolean removePollenLocationIndex(Long idPollenLocationIndex) {

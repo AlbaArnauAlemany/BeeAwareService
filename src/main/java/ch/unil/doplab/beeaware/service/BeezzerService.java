@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -145,13 +146,24 @@ public class BeezzerService {
      *
      * @param beezzer The Beezzer object to be set (must not be null).
      */
-    public boolean setBeezzer(Long id,  @NotNull Beezzer beezzer) {
-        logger.log(Level.INFO, "Setting Beezzer {0}...", beezzer.getUsername());
-        Beezzer beezzerElement = beezzerRepository.findById(id);
-        ObjectUpdater.updateNonNullFields(beezzer, beezzerElement);
-        beezzerRepository.updateBeezzer(beezzer);
+    public boolean setBeezzer(Long id, @NotNull Beezzer beezzer) {
+        logger.log(Level.INFO, "Updating Beezzer with ID: {0}...", id);
+
+        Beezzer existingBeezzer = beezzerRepository.findById(id);
+        if (existingBeezzer == null) {
+            logger.log(Level.WARNING, "Beezzer with ID {0} not found. Update operation aborted.", id);
+            return false;
+        }
+
+        ObjectUpdater.updateNonNullFields(beezzer, existingBeezzer);
+        beezzerRepository.updateBeezzer(existingBeezzer);
+        Beezzer beezzer1 = beezzerRepository.findById(existingBeezzer.getId());
+        System.out.println("new beezzer = " + beezzer1);
+
+        logger.log(Level.INFO, "Beezzer with ID {0} successfully updated.", id);
         return true;
     }
+
 
     /**
      * Retrieves a Beezzer by its unique identifier if it exists.
