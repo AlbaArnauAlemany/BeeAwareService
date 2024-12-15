@@ -33,6 +33,8 @@ public class SymptomService {
             for (Symptom sym : syptomAlreadyExist){
                 if (formatDate(sym.getDate()).equals(formatDate(symptom.getDate()))){
                     temp = sym;
+                    temp.setAntihistamine(symptom.isAntihistamine());
+                    temp.setReaction(symptom.getReaction());
                 }
             }
             if(temp != null) {

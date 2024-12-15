@@ -79,7 +79,7 @@ public class ApplicationState {
         try {
             if(beezzerService.getAllBeezzers().size() < 10) {
                 logger.log(Level.SEVERE, "Populating application");
-                int populate = 10;
+                int populate = 1100;
                 int offsetDays = 17;
                 Random random = new Random();
 
