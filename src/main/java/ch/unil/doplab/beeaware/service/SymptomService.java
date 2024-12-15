@@ -15,8 +15,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static ch.unil.doplab.beeaware.Utilis.Utils.isDateBefore;
-import static ch.unil.doplab.beeaware.Utilis.Utils.parseDate;
+import static ch.unil.doplab.beeaware.Utilis.Utils.*;
 
 @Getter
 @Setter
@@ -28,6 +27,19 @@ public class SymptomService {
     private SymptomRepository symptomRepository;
 
     public void addSymptom(@NotNull Symptom symptom) {
+        List<Symptom> syptomAlreadyExist = symptomRepository.findAllForSpecificBeezzer(symptom.getBeezzerId());
+        Symptom temp = null;
+        if (syptomAlreadyExist.size() > 0){
+            for (Symptom sym : syptomAlreadyExist){
+                if (formatDate(sym.getDate()).equals(formatDate(symptom.getDate()))){
+                    temp = sym;
+                }
+            }
+            if(temp != null) {
+                symptomRepository.addSymptom(temp);
+                return;
+            }
+        } 
         symptomRepository.addSymptom(symptom);
     }
 

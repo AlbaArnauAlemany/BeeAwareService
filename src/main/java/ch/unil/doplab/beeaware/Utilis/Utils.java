@@ -127,5 +127,12 @@ public class Utils {
             throw new ParseException("Invalid date format, expected MM-dd-yyyy. Provided: " + dateStr, 0);
         }
     }
-
+    public static String formatDate(Date date) {
+        if (date == null) {
+            throw new IllegalArgumentException("Date cannot be null");
+        }
+        // Créer un formatteur avec le format "MM-dd-yyyy"
+        SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");
+        return formatter.format(date);
+    }
 }

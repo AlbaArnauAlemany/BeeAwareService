@@ -15,7 +15,7 @@ public class SymptomRepository{
     private EntityManager entityManager;
     @Transactional
     public void addSymptom(Symptom symptom) {
-        entityManager.persist(symptom);
+        entityManager.merge(symptom);
     }
     public Symptom findById(Long id) {
         return entityManager.find(Symptom.class, id);
