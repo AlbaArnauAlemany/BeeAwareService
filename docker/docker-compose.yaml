@@ -7,7 +7,7 @@ services:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: beeaware
       MYSQL_USER: admin
-      MYSQL_PASSWORD: secret
+      MYSQL_PASSWORD: admin
     ports:
       - "3306:3306"
     volumes:
@@ -20,7 +20,7 @@ services:
     container_name: soar-payara
     environment:
       # USERNAME : admin
-      PAYARA_PASSWORD: secret
+      PAYARA_PASSWORD: admin
     ports:
       - "8080:8080"
       - "8181:8181" # HTTPS listener
