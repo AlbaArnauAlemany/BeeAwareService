@@ -84,14 +84,12 @@ public class ApplicationState {
             for(Pollen pollen : getPredefinedPollens()){
                 pollenRepository.addPollen(pollen);
             }
+            List<Integer> npas = new ArrayList<>(Arrays.asList(41001, 11005, 18010, 29015, 14002, 21002));
 
             // Creating Locations
-            locationService.addOrCreateLocation(new Location(41001, "ES"));
-            locationService.addOrCreateLocation(new Location(11005, "ES"));
-            locationService.addOrCreateLocation(new Location(18010, "ES"));
-            locationService.addOrCreateLocation(new Location(29015, "ES"));
-            locationService.addOrCreateLocation(new Location(14002, "ES"));
-            locationService.addOrCreateLocation(new Location(21002, "ES"));
+            for (int npa : npas){
+                locationService.addOrCreateLocation(new Location(npa, "ES"));
+            }
 
             // Creating manually our admin beezzers
             List<Location> allLocations = locationService.getAllRegisteredLocationsL();
@@ -147,7 +145,6 @@ public class ApplicationState {
                         allLocations.get(random.nextInt(allLocations.size())),
                         Role.BEEZZER);
                 beezzerService.addBeezzer(randomBeezzer);
-//                Beezzer currentBeezzer = beezzerService.getBeezzerByUsername(username);
                 for (int b = 0; b < 3; b++){
                     for (int dayOffset = 1; dayOffset <= 3; dayOffset++) {
                         calendarSymptom.add(Calendar.DATE, -1);

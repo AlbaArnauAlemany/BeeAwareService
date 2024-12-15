@@ -87,3 +87,4 @@ To initialize the service project follow these steps:
    password admin
    ![Image](./ReadmeResources/connecting_database.jpg)
 7) You can find the username, passwords, port, etc... in the docker file
+8) If needed, there is a dump of the database in the folder database_dump
